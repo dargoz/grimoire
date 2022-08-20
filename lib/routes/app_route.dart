@@ -1,5 +1,5 @@
 import 'package:auto_route/annotations.dart';
-import 'package:grimoire/features/home/presentation/pages/home_page.dart';
+import 'package:grimoire/features/wiki/presentation/pages/home_page.dart';
 
 @MaterialAutoRouter(
     replaceInRouteName: 'Page,Route',
