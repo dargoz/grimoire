@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/responses/file_response.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/responses/repository_tree_response.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/responses/commit_response.dart';
 import 'package:retrofit/http.dart';
 
 part 'gitlab_api_service.g.dart';
@@ -6,4 +9,15 @@ part 'gitlab_api_service.g.dart';
 @RestApi(baseUrl: 'https://gitlab.com/api/v4/')
 abstract class GitlabApiService {
   factory GitlabApiService(Dio dio, {String baseUrl}) = _GitlabApiService;
+
+  @GET('/projects/{project_id}/repository/files/{file_path}')
+  Future<FileResponse> getFile(
+      @Path('project_id') String projectId, @Path('file_path') String filePath);
+
+  @GET('/projects/{project_id}/repository/tree')
+  Future<List<RepositoryTreeResponse>> getRepositoryTree(
+      @Path('project_id') String projectId);
+
+  @GET('/projects/{project_id}/repository/commits/{commit_id}')
+  Future<CommitResponse> getCommit(@Path('commit_id') commitId);
 }
