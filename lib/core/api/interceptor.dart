@@ -4,8 +4,13 @@ import 'package:flutter/foundation.dart';
 class CustomInterceptors extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print('REQUEST[${options.method}] => PATH: ${options.path}');
-    print('body : ${options.data}');
+    options.headers['Authorization'] = 'Bearer ${'glpat-6VtJb2k-Ns8SXGApxzbb'}';
+    if (kDebugMode) {
+      print(
+          '[INTERCEPTOR] REQUEST[${options.method}] => PATH: ${options.path}');
+      print('[INTERCEPTOR] HEADER ==> ${options.headers.toString()}');
+      print('[INTERCEPTOR] BODY ==> ${options.data}');
+    }
     return super.onRequest(options, handler);
   }
 
@@ -21,10 +26,10 @@ class CustomInterceptors extends Interceptor {
     if (kDebugMode) {
       print(
           'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
-      print(err.response?.data);
-      print(err.response?.headers);
-      print(err.response?.requestOptions.data);
-      print(err.response?.statusCode);
+      print('[ERROR] data : ${err.response?.data}');
+      print('[ERROR] data : ${err.response?.headers}');
+      print('[ERROR] data : ${err.response?.requestOptions.data}');
+      print('[ERROR] data : ${err.response?.statusCode}');
     }
     switch (err.response?.statusCode) {
       case 500:

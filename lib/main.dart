@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/routes/app_route.gr.dart';
 import 'package:grimoire/translation/app_translation.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'injection.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
   configureDependencies();
   runApp(MyApp());
 }
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
-      title: 'Flutter Clean Architecture Template',
+      title: 'Grimoire',
       theme: ThemeData(
         // This is the theme of your application.
         //
