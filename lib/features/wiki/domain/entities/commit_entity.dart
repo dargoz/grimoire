@@ -1,4 +1,3 @@
-
 class CommitEntity {
   CommitEntity(
       {required this.title,
@@ -22,6 +21,4 @@ class CommitEntity {
   String committedDate;
   dynamic trailers;
   String webUrl;
-
-
 }

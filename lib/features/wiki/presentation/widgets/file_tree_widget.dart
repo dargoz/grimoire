@@ -13,10 +13,9 @@ class FileTreeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     _treeController.getFileTree();
     return Obx(() => TreeView(
-        controller: TreeViewController(
-            children: _treeController.state.value.data?.toNodeList() ?? []),
-      onNodeTap: _treeController.onNodeTap,
-
-    ));
+          controller: TreeViewController(
+              children: _treeController.state.value.data?.toNodeList() ?? []),
+          onNodeTap: _treeController.onNodeTap,
+        ));
   }
 }

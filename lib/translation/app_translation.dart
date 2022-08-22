@@ -7,7 +7,6 @@ https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPIn
 https://www.ibabbleon.com/iOS-Language-Codes-ISO-639.html
 */
 class AppTranslation extends Translations {
-
   //feedback page
   static const String pageTitle = "pageTitle";
   static const String title = "title";

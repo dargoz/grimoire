@@ -21,7 +21,7 @@ class WikiRepositoryImpl extends WikiRepository {
   Future<DocumentEntity> getDocument(String id, String filePath) async {
     var cache = await _localDataSource.getDocument(id);
     if (cache != null) {
-      if(kDebugMode) {
+      if (kDebugMode) {
         print("using cache");
       }
       return cache.toDocumentEntity();

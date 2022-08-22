@@ -25,7 +25,8 @@ extension NodeMapper on FileTreeModel {
   }
 
   FileTreeEntity toEntity() {
-    return FileTreeEntity(id: id, name: name, type: type, path: path, children: [], mode: '');
+    return FileTreeEntity(
+        id: id, name: name, type: type, path: path, children: [], mode: '');
   }
 }
 

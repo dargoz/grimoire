@@ -18,7 +18,8 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   }
 
   @override
-  Future<FileResponse> getRepositoryFile(String projectId, String filePath, String ref) {
+  Future<FileResponse> getRepositoryFile(
+      String projectId, String filePath, String ref) {
     return _restClient.service.getFile(projectId, filePath, ref);
   }
 

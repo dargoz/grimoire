@@ -3,7 +3,5 @@ import 'package:grimoire/features/wiki/presentation/pages/home_page.dart';
 
 @MaterialAutoRouter(
     replaceInRouteName: 'Page,Route',
-    routes: <AutoRoute>[
-      AutoRoute(page: HomePage, initial: true)
-    ])
+    routes: <AutoRoute>[AutoRoute(page: HomePage, initial: true)])
 class $AppRouter {}

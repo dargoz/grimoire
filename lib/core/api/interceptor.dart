@@ -38,7 +38,7 @@ class CustomInterceptors extends Interceptor {
         return handler.resolve(Response<dynamic>(
             requestOptions: err.response!.requestOptions,
             statusCode: 200,
-        data: err.response?.data));
+            data: err.response?.data));
       default:
         super.onError(err, handler);
         break;

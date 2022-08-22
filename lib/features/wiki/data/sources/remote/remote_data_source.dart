@@ -4,7 +4,8 @@ import 'package:grimoire/features/wiki/data/sources/remote/responses/file_respon
 import 'package:grimoire/features/wiki/data/sources/remote/responses/repository_tree_response.dart';
 
 abstract class RemoteDataSource {
-  Future<FileResponse> getRepositoryFile(String projectId, String filePath, String ref);
+  Future<FileResponse> getRepositoryFile(
+      String projectId, String filePath, String ref);
 
   Future<CommitResponse> getCommit(String projectId, String commitId);
 

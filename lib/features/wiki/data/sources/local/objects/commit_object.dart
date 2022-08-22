@@ -48,4 +48,3 @@ class CommitObject extends HiveObject {
     return 'CommitObject{id: $id, shortId: $shortId, createdAt: $createdAt, parentIds: $parentIds, title: $title, message: $message, authorName: $authorName, authorEmail: $authorEmail, authoredDate: $authoredDate, committerName: $committerName, committerEmail: $committerEmail, committedDate: $committedDate}';
   }
 }
-

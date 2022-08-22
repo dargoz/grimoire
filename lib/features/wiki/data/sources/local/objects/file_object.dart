@@ -49,5 +49,3 @@ class FileObject extends HiveObject {
     return 'FileObject{fileName: $fileName, filePath: $filePath, size: $size, encoding: $encoding, content: $content, contentSha256: $contentSha256, ref: $ref, blobId: $blobId, commitId: $commitId, lastCommitId: $lastCommitId, executeFilemode: $executeFilemode}';
   }
 }
-
-

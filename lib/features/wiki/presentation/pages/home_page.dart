@@ -14,11 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          ElevatedButton(
-              child: const Text('get data'),
-              onPressed: () {
-
-              }),
+          ElevatedButton(child: const Text('get data'), onPressed: () {}),
           Row(
             children: [
               SizedBox(

@@ -48,6 +48,4 @@ class CommitResponse {
       _$CommitResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommitResponseToJson(this);
-
-
 }
