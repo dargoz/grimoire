@@ -7,11 +7,10 @@ import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers
 class FileTreeWidget extends StatelessWidget {
   FileTreeWidget({Key? key}) : super(key: key);
 
-  final FileTreeController _treeController = Get.put(FileTreeController());
+  final FileTreeController _treeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    _treeController.getFileTree();
     return Obx(() => TreeView(
           controller: TreeViewController(
               children: _treeController.state.value.data?.toNodeList() ?? []),

@@ -26,10 +26,10 @@ class RepositoryController extends GetxController {
     if (href?.indexOf('.') == 0) {
       href = href?.substring(2);
     }
-    if(href != null) {
-      var node = fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
+    if (href != null) {
+      var node =
+          fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
       getDocument(node!);
     }
-
   }
 }
