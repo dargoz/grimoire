@@ -13,4 +13,9 @@ class FileTreeEntity {
   String path;
   List<FileTreeEntity> children = List.empty(growable: true);
   String mode;
+
+  @override
+  String toString() {
+    return 'FileTreeEntity{id: $id, name: $name, type: $type, path: $path, children: $children, mode: $mode}';
+  }
 }

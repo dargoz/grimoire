@@ -1,5 +1,12 @@
 [
   {
+    "id": "d564d0bc3dd917926892c55e3706cc116d5b165e",
+    "name": "files",
+    "type": "tree",
+    "path": "files",
+    "mode": "040000"
+  },
+  {
     "id": "a1e8f8d745cc87e3a9248358d9352bb7f9a0aeba",
     "name": "html",
     "type": "tree",
@@ -33,6 +40,20 @@
     "type": "tree",
     "path": "files/markdown",
     "mode": "040000"
+  },
+  {
+    "id": "74c2630ab6ca21f0dee785f71810d9f411b85c5c",
+    "name": "extraneous-functionality.md",
+    "type": "blob",
+    "path": "files/markdown/extraneous-functionality.md",
+    "mode": "100644"
+  },
+  {
+    "id": "6f9895bf008468e63baa636483f49686473dd362",
+    "name": "improper-platform-use.md",
+    "type": "blob",
+    "path": "improper-platform-use.md",
+    "mode": "100644"
   },
   {
     "id": "23ea4d11a4bdd960ee5320c5cb65b5b3fdbc60db",

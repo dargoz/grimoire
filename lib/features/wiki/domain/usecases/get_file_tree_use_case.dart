@@ -19,21 +19,34 @@ class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, NoParams> {
             (element.name.contains('.md') || element.type == 'tree'))
         .toList();
     var tree = List<FileTreeEntity>.empty(growable: true);
-    var toRemove = [];
     for (var fileTree in filteredResult) {
-      if (fileTree.type == 'tree') {
-        tree.add(fileTree);
-        toRemove.add(fileTree);
-      }
-    }
-    filteredResult.removeWhere((element) => toRemove.contains(element));
-    for (var fileTree in filteredResult) {
-      if (fileTree.path.contains('/')) {
-        var dir = fileTree.path.split('/');
-        var dirIdx = tree.indexWhere((element) => element.name == dir[0]);
-        tree[dirIdx].children.add(fileTree);
-      }
+      var paths = fileTree.path.split('/');
+      add(paths: paths, tree: tree, entity: fileTree);
     }
     return tree;
+  }
+
+  void add(
+      {required List<String> paths,
+      int position = 0,
+      int pathIndex = -1,
+      required List<FileTreeEntity> tree,
+      required FileTreeEntity entity}) {
+
+    pathIndex = tree.indexWhere((element) => element.name == paths[position]);
+    print("position : $position");
+    print('pathIndex get : $pathIndex');
+    if (pathIndex == -1 || position == paths.length - 1) {
+      print('add data');
+      tree.add(entity);
+    } else {
+      print('path found');
+      add(
+          paths: paths,
+          position: ++position,
+          pathIndex: pathIndex,
+          tree: tree[pathIndex].children,
+          entity: entity);
+    }
   }
 }
