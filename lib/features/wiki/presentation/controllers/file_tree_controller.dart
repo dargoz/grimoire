@@ -27,21 +27,8 @@ class FileTreeController extends GetxController {
       print('node : $nodeKey');
     }
 
-    FileTreeModel? node;
-
-    state.value.data?.forEach((element) {
-      if (element.children.isNotEmpty) {
-        for (var childElement in element.children) {
-          print('iterate name : ${childElement.name}');
-          if (childElement.id == nodeKey) {
-            node = childElement;
-            break;
-          }
-        }
-      }
-      if (node != null) return;
-      if (element.id == nodeKey) node = element;
-    });
+    FileTreeModel? node =
+        state.value.data?.findNode(models: state.value.data!, nodeKey: nodeKey);
 
     print('node founded : ${node?.name ?? 'not found'}');
     _repositoryController.getDocument(node!);

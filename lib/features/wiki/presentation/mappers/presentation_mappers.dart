@@ -34,4 +34,19 @@ extension NodeListMapper on List<FileTreeModel> {
   List<Node> toNodeList() {
     return map((e) => e.toNode()).toList();
   }
+
+  FileTreeModel? findNode(
+      {required List<FileTreeModel> models, required String nodeKey}) {
+    FileTreeModel? node;
+    for (var element in models) {
+      if (element.id == nodeKey) {
+        node = element;
+        break;
+      }
+      if (element.children.isNotEmpty) {
+        node = findNode(models: element.children, nodeKey: nodeKey);
+      }
+    }
+    return node;
+  }
 }
