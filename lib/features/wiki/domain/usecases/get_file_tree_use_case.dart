@@ -19,12 +19,14 @@ class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, NoParams> {
             (element.name.contains('.md') || element.type == 'tree'))
         .toList();
     var tree = List<FileTreeEntity>.empty(growable: true);
+    var toRemove = [];
     for (var fileTree in filteredResult) {
       if (fileTree.type == 'tree') {
         tree.add(fileTree);
-        filteredResult.remove(fileTree);
+        toRemove.add(fileTree);
       }
     }
+    filteredResult.removeWhere((element) => toRemove.contains(element));
     for (var fileTree in filteredResult) {
       if (fileTree.path.contains('/')) {
         var dir = fileTree.path.split('/');
