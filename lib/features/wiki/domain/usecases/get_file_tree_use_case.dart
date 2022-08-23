@@ -32,15 +32,10 @@ class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, NoParams> {
       int pathIndex = -1,
       required List<FileTreeEntity> tree,
       required FileTreeEntity entity}) {
-
     pathIndex = tree.indexWhere((element) => element.name == paths[position]);
-    print("position : $position");
-    print('pathIndex get : $pathIndex');
     if (pathIndex == -1 || position == paths.length - 1) {
-      print('add data');
       tree.add(entity);
     } else {
-      print('path found');
       add(
           paths: paths,
           position: ++position,

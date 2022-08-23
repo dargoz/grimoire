@@ -49,4 +49,19 @@ extension NodeListMapper on List<FileTreeModel> {
     }
     return node;
   }
+
+  FileTreeModel? findNodeByPath(
+      {required List<FileTreeModel> models, required String path}) {
+    FileTreeModel? node;
+    for (var element in models) {
+      if (element.path == path) {
+        node = element;
+        break;
+      }
+      if (element.children.isNotEmpty) {
+        node = findNodeByPath(models: element.children, path: path);
+      }
+    }
+    return node;
+  }
 }

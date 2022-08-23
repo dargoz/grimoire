@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/core/models/resource.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
@@ -15,5 +16,20 @@ class RepositoryController extends GetxController {
     var result =
         await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
     data.value = result;
+  }
+
+  void redirect(String text, String? href, List<FileTreeModel> fileTreeModels) {
+    if (kDebugMode) {
+      print('text : $text');
+      print('href : $href');
+    }
+    if (href?.indexOf('.') == 0) {
+      href = href?.substring(2);
+    }
+    if(href != null) {
+      var node = fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
+      getDocument(node!);
+    }
+
   }
 }
