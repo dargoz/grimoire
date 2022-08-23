@@ -15,6 +15,7 @@ class RepositoryController extends GetxController {
   void getDocument(FileTreeModel fileTreeModel) async {
     var result =
         await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
+    print("file result : ${result.data.toString()}");
     data.value = result;
   }
 

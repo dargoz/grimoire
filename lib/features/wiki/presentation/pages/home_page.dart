@@ -30,15 +30,32 @@ class HomePage extends StatelessWidget {
                 child: FileTreeWidget(),
               ),
               Obx(
-                () => SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  height: 700,
-                  child: Markdown(
-                    controller: ScrollController(),
-                    data: controller.data.value.data?.content ?? '',
-                    onTapLink: (text, href, title) => controller.redirect(
-                        text, href, _treeController.state.value.data!),
-                  ),
+                () => Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      child: Column(
+                        children: [
+                          Text('Author : ${controller.data.value.data?.commitEntity?.authorName}'),
+                          Text('Last Update : ${controller.data.value.data?.commitEntity?.committedDate}'),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: MediaQuery.of(context).size.height * 0.7,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black)
+                      ),
+                      child: Markdown(
+                        controller: ScrollController(),
+                        data: controller.data.value.data?.content ?? '',
+                        onTapLink: (text, href, title) => controller.redirect(
+                            text, href, _treeController.state.value.data!),
+                      ),
+                    )
+                  ],
                 ),
               )
             ],

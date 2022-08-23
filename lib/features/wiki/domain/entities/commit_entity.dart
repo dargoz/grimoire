@@ -21,4 +21,19 @@ class CommitEntity {
   String committedDate;
   dynamic trailers;
   String webUrl;
+
+  @override
+  String toString() {
+    return 'CommitEntity{'
+        'title: $title, '
+        'message: $message, '
+        'authorName: $authorName, '
+        'authorEmail: $authorEmail, '
+        'authoredDate: $authoredDate, '
+        'committerName: $committerName, '
+        'committerEmail: $committerEmail, '
+        'committedDate: $committedDate, '
+        'trailers: $trailers, '
+        'webUrl: $webUrl}';
+  }
 }

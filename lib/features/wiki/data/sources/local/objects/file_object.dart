@@ -46,6 +46,18 @@ class FileObject extends HiveObject {
 
   @override
   String toString() {
-    return 'FileObject{fileName: $fileName, filePath: $filePath, size: $size, encoding: $encoding, content: $content, contentSha256: $contentSha256, ref: $ref, blobId: $blobId, commitId: $commitId, lastCommitId: $lastCommitId, executeFilemode: $executeFilemode}';
+    return 'FileObject{'
+        'fileName: $fileName, '
+        'filePath: $filePath, '
+        'size: $size, '
+        'encoding: $encoding, '
+        'content: $content, '
+        'contentSha256: $contentSha256, '
+        'ref: $ref, '
+        'blobId: $blobId, '
+        'commitId: $commitId, '
+        'lastCommitId: $lastCommitId, '
+        'executeFilemode: $executeFilemode'
+        'commitObject: $commitObject}';
   }
 }

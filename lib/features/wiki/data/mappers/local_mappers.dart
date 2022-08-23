@@ -2,6 +2,7 @@ import 'package:grimoire/features/wiki/data/sources/local/objects/commit_object.
 import 'package:grimoire/features/wiki/data/sources/local/objects/file_object.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/responses/commit_response.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/responses/file_response.dart';
+import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 
 extension FileMapper on FileObject {
@@ -14,7 +15,8 @@ extension FileMapper on FileObject {
         contentSha256: contentSha256,
         blobId: blobId,
         commitId: commitId,
-        executeFilemode: executeFilemode);
+        executeFilemode: executeFilemode,
+        commitEntity: commitObject.toCommitEntity());
   }
 }
 
@@ -36,7 +38,7 @@ extension DocumentMapper on FileResponse {
   }
 }
 
-extension CommitObjectMapper on CommitResponse {
+extension CommitResponseMapper on CommitResponse {
   CommitObject toCommitObject() {
     return CommitObject(
       id: id,
@@ -52,5 +54,21 @@ extension CommitObjectMapper on CommitResponse {
       committerEmail: committerEmail,
       committedDate: committedDate,
     );
+  }
+}
+
+extension CommitObjectMapper on CommitObject {
+  CommitEntity toCommitEntity() {
+    return CommitEntity(
+        title: title ?? 'unknown',
+        message: message,
+        authorName: authorName!,
+        authorEmail: authorEmail ?? 'unknown',
+        authoredDate: authoredDate ?? 'unknown',
+        committerName: committerName ?? 'unknown',
+        committerEmail: committerEmail ?? 'unknown',
+        committedDate: committedDate ?? 'unknown',
+        trailers: '',
+        webUrl: '');
   }
 }

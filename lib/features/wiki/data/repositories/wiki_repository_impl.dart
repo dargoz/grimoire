@@ -34,6 +34,7 @@ class WikiRepositoryImpl extends WikiRepository {
     documentEntity.commitEntity = commitResponse.toCommitEntity();
     var fileObject = fileResponse.toFileObject();
     fileObject.commitObject = commitResponse.toCommitObject();
+    print('file object : ${fileObject.toString()}');
     _localDataSource.saveDocument(fileObject);
     return documentEntity;
   }

@@ -21,4 +21,17 @@ class DocumentEntity {
   String blobId;
   String commitId;
   bool executeFilemode;
+
+  @override
+  String toString() {
+    return 'DocumentEntity{'
+        'commitEntity: $commitEntity, '
+        'fileName: $fileName, '
+        'filePath: $filePath, '
+        'size: $size, content: $content, '
+        'contentSha256: $contentSha256, '
+        'blobId: $blobId, '
+        'commitId: $commitId, '
+        'executeFilemode: $executeFilemode}';
+  }
 }
