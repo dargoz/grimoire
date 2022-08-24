@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:get/get.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/repository_controller.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
 
 import '../controllers/file_tree_controller.dart';
+import '../widgets/highlight_builder.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -32,29 +34,60 @@ class HomePage extends StatelessWidget {
               Obx(
                 () => Column(
                   children: [
-                    SizedBox(
+                    Container(
                       width: MediaQuery.of(context).size.width * 0.6,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: Column(
+                      height: 80,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16)),
+                      ),
+                      child: Row(
                         children: [
-                          Text('Author : ${controller.data.value.data?.commitEntity?.authorName}'),
-                          Text('Last Update : ${controller.data.value.data?.commitEntity?.committedDate}'),
+                          const CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'https://secure.gravatar.com/avatar/018afd3eb4d4dcb676df54b56db7c80e?s=64&d=identicon'),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Spacer(),
+                              Text(
+                                  'Author : ${controller.data.value.data?.commitEntity?.authorName}'),
+                              Text(
+                                  'Last Update : ${controller.data.value.data?.commitEntity?.committedDate}'),
+                              const Spacer(),
+                            ],
+                          ),
                         ],
                       ),
                     ),
+                    const Divider(),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black)
-                      ),
-                      child: Markdown(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)),
+                        child: SingleChildScrollView(
+                          controller: ScrollController(),
+                          child: Html(
+                              customRender: const {'code': customCodeRender},
+                              data: md.markdownToHtml(
+                                  controller.data.value.data?.content ?? '')),
+                        )
+
+                        /*child: Markdown(
                         controller: ScrollController(),
                         data: controller.data.value.data?.content ?? '',
+                        padding: const EdgeInsets.all(10),
+                        builders: {
+                          'code': CodeElementBuilder(),
+                        },
                         onTapLink: (text, href, title) => controller.redirect(
                             text, href, _treeController.state.value.data!),
-                      ),
-                    )
+                      ),*/
+                        )
                   ],
                 ),
               )
