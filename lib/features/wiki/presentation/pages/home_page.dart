@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(16)),
+                            const BorderRadius.all(Radius.circular(8)),
                       ),
                       child: Row(
                         children: [
@@ -68,13 +68,21 @@ class HomePage extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * 0.6,
                         height: MediaQuery.of(context).size.height * 0.8,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black)),
+                          border: Border.all(color: Colors.black),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                        ),
                         child: SingleChildScrollView(
                           controller: ScrollController(),
                           child: Html(
-                              customRender: const {'code': customCodeRender},
-                              data: md.markdownToHtml(
-                                  controller.data.value.data?.content ?? '')),
+                            customRender: const {'code': customCodeRender},
+                            data: md.markdownToHtml(
+                                controller.data.value.data?.content ?? ''),
+                            onLinkTap: (text, renderContext, map, element) {
+                              controller.redirect(text ?? '', map['href'],
+                                  _treeController.state.value.data!);
+                            },
+                          ),
                         )
 
                         /*child: Markdown(
