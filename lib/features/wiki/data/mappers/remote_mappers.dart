@@ -14,7 +14,7 @@ extension DocumentMapper on FileResponse {
         content: content,
         contentSha256: contentSha256,
         blobId: blobId,
-        commitId: commitId,
+        commitId: lastCommitId,
         executeFilemode: executeFilemode);
   }
 }

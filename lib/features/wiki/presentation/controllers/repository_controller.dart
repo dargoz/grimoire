@@ -13,6 +13,7 @@ class RepositoryController extends GetxController {
   var data = const Resource<DocumentEntity>.initial('initial').obs;
 
   void getDocument(FileTreeModel fileTreeModel) async {
+    data.value = const Resource<DocumentEntity>.loading('fetch data');
     var result =
         await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
     data.value = result;

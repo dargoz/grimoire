@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_treeview/flutter_treeview.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
@@ -21,7 +22,11 @@ extension FileListMapper on List<FileTreeEntity> {
 
 extension NodeMapper on FileTreeModel {
   Node toNode() {
-    return Node(key: id, label: name, children: children.toNodeList());
+    return Node(
+        key: id,
+        label: name,
+        icon: type == 'tree' ? Icons.folder : Icons.file_present,
+        children: children.toNodeList());
   }
 
   FileTreeEntity toEntity() {
