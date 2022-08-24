@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grimoire/routes/app_route.gr.dart';
+import 'package:grimoire/routes/app_route.dart';
 import 'package:grimoire/translation/app_translation.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -13,8 +13,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
-
   MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -37,8 +35,9 @@ class MyApp extends StatelessWidget {
       translations: AppTranslation(),
       locale: Get.deviceLocale,
       fallbackLocale: const Locale('en', 'US'),
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
+      routerDelegate: appRouter.routerDelegate,
+      routeInformationProvider: appRouter.routeInformationProvider,
+      routeInformationParser: appRouter.routeInformationParser,
     );
   }
 }
