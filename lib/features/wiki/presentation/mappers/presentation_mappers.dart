@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_treeview/flutter_treeview.dart';
+import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
+import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/version_model.dart';
+
+import '../../domain/entities/document_entity.dart';
 
 extension FileEntityMapper on FileTreeEntity {
   FileTreeModel toFileTreeModel() {
@@ -20,6 +25,33 @@ extension FileListMapper on List<FileTreeEntity> {
   }
 }
 
+extension CommitEntityMapper on CommitEntity {
+
+  VersionModel toVersionModel() {
+    return VersionModel(title: title,
+        message: message,
+        authorName: authorName,
+        authorEmail: authorEmail,
+        authoredDate: authoredDate,
+        committerName: committerName,
+        committerEmail: committerEmail,
+        committedDate: committedDate);
+  }
+
+}
+
+extension DocumentEntityMapper on DocumentEntity {
+
+  DocumentModel toDocumentModel() {
+    return DocumentModel(versionModel: commitEntity!.toVersionModel(),
+        fileName: fileName,
+        filePath: filePath,
+        size: size,
+        content: content);
+  }
+
+}
+
 extension NodeMapper on FileTreeModel {
   Node toNode() {
     return Node(
@@ -31,7 +63,12 @@ extension NodeMapper on FileTreeModel {
 
   FileTreeEntity toEntity() {
     return FileTreeEntity(
-        id: id, name: name, type: type, path: path, children: [], mode: '');
+        id: id,
+        name: name,
+        type: type,
+        path: path,
+        children: [],
+        mode: '');
   }
 }
 

@@ -1,22 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/core/models/resource.dart';
-import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_document_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
+import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
 import 'package:grimoire/injection.dart';
 
-class RepositoryController extends GetxController {
+class DocumentController extends GetxController {
   final GetDocumentUseCase _getDocumentUseCase = getIt<GetDocumentUseCase>();
 
-  var data = const Resource<DocumentEntity>.initial('initial').obs;
+  var data = const Resource<DocumentModel>.initial('initial').obs;
 
   void getDocument(FileTreeModel fileTreeModel) async {
-    data.value = const Resource<DocumentEntity>.loading('fetch data');
+    data.value = const Resource<DocumentModel>.loading('fetch data');
     var result =
         await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
-    data.value = result;
+    data.value = result.map((e) => e!.toDocumentModel());
   }
 
   void redirect(String text, String? href, List<FileTreeModel> fileTreeModels) {

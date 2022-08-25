@@ -40,7 +40,7 @@ dependencies:
   dio: ^4.0.6
   injectable: ^1.5.3
   package_info_plus: ^1.4.3+1
-  dropdown_search: ^5.0.2
+  material_floating_search_bar: ^0.3.7
   font_awesome_flutter: ^10.1.0
   markdown: 6.0.0
   hive: ^2.2.3

@@ -17,4 +17,10 @@ class Resource<T> {
 
   const Resource.error(this.message, {this.data, this.errorCode})
       : status = Status.error;
+
+  Resource<E> map<E>(E Function(T? e) toElement) {
+    var transformed = Resource<E>.completed(toElement(data));
+    return transformed;
+  }
+
 }
