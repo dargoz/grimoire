@@ -41,7 +41,7 @@ class WikiRepositoryImpl extends WikiRepository {
   @override
   Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage) async {
     var response = await _remoteDataSource.getRepositoryTree(
-        RepositoryTreeRequest(id: _projectId, recursive: true));
+        RepositoryTreeRequest(id: _projectId, recursive: true, perPage: 100));
     return response.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
 }
