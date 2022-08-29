@@ -4,7 +4,7 @@ import './responses/repository_tree_response.dart';
 import './responses/commit_response.dart';
 import 'package:retrofit/http.dart';
 
-part './gitlab_api_service.g.dart';
+part 'gitlab_api_service.g.dart';
 
 @RestApi(baseUrl: 'https://gitlab.com/api/v4/')
 abstract class GitlabApiService {
