@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/gitlab_api_service.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/gitlab/gitlab_api_service.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/rest_client.dart';
 import 'package:injectable/injectable.dart';
 

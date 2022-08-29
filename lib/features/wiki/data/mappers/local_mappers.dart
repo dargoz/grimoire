@@ -1,7 +1,7 @@
 import 'package:grimoire/features/wiki/data/sources/local/objects/commit_object.dart';
 import 'package:grimoire/features/wiki/data/sources/local/objects/file_object.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/responses/commit_response.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/responses/file_response.dart';
+import '../sources/remote/gitlab/responses/commit_response.dart';
+import '../sources/remote/gitlab/responses/file_response.dart';
 import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 

@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/responses/file_response.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/gitlab/responses/file_response.dart';
+
 
 import '../../../../../data/get_string.dart';
 

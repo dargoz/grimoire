@@ -3,7 +3,7 @@ import 'package:grimoire/features/wiki/data/mappers/local_mappers.dart';
 import 'package:grimoire/features/wiki/data/mappers/remote_mappers.dart';
 import 'package:grimoire/features/wiki/data/sources/local/local_data_source.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/remote_data_source.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/requests/repository_tree_request.dart';
+import '../sources/remote/gitlab/requests/repository_tree_request.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';

@@ -1,6 +1,9 @@
-import 'package:grimoire/features/wiki/data/sources/remote/responses/commit_response.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/responses/file_response.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/responses/repository_tree_response.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/schema_model.dart';
+import 'package:typesense/typesense.dart';
+
+import '../sources/remote/gitlab/responses/commit_response.dart';
+import '../sources/remote/gitlab/responses/file_response.dart';
+import '../sources/remote/gitlab/responses/repository_tree_response.dart';
 import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
@@ -45,4 +48,12 @@ extension FileTreeMapper on RepositoryTreeResponse {
         children: List.empty(growable: true),
         mode: mode);
   }
+}
+
+extension SchemaMapper on SchemaModel {
+
+  Schema toSchema() {
+    return Schema(name, fields);
+  }
+
 }

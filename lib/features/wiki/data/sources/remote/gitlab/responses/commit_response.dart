@@ -1,5 +1,7 @@
-import 'package:grimoire/features/wiki/data/sources/remote/responses/stats_response.dart';
+
 import 'package:json_annotation/json_annotation.dart';
+
+import './stats_response.dart';
 
 part 'commit_response.g.dart';
 
