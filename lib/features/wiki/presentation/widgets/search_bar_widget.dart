@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class SearchBarWidget extends StatelessWidget {
-  const SearchBarWidget({Key? key, this.controller, this.onFocusChanged}) : super(key: key);
+  const SearchBarWidget({Key? key, this.controller, this.onFocusChanged})
+      : super(key: key);
 
   final FloatingSearchBarController? controller;
   final Function(bool)? onFocusChanged;

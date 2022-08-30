@@ -26,9 +26,9 @@ extension FileListMapper on List<FileTreeEntity> {
 }
 
 extension CommitEntityMapper on CommitEntity {
-
   VersionModel toVersionModel() {
-    return VersionModel(title: title,
+    return VersionModel(
+        title: title,
         message: message,
         authorName: authorName,
         authorEmail: authorEmail,
@@ -37,19 +37,17 @@ extension CommitEntityMapper on CommitEntity {
         committerEmail: committerEmail,
         committedDate: committedDate);
   }
-
 }
 
 extension DocumentEntityMapper on DocumentEntity {
-
   DocumentModel toDocumentModel() {
-    return DocumentModel(versionModel: commitEntity!.toVersionModel(),
+    return DocumentModel(
+        versionModel: commitEntity!.toVersionModel(),
         fileName: fileName,
         filePath: filePath,
         size: size,
         content: content);
   }
-
 }
 
 extension NodeMapper on FileTreeModel {
@@ -63,12 +61,7 @@ extension NodeMapper on FileTreeModel {
 
   FileTreeEntity toEntity() {
     return FileTreeEntity(
-        id: id,
-        name: name,
-        type: type,
-        path: path,
-        children: [],
-        mode: '');
+        id: id, name: name, type: type, path: path, children: [], mode: '');
   }
 }
 

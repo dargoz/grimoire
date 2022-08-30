@@ -28,8 +28,8 @@ class WikiRepositoryImpl extends WikiRepository {
     }
     var fileResponse =
         await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
-    var commitResponse =
-        await _remoteDataSource.getCommit(_projectId, fileResponse.lastCommitId);
+    var commitResponse = await _remoteDataSource.getCommit(
+        _projectId, fileResponse.lastCommitId);
     var documentEntity = fileResponse.toDocumentEntity();
     documentEntity.commitEntity = commitResponse.toCommitEntity();
     var fileObject = fileResponse.toFileObject();

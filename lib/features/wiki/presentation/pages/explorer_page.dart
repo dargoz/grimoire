@@ -14,89 +14,101 @@ import 'package:grimoire/features/wiki/presentation/controllers/document_control
 
 import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
+import '../models/file_tree_model.dart';
 import '../widgets/highlight_builder.dart';
 
 class ExplorerPage extends StatelessWidget {
-  ExplorerPage({Key? key}) : super(key: key);
-
   final _keyboardController = Get.put(KeyboardController());
-  final documentController = Get.put(DocumentController());
-  final _treeController = Get.put(FileTreeController());
+  final DocumentController documentController = Get.find();
+  final FileTreeController _treeController = Get.find();
+
+  ExplorerPage({Key? key}) : super(key: key) {
+    print('page init called');
+    _treeController.state.value = Resource<List<FileTreeModel>>.initial(
+        'page init',
+        data: _treeController.state.value.data);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-        autofocus: true,
-        focusNode: _keyboardController.focusNode,
-        onKey: _keyboardController.onKeyEvent,
-        child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Grimoire'),
-              toolbarHeight: 48,
-              actions: [
-                MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        _keyboardController.showSearchBar();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(32)),
-                              color: Colors.white),
-                          child: Row(
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.black87,
+    return WillPopScope(
+      onWillPop: () async {
+        print('will pop');
+        return true;
+      },
+      child: RawKeyboardListener(
+          autofocus: true,
+          focusNode: _keyboardController.focusNode,
+          onKey: _keyboardController.onKeyEvent,
+          child: Scaffold(
+              appBar: AppBar(
+                title: const Text('Grimoire'),
+                toolbarHeight: 48,
+                actions: [
+                  MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {
+                          _keyboardController.showSearchBar();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32)),
+                                color: Colors.white),
+                            child: Row(
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.black87,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'Search',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                child: KeyCapsWidget(text: 'Ctrl'),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(8, 0, 16, 0),
-                                child: KeyCapsWidget(text: 'Space'),
-                              )
-                            ],
+                                Text(
+                                  'Search',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                  child: KeyCapsWidget(text: 'Ctrl'),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(8, 0, 16, 0),
+                                  child: KeyCapsWidget(text: 'Space'),
+                                )
+                              ],
+                            ),
                           ),
                         ),
+                      )),
+                  const Icon(Icons.help),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        'https://secure.gravatar.com/avatar/018afd3eb4d4dcb676df54b56db7c80e?s=64&d=identicon',
                       ),
-                    )),
-                const Icon(Icons.help),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      'https://secure.gravatar.com/avatar/018afd3eb4d4dcb676df54b56db7c80e?s=64&d=identicon',
                     ),
                   ),
-                ),
-              ],
-            ),
-            body: Stack(
-              children: [
-                buildContent(context),
-                SearchBarWidget(
-                  controller: _keyboardController.searchBarController,
-                  onFocusChanged: (isFocus) {
-                    if (!isFocus) {
-                      _keyboardController.hideSearchBar();
-                    }
-                  },
-                )
-              ],
-            )));
+                ],
+              ),
+              body: Stack(
+                children: [
+                  buildContent(context),
+                  SearchBarWidget(
+                    controller: _keyboardController.searchBarController,
+                    onFocusChanged: (isFocus) {
+                      if (!isFocus) {
+                        _keyboardController.hideSearchBar();
+                      }
+                    },
+                  )
+                ],
+              ))),
+    );
   }
 
   Widget versionWidget(BuildContext context) {
@@ -212,11 +224,21 @@ class ExplorerPage extends StatelessWidget {
           ),
           child: Column(
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    _treeController.getFileTree();
-                  },
-                  child: const Text('get file tree')),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: TextField(
+                  style: TextStyle(
+                    fontSize: 14
+                  ),
+                  decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.fromLTRB(16, 24, 24, 0),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      labelText: 'search file..'),
+                ),
+              ),
               Expanded(child: FileTreeWidget())
             ],
           ),

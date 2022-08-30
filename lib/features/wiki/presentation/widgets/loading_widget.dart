@@ -7,8 +7,8 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: LottieBuilder.asset('resources/lottie/loading_animation_bored_hand.json'),
+      child: LottieBuilder.asset(
+          'resources/lottie/loading_animation_bored_hand.json'),
     );
   }
-
 }

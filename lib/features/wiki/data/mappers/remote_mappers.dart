@@ -51,9 +51,29 @@ extension FileTreeMapper on RepositoryTreeResponse {
 }
 
 extension SchemaMapper on SchemaModel {
-
   Schema toSchema() {
     return Schema(name, fields);
   }
+}
 
+extension FieldSchemaMapper on FileResponse {
+  SchemaModel toSchemaModel() {
+    var fields = <Field>{};
+    toJson().forEach((key, value) {
+      Field field;
+      if (value is String) {
+        field = Field(key, Type.string);
+      } else if (value is bool) {
+        field = Field(key, Type.bool);
+      } else if (value is int) {
+        field = Field(key, Type.int32);
+      } else if (value is double) {
+        field = Field(key, Type.float);
+      } else {
+        field = Field(key, Type.stringify);
+      }
+      fields.add(field);
+    });
+    return SchemaModel('files', fields);
+  }
 }

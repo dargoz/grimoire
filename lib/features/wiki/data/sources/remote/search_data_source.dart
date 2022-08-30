@@ -2,4 +2,9 @@ import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/sche
 
 abstract class SearchDataSource {
   Future<dynamic> createCollection(SchemaModel schema);
+
+  Future<Map<String, dynamic>> multiSearch(Map<String, String> queryParams);
+
+  Future<dynamic> importDocuments(
+      String collectionName, List<Map<String, dynamic>> documents);
 }

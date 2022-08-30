@@ -22,5 +22,4 @@ class Resource<T> {
     var transformed = Resource<E>.completed(toElement(data));
     return transformed;
   }
-
 }

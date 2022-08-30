@@ -8,7 +8,13 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return const HomePage();
+        return HomePage();
+      },
+    ),
+    GoRoute(
+      path: '/explorer',
+      builder: (BuildContext context, GoRouterState state) {
+        return ExplorerPage();
       },
     ),
   ],
