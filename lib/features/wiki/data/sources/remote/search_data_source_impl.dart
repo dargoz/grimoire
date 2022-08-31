@@ -19,6 +19,14 @@ class SearchDataSourceImpl extends SearchDataSource {
   }
 
   @override
+  Future addDocument(String collectionName, Map<String, dynamic> document) {
+    return typeSenseClient.client
+        .collection(collectionName)
+        .documents
+        .upsert(document);
+  }
+
+  @override
   Future<dynamic> importDocuments(
       String collectionName, List<Map<String, dynamic>> documents) {
     var importResult = typeSenseClient.client

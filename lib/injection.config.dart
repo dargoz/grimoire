@@ -37,7 +37,9 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i11.RemoteDataSource>(
       _i12.RemoteDataSourceImpl(get<_i5.RestClient>()));
   gh.singleton<_i13.WikiRepository>(_i14.WikiRepositoryImpl(
-      get<_i11.RemoteDataSource>(), get<_i3.LocalDataSource>()));
+      get<_i11.RemoteDataSource>(),
+      get<_i3.LocalDataSource>(),
+      get<_i7.SearchDataSource>()));
   gh.factory<_i15.GetDocumentUseCase>(
       () => _i15.GetDocumentUseCase(get<_i13.WikiRepository>()));
   gh.factory<_i16.GetFileTreeUseCase>(

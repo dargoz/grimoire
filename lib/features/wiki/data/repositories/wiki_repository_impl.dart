@@ -3,6 +3,7 @@ import 'package:grimoire/features/wiki/data/mappers/local_mappers.dart';
 import 'package:grimoire/features/wiki/data/mappers/remote_mappers.dart';
 import 'package:grimoire/features/wiki/data/sources/local/local_data_source.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/remote_data_source.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/search_data_source.dart';
 import '../sources/remote/gitlab/requests/repository_tree_request.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
@@ -11,11 +12,12 @@ import 'package:injectable/injectable.dart';
 
 @Singleton(as: WikiRepository)
 class WikiRepositoryImpl extends WikiRepository {
-  WikiRepositoryImpl(this._remoteDataSource, this._localDataSource);
+  WikiRepositoryImpl(this._remoteDataSource, this._localDataSource, this._searchDataSource);
 
   final String _projectId = '27745171';
   final RemoteDataSource _remoteDataSource;
   final LocalDataSource _localDataSource;
+  final SearchDataSource _searchDataSource;
 
   @override
   Future<DocumentEntity> getDocument(String id, String filePath) async {
@@ -35,6 +37,7 @@ class WikiRepositoryImpl extends WikiRepository {
     var fileObject = fileResponse.toFileObject();
     fileObject.commitObject = commitResponse.toCommitObject();
     _localDataSource.saveDocument(fileObject);
+    _searchDataSource.addDocument('files', fileResponse.toJson());
     return documentEntity;
   }
 
