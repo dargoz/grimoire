@@ -141,15 +141,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Future<void> _showLoadingDialog(BuildContext context,
-      {String? errorMessage}) async {
+  Future<void> _showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return Container(
-          child: LoadingWidget(),
-        );
+        return const LoadingWidget();
       },
     );
   }

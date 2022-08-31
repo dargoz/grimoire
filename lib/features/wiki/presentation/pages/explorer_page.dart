@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_treeview/flutter_treeview.dart' as tree;
 import 'package:get/get.dart';
+import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
+import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/key_caps_widget.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
@@ -23,7 +26,6 @@ class ExplorerPage extends StatelessWidget {
   final FileTreeController _treeController = Get.find();
 
   ExplorerPage({Key? key}) : super(key: key) {
-    print('page init called');
     _treeController.state.value = Resource<List<FileTreeModel>>.initial(
         'page init',
         data: _treeController.state.value.data);
@@ -185,12 +187,59 @@ class ExplorerPage extends StatelessWidget {
                 child: SingleChildScrollView(
               controller: ScrollController(),
               child: Html(
-                customRender: const {'code': customCodeRender},
+                customRender: {
+                  'code': customCodeRender,
+                  'h1': (renderContext, widget) => customHeaderRender(
+                      renderContext, widget,
+                      onRender: (label, key) =>
+                          documentController.documentWidgetSections.add(Section(
+                              id: '${label.hashCode}',
+                              label: label,
+                              sectionKey: key))),
+                  'h2': (renderContext, widget) => customHeaderRender(
+                      renderContext, widget,
+                      onRender: (label, key) =>
+                          documentController.documentWidgetSections.add(Section(
+                              id: '${label.hashCode}',
+                              label: label,
+                              sectionKey: key))),
+                  'h3': (renderContext, widget) => customHeaderRender(
+                      renderContext, widget,
+                      onRender: (label, key) =>
+                          documentController.documentWidgetSections.add(Section(
+                              id: '${label.hashCode}',
+                              label: label,
+                              sectionKey: key))),
+                  'h4': (renderContext, widget) => customHeaderRender(
+                      renderContext, widget,
+                      onRender: (label, key) =>
+                          documentController.documentWidgetSections.add(Section(
+                              id: '${label.hashCode}',
+                              label: label,
+                              sectionKey: key))),
+                  'h5': (renderContext, widget) => customHeaderRender(
+                      renderContext, widget,
+                      onRender: (label, key) =>
+                          documentController.documentWidgetSections.add(Section(
+                              id: '${label.hashCode}',
+                              label: label,
+                              sectionKey: key))),
+                  'h6': (renderContext, widget) => customHeaderRender(
+                      renderContext, widget,
+                      onRender: (label, key) =>
+                          documentController.documentWidgetSections.add(Section(
+                              id: '${label.hashCode}',
+                              label: label,
+                              sectionKey: key)))
+                },
                 data: md.markdownToHtml(
                     documentController.data.value.data?.content ?? ''),
                 onLinkTap: (text, renderContext, map, element) {
                   documentController.redirect(text ?? '', map['href'],
                       _treeController.state.value.data!);
+                },
+                onAnchorTap: (url, renderContext, attribute, element) {
+                  print('anchor : $url');
                 },
               ),
             ))
@@ -213,48 +262,39 @@ class ExplorerPage extends StatelessWidget {
   Widget buildContent(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.2,
-          height: MediaQuery.of(context).size.height,
-          margin: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-          constraints: const BoxConstraints(minWidth: 100, minHeight: 100),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-                child: TextField(
-                  style: TextStyle(
-                    fontSize: 14
+        panelContainer(context,
+            childWidget: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: TextField(
+                    style: TextStyle(fontSize: 14),
+                    decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.fromLTRB(16, 24, 24, 0),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        labelText: 'search file..'),
                   ),
-                  decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.fromLTRB(16, 24, 24, 0),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      labelText: 'search file..'),
                 ),
-              ),
-              Expanded(child: FileTreeWidget())
-            ],
-          ),
-        ),
+                Expanded(child: FileTreeWidget())
+              ],
+            )),
         Obx(() {
           switch (documentController.data.value.status) {
             case Status.loading:
-              return SizedBox(
-                width: MediaQuery.of(context).size.width * 0.6,
+              return Expanded(
+                  child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
                 height: MediaQuery.of(context).size.height * 0.5,
                 child: const LoadingWidget(),
-              );
+              ));
             case Status.initial:
             case Status.completed:
-              return Container(
-                width: MediaQuery.of(context).size.width * 0.6,
+              return Expanded(
+                  child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
                 height: MediaQuery.of(context).size.height,
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                 child: Column(
@@ -266,12 +306,40 @@ class ExplorerPage extends StatelessWidget {
                     Expanded(child: documentWidget(context)),
                   ],
                 ),
-              );
+              ));
             case Status.error:
               return const ResourceErrorWidget();
           }
-        })
+        }),
+        panelContainer(context, childWidget: Obx(() {
+          print('section panel build');
+          return tree.TreeView(
+              onNodeTap: (node) {
+                documentController.onSectionClick(node);
+              },
+              controller: tree.TreeViewController(
+                children: documentController
+                    .parseDocumentSections(
+                        documentController.data.value.data?.content)
+                    .map((e) => e.toNode())
+                    .toList(),
+              ));
+        }))
       ],
+    );
+  }
+
+  Widget panelContainer(BuildContext context, {required Widget childWidget}) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.2,
+      height: MediaQuery.of(context).size.height,
+      margin: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      constraints: const BoxConstraints(minWidth: 100, minHeight: 100),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
+      child: childWidget,
     );
   }
 }

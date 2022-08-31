@@ -7,6 +7,7 @@ import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart'
 import 'package:grimoire/features/wiki/presentation/models/version_model.dart';
 
 import '../../domain/entities/document_entity.dart';
+import '../models/section.dart';
 
 extension FileEntityMapper on FileTreeEntity {
   FileTreeModel toFileTreeModel() {
@@ -99,4 +100,12 @@ extension NodeListMapper on List<FileTreeModel> {
     }
     return node;
   }
+}
+
+extension SectionNodeMapper on Section {
+
+  Node toNode() {
+    return Node(key: id, label: label);
+  }
+
 }
