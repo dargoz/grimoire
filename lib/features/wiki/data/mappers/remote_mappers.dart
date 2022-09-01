@@ -1,4 +1,9 @@
+import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/highlight.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/schema_model.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/typesense/requests/add_document_request.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/typesense/responses/search_response.dart';
+import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/search_result_entity.dart';
 import 'package:typesense/typesense.dart';
 
 import '../sources/remote/gitlab/responses/commit_response.dart';
@@ -56,7 +61,7 @@ extension SchemaMapper on SchemaModel {
   }
 }
 
-extension FieldSchemaMapper on FileResponse {
+extension FieldSchemaMapper on AddDocumentRequest {
   SchemaModel toSchemaModel() {
     var fields = <Field>{};
     toJson().forEach((key, value) {
@@ -74,6 +79,54 @@ extension FieldSchemaMapper on FileResponse {
       }
       fields.add(field);
     });
-    return SchemaModel('files', fields);
+    return SchemaModel('wiki', fields);
+  }
+}
+
+extension AddDocumentMapper on DocumentEntity {
+  AddDocumentRequest toDocumentRequest() {
+    return AddDocumentRequest(
+        fileName: fileName,
+        filePath: filePath,
+        size: size,
+        content: content,
+        contentSha256: contentSha256,
+        blobId: blobId,
+        commitId: commitId,
+        authorName: commitEntity?.authorName ?? '',
+        committedDate: commitEntity?.committedDate ?? '',
+        executeFilemode: executeFilemode);
+  }
+}
+
+extension DocumentRequestMapper on AddDocumentRequest {
+  DocumentEntity toDocumentEntity() {
+    return DocumentEntity(
+        fileName: fileName,
+        filePath: filePath,
+        size: size,
+        content: content,
+        contentSha256: contentSha256,
+        blobId: blobId,
+        commitId: commitId,
+        executeFilemode: executeFilemode);
+  }
+}
+
+extension HighlightMapper on Highlight {
+  HighlightEntity toHighLightEntity() {
+    return HighlightEntity(
+        field: field, matchedTokens: matchedTokens, snippet: snippet);
+  }
+}
+
+extension SearchMapper on SearchResponse {
+  List<SearchResultEntity> toSearchEntity() {
+    return hits
+        .map((e) => SearchResultEntity(
+            documentEntity: e.document.toDocumentEntity(),
+            highlights: e.highlights.map((highlight) => highlight.toHighLightEntity()).toList(),
+            textMatch: e.textMatch))
+        .toList();
   }
 }

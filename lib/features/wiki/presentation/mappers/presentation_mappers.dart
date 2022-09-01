@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_treeview/flutter_treeview.dart';
 import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
 import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/marker_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/version_model.dart';
 
 import '../../domain/entities/document_entity.dart';
+import '../../domain/entities/search_result_entity.dart';
 import '../models/section.dart';
 
 extension FileEntityMapper on FileTreeEntity {
@@ -43,7 +47,7 @@ extension CommitEntityMapper on CommitEntity {
 extension DocumentEntityMapper on DocumentEntity {
   DocumentModel toDocumentModel() {
     return DocumentModel(
-        versionModel: commitEntity!.toVersionModel(),
+        versionModel: commitEntity?.toVersionModel(),
         fileName: fileName,
         filePath: filePath,
         size: size,
@@ -62,7 +66,12 @@ extension NodeMapper on FileTreeModel {
 
   FileTreeEntity toEntity() {
     return FileTreeEntity(
-        id: id, name: name, type: type, path: path, children: [], mode: '');
+        id: id,
+        name: name,
+        type: type,
+        path: path,
+        children: [],
+        mode: '');
   }
 }
 
@@ -106,6 +115,24 @@ extension SectionNodeMapper on Section {
 
   Node toNode() {
     return Node(key: id, label: label);
+  }
+
+}
+
+extension MarkerModelMapper on HighlightEntity {
+
+  MarkerModel toMarkerModel() {
+    return MarkerModel(field: field, matchedTokens: matchedTokens, snippet: snippet);
+  }
+
+}
+
+extension SearchModelMapper on SearchResultEntity {
+
+  SearchModel toSearchModel() {
+    return SearchModel(document: documentEntity?.toDocumentModel(),
+        marker: highlights?.map((e) => e.toMarkerModel()).toList() ?? [],
+        textMatch: textMatch);
   }
 
 }

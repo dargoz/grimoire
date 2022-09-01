@@ -3,16 +3,22 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/core/models/resource.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_document_use_case.dart';
+import 'package:grimoire/features/wiki/domain/usecases/search_document_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/injection.dart';
 
 class DocumentController extends GetxController {
   final GetDocumentUseCase _getDocumentUseCase = getIt<GetDocumentUseCase>();
+  final SearchDocumentUseCase _searchDocumentUseCase = getIt<
+      SearchDocumentUseCase>();
 
   var data = const Resource<DocumentModel>.initial('initial').obs;
+  var searchData = const Resource<List<SearchModel>>.initial('initial_search')
+      .obs;
   var documentWidgetSections = List<Section>.empty(growable: true);
   var documentAnchorSections = List<Section>.empty(growable: true);
 
@@ -21,7 +27,7 @@ class DocumentController extends GetxController {
     documentAnchorSections.clear();
     data.value = const Resource<DocumentModel>.loading('fetch data');
     var result =
-        await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
+    await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
     data.value = result.map((e) => e!.toDocumentModel());
   }
 
@@ -35,7 +41,7 @@ class DocumentController extends GetxController {
     }
     if (href != null) {
       var node =
-          fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
+      fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
       getDocument(node!);
     }
   }
@@ -69,8 +75,14 @@ class DocumentController extends GetxController {
 
   void onSectionClick(String nodeKey) {
     var sectionIndex =
-        documentAnchorSections.indexWhere((element) => element.id == nodeKey);
+    documentAnchorSections.indexWhere((element) => element.id == nodeKey);
     var section = documentWidgetSections.elementAt(sectionIndex);
     scrollTo(section);
+  }
+
+  void onQueryChanged(String query) async {
+    var searchResult = await _searchDocumentUseCase.executeUseCase(query);
+    searchData.value = searchResult.map((data) =>
+        data!.map((item) => item.toSearchModel()).toList());
   }
 }

@@ -8,7 +8,7 @@ class DocumentModel {
       required this.size,
       required this.content});
 
-  VersionModel versionModel;
+  VersionModel? versionModel;
   String fileName;
   String filePath;
   int size;

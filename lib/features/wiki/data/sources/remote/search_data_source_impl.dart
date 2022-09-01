@@ -1,6 +1,9 @@
 import 'package:grimoire/features/wiki/data/mappers/remote_mappers.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/search_data_source.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/schema_model.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/typesense/requests/add_document_request.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/typesense/requests/search_query_request.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/typesense/responses/search_response.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/typesense_client.dart';
 import 'package:injectable/injectable.dart';
 
@@ -19,11 +22,11 @@ class SearchDataSourceImpl extends SearchDataSource {
   }
 
   @override
-  Future addDocument(String collectionName, Map<String, dynamic> document) {
+  Future addDocument(String collectionName, AddDocumentRequest addDocumentRequest) {
     return typeSenseClient.client
         .collection(collectionName)
         .documents
-        .upsert(document);
+        .upsert(addDocumentRequest.toJson());
   }
 
   @override
@@ -34,5 +37,15 @@ class SearchDataSourceImpl extends SearchDataSource {
         .documents
         .importDocuments(documents);
     return importResult;
+  }
+
+  @override
+  Future<SearchResponse> searchDocument(
+      String collectionName,SearchQueryRequest searchQueryRequest) async {
+    var result = await typeSenseClient.client
+        .collection(collectionName)
+        .documents
+        .search(searchQueryRequest.toJson());
+    return SearchResponse.fromJson(result);
   }
 }

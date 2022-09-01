@@ -100,14 +100,22 @@ class ExplorerPage extends StatelessWidget {
               body: Stack(
                 children: [
                   buildContent(context),
-                  SearchBarWidget(
-                    controller: _keyboardController.searchBarController,
-                    onFocusChanged: (isFocus) {
-                      if (!isFocus) {
-                        _keyboardController.hideSearchBar();
-                      }
-                    },
-                  )
+                  Obx(() {
+                    return SearchBarWidget(
+                      controller: _keyboardController.searchBarController,
+                      onFocusChanged: (isFocus) {
+                        if (!isFocus) {
+                          _keyboardController.hideSearchBar();
+                        }
+                      },
+                      onQueryChanged: documentController.onQueryChanged,
+                      itemList: <Widget>[
+                        if (documentController.searchData.value.status == Status.completed)
+                          for (var item in documentController.searchData.value.data!)
+                            Text(item.marker.isEmpty ? '' : item.marker[0].snippet)
+                      ],
+                    );
+                  })
                 ],
               ))),
     );
@@ -135,9 +143,9 @@ class ExplorerPage extends StatelessWidget {
               children: [
                 const Spacer(),
                 Text(
-                    'Author : ${documentController.data.value.data?.versionModel.authorName}'),
+                    'Author : ${documentController.data.value.data?.versionModel?.authorName}'),
                 Text(
-                    'Last Update : ${documentController.data.value.data?.versionModel.committedDate}'),
+                    'Last Update : ${documentController.data.value.data?.versionModel?.committedDate}'),
                 const Spacer(),
               ],
             ),
