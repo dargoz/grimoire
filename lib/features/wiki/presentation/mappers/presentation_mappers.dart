@@ -3,6 +3,7 @@ import 'package:flutter_treeview/flutter_treeview.dart';
 import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/section_entity.dart';
 import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/marker_model.dart';
@@ -48,11 +49,22 @@ extension DocumentEntityMapper on DocumentEntity {
   DocumentModel toDocumentModel() {
     return DocumentModel(
         versionModel: commitEntity?.toVersionModel(),
+        sections: sections?.map((e) => e.toSection()).toList() ?? [],
         fileName: fileName,
         filePath: filePath,
         size: size,
         content: content);
   }
+}
+
+extension SectionEntityMapper on SectionEntity {
+
+  Section toSection() {
+    var key = GlobalKey();
+    return Section(
+        id: '${key.hashCode}', label: label, sectionKey: key, attr: attr);
+  }
+
 }
 
 extension NodeMapper on FileTreeModel {
@@ -122,7 +134,8 @@ extension SectionNodeMapper on Section {
 extension MarkerModelMapper on HighlightEntity {
 
   MarkerModel toMarkerModel() {
-    return MarkerModel(field: field, matchedTokens: matchedTokens, snippet: snippet);
+    return MarkerModel(
+        field: field, matchedTokens: matchedTokens, snippet: snippet);
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:grimoire/core/usecases/usecase.dart';
+import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/search_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -12,8 +13,18 @@ class SearchDocumentUseCase extends UseCase<List<SearchResultEntity>, String> {
 
   @override
   Future<List<SearchResultEntity>> useCase(String params) async {
-    List<SearchResultEntity> result = await _searchRepository.searchDocument(params);
+    List<SearchResultEntity> result =
+        await _searchRepository.searchDocument(params);
+    for (var entity in result) {
+      for (var highlight in entity.highlights ?? <HighlightEntity>[]) {
+        var splitWord = highlight.snippet.split('\n');
+        print('split word : $splitWord');
+        var index = splitWord.indexWhere((element) => element.contains("<mark>"));
+        if(index != -1) {
+          highlight.snippet = splitWord[index];
+        }
+      }
+    }
     return result;
   }
-
 }

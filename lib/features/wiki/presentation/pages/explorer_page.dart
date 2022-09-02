@@ -110,9 +110,14 @@ class ExplorerPage extends StatelessWidget {
                       },
                       onQueryChanged: documentController.onQueryChanged,
                       itemList: <Widget>[
-                        if (documentController.searchData.value.status == Status.completed)
-                          for (var item in documentController.searchData.value.data!)
-                            Text(item.marker.isEmpty ? '' : item.marker[0].snippet)
+                        if (documentController.searchData.value.status ==
+                            Status.completed)
+                          for (int index = 0;
+                              index <
+                                  documentController
+                                      .searchData.value.data!.length;
+                              index++)
+                            _searchItem(context, index),
                       ],
                     );
                   })
@@ -202,6 +207,7 @@ class ExplorerPage extends StatelessWidget {
                       onRender: (label, key) =>
                           documentController.documentWidgetSections.add(Section(
                               id: '${label.hashCode}',
+                              attr: '1',
                               label: label,
                               sectionKey: key))),
                   'h2': (renderContext, widget) => customHeaderRender(
@@ -209,6 +215,7 @@ class ExplorerPage extends StatelessWidget {
                       onRender: (label, key) =>
                           documentController.documentWidgetSections.add(Section(
                               id: '${label.hashCode}',
+                              attr: '2',
                               label: label,
                               sectionKey: key))),
                   'h3': (renderContext, widget) => customHeaderRender(
@@ -216,6 +223,7 @@ class ExplorerPage extends StatelessWidget {
                       onRender: (label, key) =>
                           documentController.documentWidgetSections.add(Section(
                               id: '${label.hashCode}',
+                              attr: '3',
                               label: label,
                               sectionKey: key))),
                   'h4': (renderContext, widget) => customHeaderRender(
@@ -223,6 +231,7 @@ class ExplorerPage extends StatelessWidget {
                       onRender: (label, key) =>
                           documentController.documentWidgetSections.add(Section(
                               id: '${label.hashCode}',
+                              attr: '4',
                               label: label,
                               sectionKey: key))),
                   'h5': (renderContext, widget) => customHeaderRender(
@@ -230,6 +239,7 @@ class ExplorerPage extends StatelessWidget {
                       onRender: (label, key) =>
                           documentController.documentWidgetSections.add(Section(
                               id: '${label.hashCode}',
+                              attr: '5',
                               label: label,
                               sectionKey: key))),
                   'h6': (renderContext, widget) => customHeaderRender(
@@ -237,6 +247,7 @@ class ExplorerPage extends StatelessWidget {
                       onRender: (label, key) =>
                           documentController.documentWidgetSections.add(Section(
                               id: '${label.hashCode}',
+                              attr: '6',
                               label: label,
                               sectionKey: key)))
                 },
@@ -324,10 +335,9 @@ class ExplorerPage extends StatelessWidget {
               },
               controller: tree.TreeViewController(
                 children: documentController
-                    .parseDocumentSections(
-                        documentController.data.value.data?.content)
+                    .data.value.data?.sections
                     .map((e) => e.toNode())
-                    .toList(),
+                    .toList() ?? [],
               ));
         }))
       ],
@@ -345,6 +355,42 @@ class ExplorerPage extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
       child: childWidget,
+    );
+  }
+
+  Widget _searchItem(BuildContext context, int index) {
+    return MouseRegion(
+      onEnter: (pointerEvent) {
+        documentController.onItemHover(index, true);
+      },
+      onExit: (pointerEvent) {
+        documentController.onItemHover(index, false);
+      },
+      cursor: SystemMouseCursors.click,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 64,
+        decoration: BoxDecoration(
+          color: documentController.hovers[index]
+              ? const Color.fromARGB(255, 196, 239, 255)
+              : Colors.white,
+          border: const Border(
+            bottom: BorderSide(width: 1.0, color: Colors.grey),
+          ),
+        ),
+        child: Builder(builder: (builderContext) {
+          var item = documentController.searchData.value.data![index];
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(item.document?.fileName ?? 'unknown'),
+              Html(
+                data: item.marker.isEmpty ? '' : item.marker[0].snippet,
+              )
+            ],
+          );
+        }),
+      ),
     );
   }
 }

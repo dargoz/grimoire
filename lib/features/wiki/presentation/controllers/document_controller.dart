@@ -20,11 +20,10 @@ class DocumentController extends GetxController {
   var searchData = const Resource<List<SearchModel>>.initial('initial_search')
       .obs;
   var documentWidgetSections = List<Section>.empty(growable: true);
-  var documentAnchorSections = List<Section>.empty(growable: true);
+  var hovers = List<bool>.empty(growable: true).obs;
 
   void getDocument(FileTreeModel fileTreeModel) async {
     documentWidgetSections.clear();
-    documentAnchorSections.clear();
     data.value = const Resource<DocumentModel>.loading('fetch data');
     var result =
     await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
@@ -46,22 +45,6 @@ class DocumentController extends GetxController {
     }
   }
 
-  List<Section> parseDocumentSections(String? content) {
-    documentAnchorSections = List<Section>.empty(growable: true);
-    if (content != null) {
-      var contents = content.split('\n');
-      for (var section in contents) {
-        if (section.startsWith('#')) {
-          var trimSection = section.replaceAll('#', '').trim();
-          var key = GlobalKey();
-          documentAnchorSections.add(Section(
-              id: '${key.hashCode}', label: trimSection, sectionKey: key));
-        }
-      }
-    }
-
-    return documentAnchorSections;
-  }
 
   void scrollTo(Section section) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -75,14 +58,19 @@ class DocumentController extends GetxController {
 
   void onSectionClick(String nodeKey) {
     var sectionIndex =
-    documentAnchorSections.indexWhere((element) => element.id == nodeKey);
+    data.value.data?.sections.indexWhere((element) => element.id == nodeKey) ?? 0;
     var section = documentWidgetSections.elementAt(sectionIndex);
     scrollTo(section);
   }
 
   void onQueryChanged(String query) async {
     var searchResult = await _searchDocumentUseCase.executeUseCase(query);
+    hovers.value = List<bool>.filled(searchResult.data?.length ?? 0, false, growable: true);
     searchData.value = searchResult.map((data) =>
         data!.map((item) => item.toSearchModel()).toList());
+  }
+
+  onItemHover(int index, bool flag) {
+    hovers[index] = flag;
   }
 }

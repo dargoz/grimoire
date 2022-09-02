@@ -1,8 +1,10 @@
 import 'dart:convert' show base64, utf8;
 
+import 'package:flutter/foundation.dart';
 import 'package:grimoire/core/usecases/usecase.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/section_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/search_repository.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';
 import 'package:injectable/injectable.dart';
@@ -22,8 +24,28 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
     var contentCodeUnits = base64.decode(document.content);
     String decodedContent = utf8.decode(contentCodeUnits);
     document.content = decodedContent;
-    var indexing = await _searchRepository.addDocument(document);
-    print('indexing : $indexing');
+    document.sections = _parseDocumentSections(decodedContent);
+    await _searchRepository.addDocument(document);
+    if (kDebugMode) {
+      print('indexing done');
+    }
     return document;
+  }
+
+  List<SectionEntity> _parseDocumentSections(String? content) {
+    var sections = List<SectionEntity>.empty(growable: true);
+    if (content != null) {
+      var contents = content.split('\n');
+      for (var section in contents) {
+
+        if (section.startsWith('#')) {
+          var attr = section.lastIndexOf('#') + 1;
+          var trimSection = section.replaceAll('#', '').trim();
+          sections.add(SectionEntity(attr: '$attr', label: trimSection));
+        }
+      }
+    }
+
+    return sections;
   }
 }

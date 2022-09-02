@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Section {
-  Section({required this.id, required this.label, required this.sectionKey});
+  Section(
+      {required this.id,
+      required this.attr,
+      required this.label,
+      required this.sectionKey});
 
   String id;
+  String attr;
   String label;
   GlobalKey sectionKey;
 

@@ -1,8 +1,10 @@
 import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/section_entity.dart';
 
 class DocumentEntity {
   DocumentEntity(
       {this.commitEntity,
+      this.sections = const [],
       required this.fileName,
       required this.filePath,
       required this.size,
@@ -13,6 +15,7 @@ class DocumentEntity {
       required this.executeFilemode});
 
   CommitEntity? commitEntity;
+  List<SectionEntity>? sections;
   String fileName;
   String filePath;
   int size;
