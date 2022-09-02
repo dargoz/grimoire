@@ -383,7 +383,12 @@ class ExplorerPage extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(item.document?.fileName ?? 'unknown'),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.fromLTRB(8, 4, 4, 4),
+                color: const Color.fromARGB(255, 171, 194, 206),
+                child: Text(item.document?.fileName ?? 'unknown'),
+              ),
               Html(
                 data: item.marker.isEmpty ? '' : item.marker[0].snippet,
               )

@@ -41,7 +41,7 @@ class SearchBarWidget extends StatelessWidget {
         FloatingSearchBarAction(
           showIfOpened: false,
           child: CircularButton(
-            icon: const Icon(Icons.place),
+            icon: const Icon(Icons.search),
             onPressed: () {},
           ),
         ),

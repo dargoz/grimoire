@@ -10,7 +10,7 @@ class AddDocumentRequest {
       required this.size,
       required this.content,
       required this.contentSha256,
-      required this.blobId,
+      required this.id,
       required this.commitId,
       required this.authorName,
       required this.committedDate,
@@ -21,7 +21,7 @@ class AddDocumentRequest {
   int size;
   String content;
   String contentSha256;
-  String blobId;
+  String id;
   String commitId;
   String authorName;
   String committedDate;

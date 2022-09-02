@@ -20,11 +20,23 @@ void main() {
     print('collection : ${collection.toString()}');
   });
 
-  test('get document', () async {
+  test('search document', () async {
     var searchDataSource = SearchDataSourceImpl();
-    var response = await searchDataSource.searchDocument('wiki', SearchQueryRequest(q: 't', queryBy: 'content'));
+    var response = await searchDataSource.searchDocument('wiki', SearchQueryRequest(q: 'table of content', queryBy: 'content'));
     print('response :\n${response.toJson()}');
     /*var documents = typeSense.client.collection('files').documents.search('searchParameters');
     print('collection : ${document}');*/
+  });
+
+  test('get document', () async {
+    var searchDataSource = SearchDataSourceImpl();
+    var result = searchDataSource.typeSenseClient.client.collection('wiki').documents;
+    print('documents :\n$result');
+  });
+
+  test('drop collection', () async {
+    var searchDataSource = SearchDataSourceImpl();
+    var result = await searchDataSource.typeSenseClient.client.collection('wiki').delete();
+    print('documents :\n$result');
   });
 }

@@ -91,7 +91,7 @@ extension AddDocumentMapper on DocumentEntity {
         size: size,
         content: content,
         contentSha256: contentSha256,
-        blobId: blobId,
+        id: blobId,
         commitId: commitId,
         authorName: commitEntity?.authorName ?? '',
         committedDate: commitEntity?.committedDate ?? '',
@@ -107,7 +107,7 @@ extension DocumentRequestMapper on AddDocumentRequest {
         size: size,
         content: content,
         contentSha256: contentSha256,
-        blobId: blobId,
+        blobId: id,
         commitId: commitId,
         executeFilemode: executeFilemode);
   }
