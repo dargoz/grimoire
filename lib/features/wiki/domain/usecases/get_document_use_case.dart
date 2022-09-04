@@ -25,7 +25,11 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
     String decodedContent = utf8.decode(contentCodeUnits);
     document.content = decodedContent;
     document.sections = _parseDocumentSections(decodedContent);
-    await _searchRepository.addDocument(document);
+    try {
+      await _searchRepository.addDocument(document);
+    } catch (e) {
+      print(e);
+    }
     if (kDebugMode) {
       print('indexing done');
     }

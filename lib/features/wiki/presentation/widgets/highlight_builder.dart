@@ -166,7 +166,7 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
     print("widget : ${widget.toString()} :: ${widget.key}");
   }
 
-  var renderWidget = SelectableText(
+  var renderWidget = Text(
     renderContext.tree.element?.text ?? 'error_parsing',
     key: globalKey,
     style: TextStyle(fontSize: fontSize),

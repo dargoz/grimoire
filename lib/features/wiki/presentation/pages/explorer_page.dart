@@ -199,64 +199,66 @@ class ExplorerPage extends StatelessWidget {
             Expanded(
                 child: SingleChildScrollView(
               controller: ScrollController(),
-              child: Html(
-                customRender: {
-                  'code': customCodeRender,
-                  'h1': (renderContext, widget) => customHeaderRender(
-                      renderContext, widget,
-                      onRender: (label, key) =>
-                          documentController.documentWidgetSections.add(Section(
-                              id: '${label.hashCode}',
-                              attr: '1',
-                              label: label,
-                              sectionKey: key))),
-                  'h2': (renderContext, widget) => customHeaderRender(
-                      renderContext, widget,
-                      onRender: (label, key) =>
-                          documentController.documentWidgetSections.add(Section(
-                              id: '${label.hashCode}',
-                              attr: '2',
-                              label: label,
-                              sectionKey: key))),
-                  'h3': (renderContext, widget) => customHeaderRender(
-                      renderContext, widget,
-                      onRender: (label, key) =>
-                          documentController.documentWidgetSections.add(Section(
-                              id: '${label.hashCode}',
-                              attr: '3',
-                              label: label,
-                              sectionKey: key))),
-                  'h4': (renderContext, widget) => customHeaderRender(
-                      renderContext, widget,
-                      onRender: (label, key) =>
-                          documentController.documentWidgetSections.add(Section(
-                              id: '${label.hashCode}',
-                              attr: '4',
-                              label: label,
-                              sectionKey: key))),
-                  'h5': (renderContext, widget) => customHeaderRender(
-                      renderContext, widget,
-                      onRender: (label, key) =>
-                          documentController.documentWidgetSections.add(Section(
-                              id: '${label.hashCode}',
-                              attr: '5',
-                              label: label,
-                              sectionKey: key))),
-                  'h6': (renderContext, widget) => customHeaderRender(
-                      renderContext, widget,
-                      onRender: (label, key) =>
-                          documentController.documentWidgetSections.add(Section(
-                              id: '${label.hashCode}',
-                              attr: '6',
-                              label: label,
-                              sectionKey: key)))
-                },
-                data: md.markdownToHtml(
-                    documentController.data.value.data?.content ?? ''),
-                onLinkTap: (text, renderContext, map, element) {
-                  documentController.redirect(text ?? '', map['href'],
-                      _treeController.state.value.data!);
-                },
+              child: SelectionArea(
+                child: Html(
+                  customRender: {
+                    'code': customCodeRender,
+                    'h1': (renderContext, widget) => customHeaderRender(
+                        renderContext, widget,
+                        onRender: (label, key) =>
+                            documentController.documentWidgetSections.add(Section(
+                                id: '${label.hashCode}',
+                                attr: '1',
+                                label: label,
+                                sectionKey: key))),
+                    'h2': (renderContext, widget) => customHeaderRender(
+                        renderContext, widget,
+                        onRender: (label, key) =>
+                            documentController.documentWidgetSections.add(Section(
+                                id: '${label.hashCode}',
+                                attr: '2',
+                                label: label,
+                                sectionKey: key))),
+                    'h3': (renderContext, widget) => customHeaderRender(
+                        renderContext, widget,
+                        onRender: (label, key) =>
+                            documentController.documentWidgetSections.add(Section(
+                                id: '${label.hashCode}',
+                                attr: '3',
+                                label: label,
+                                sectionKey: key))),
+                    'h4': (renderContext, widget) => customHeaderRender(
+                        renderContext, widget,
+                        onRender: (label, key) =>
+                            documentController.documentWidgetSections.add(Section(
+                                id: '${label.hashCode}',
+                                attr: '4',
+                                label: label,
+                                sectionKey: key))),
+                    'h5': (renderContext, widget) => customHeaderRender(
+                        renderContext, widget,
+                        onRender: (label, key) =>
+                            documentController.documentWidgetSections.add(Section(
+                                id: '${label.hashCode}',
+                                attr: '5',
+                                label: label,
+                                sectionKey: key))),
+                    'h6': (renderContext, widget) => customHeaderRender(
+                        renderContext, widget,
+                        onRender: (label, key) =>
+                            documentController.documentWidgetSections.add(Section(
+                                id: '${label.hashCode}',
+                                attr: '6',
+                                label: label,
+                                sectionKey: key)))
+                  },
+                  data: md.markdownToHtml(
+                      documentController.data.value.data?.content ?? ''),
+                  onLinkTap: (text, renderContext, map, element) {
+                    documentController.redirect(text ?? '', map['href'],
+                        _treeController.state.value.data!);
+                  },
+                ),
               ),
             ))
           ],
