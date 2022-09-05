@@ -78,7 +78,7 @@ class HomePage extends StatelessWidget {
                     appsContainer('resources/icons/grimoire_logo_bw.png',
                         onTap: () {
                       _showLoadingDialog(context);
-                      _fileTreeController.getFileTree('');
+                      _fileTreeController.getFileTree('27745171');
                     }),
                     const Spacer(),
                     appsContainer('resources/icons/grimoire_logo_bw.png',
