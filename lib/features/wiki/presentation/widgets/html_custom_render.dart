@@ -16,8 +16,18 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
   }
 
   if (language.isEmpty) {
-    return Text(
-      renderContext.tree.element!.text,
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 240, 240, 240),
+        borderRadius: const BorderRadius.all(Radius.circular(4))
+      ),
+      child: Text(
+        renderContext.tree.element!.text,
+        style: TextStyle(
+          fontSize: 12
+        ),
+      ),
     );
   } else {
     return SizedBox(
