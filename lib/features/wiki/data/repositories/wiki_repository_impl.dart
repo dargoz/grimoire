@@ -18,13 +18,18 @@ import '../sources/remote/gitlab/responses/repository_tree_response.dart';
 class WikiRepositoryImpl extends WikiRepository {
   WikiRepositoryImpl(this._remoteDataSource, this._localDataSource);
 
-  final String _projectId = '27745171';
+  String _projectId = '27745171';
   final RemoteDataSource _remoteDataSource;
   final LocalDataSource _localDataSource;
 
-
   @override
-  Future<DocumentEntity> getDocument(String id, String filePath) async {
+  Future<DocumentEntity> getDocument(String id, String filePath,
+      {String projectId = ''}) async {
+    var cacheProject = await _localDataSource.loadProject();
+    if (cacheProject != null) {
+      _projectId = cacheProject;
+    }
+    if (projectId.isNotEmpty) _projectId = projectId;
     var cache = await _localDataSource.getDocument(id);
     if (cache != null) {
       if (kDebugMode) {
@@ -45,9 +50,13 @@ class WikiRepositoryImpl extends WikiRepository {
   }
 
   @override
-  Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage) async {
-    List<RepositoryTreeResponse> response = await _remoteDataSource.getRepositoryTree(
-        RepositoryTreeRequest(id: _projectId, recursive: true, perPage: 100));
+  Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage,
+      {String projectId = ''}) async {
+    if (projectId.isNotEmpty) _projectId = projectId;
+    _localDataSource.saveProject(_projectId);
+    List<RepositoryTreeResponse> response =
+        await _remoteDataSource.getRepositoryTree(RepositoryTreeRequest(
+            id: _projectId, recursive: true, perPage: 100));
     return response.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
 }

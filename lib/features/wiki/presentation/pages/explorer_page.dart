@@ -225,7 +225,8 @@ class ExplorerPage extends StatelessWidget {
                   },
                   data: md.markdownToHtml(
                       documentController.data.value.data?.content ?? ''),
-                  onLinkTap: (text, renderContext, map, element) {
+                  onAnchorTap: (text, renderContext, map, element) {
+                    print('anchor tap : $text');
                     documentController.redirect(text ?? '', map['href'],
                         _treeController.state.value.data!);
                   },

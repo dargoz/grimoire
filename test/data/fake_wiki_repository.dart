@@ -11,13 +11,15 @@ import 'get_string.dart';
 
 class FakeWikiRepository extends WikiRepository {
   @override
-  Future<DocumentEntity> getDocument(String id, String filePath) {
+  Future<DocumentEntity> getDocument(String id, String filePath,
+      {String projectId = ''}) {
     // TODO: implement getDocument
     throw UnimplementedError();
   }
 
   @override
-  Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage) async {
+  Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage,
+      {String projectId = ''}) async {
     String apiResponseString = getString('repository_tree_list_response.json');
     Iterable json = jsonDecode(apiResponseString);
     var result = List<RepositoryTreeResponse>.from(

@@ -13,20 +13,16 @@ import 'package:injectable/injectable.dart';
 class LocalDataSourceImpl extends LocalDataSource {
   Uint8List? encryptionKey;
 
+  static const String documentBox = 'documentBox';
+  static const String projectBox = 'projectBox';
+
   LocalDataSourceImpl() {
     Hive.registerAdapter(CommitObjectAdapter());
     Hive.registerAdapter(FileObjectAdapter());
-    initializeSecureStorage();
+    _initializeSecureStorage();
   }
 
-  @override
-  void saveDocument(FileObject fileObject) async {
-    var encryptedBox = await Hive.openBox('documentBox',
-        encryptionCipher: HiveAesCipher(encryptionKey!));
-    encryptedBox.put(fileObject.blobId, fileObject);
-  }
-
-  void initializeSecureStorage() async {
+  void _initializeSecureStorage() async {
     const secureStorage = FlutterSecureStorage();
     // if key not exists return null
     final secureKey = await secureStorage.read(key: 'key');
@@ -43,9 +39,30 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
+  void saveDocument(FileObject fileObject) async {
+    var encryptedBox = await Hive.openBox(documentBox,
+        encryptionCipher: HiveAesCipher(encryptionKey!));
+    encryptedBox.put(fileObject.blobId, fileObject);
+  }
+
+  @override
   Future<FileObject?> getDocument(String id) async {
-    var encryptedBox = await Hive.openBox('documentBox',
+    var encryptedBox = await Hive.openBox(documentBox,
         encryptionCipher: HiveAesCipher(encryptionKey!));
     return encryptedBox.get(id);
+  }
+
+  @override
+  Future<String> loadProject() async {
+    var encryptedBox = await Hive.openBox(projectBox,
+        encryptionCipher: HiveAesCipher(encryptionKey!));
+    return encryptedBox.get('project_id');
+  }
+
+  @override
+  void saveProject(String projectId) async {
+    var encryptedBox = await Hive.openBox(projectBox,
+        encryptionCipher: HiveAesCipher(encryptionKey!));
+    encryptedBox.put('project_id', projectId);
   }
 }

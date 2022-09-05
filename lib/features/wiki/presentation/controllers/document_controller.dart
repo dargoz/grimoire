@@ -10,6 +10,7 @@ import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart'
 import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/injection.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DocumentController extends GetxController {
   final GetDocumentUseCase _getDocumentUseCase = getIt<GetDocumentUseCase>();
@@ -34,7 +35,8 @@ class DocumentController extends GetxController {
     data.value = result.map((e) => e!.toDocumentModel());
   }
 
-  void redirect(String text, String? href, List<FileTreeModel> fileTreeModels) {
+  void redirect(
+      String text, String? href, List<FileTreeModel> fileTreeModels) async {
     if (kDebugMode) {
       print('text : $text');
       print('href : $href');
@@ -42,7 +44,18 @@ class DocumentController extends GetxController {
     if (href?.indexOf('.') == 0) {
       href = href?.substring(2);
     }
-    if (href != null) {
+    if (href?.startsWith('http') ?? text.startsWith('http')) {
+      if (!await launchUrl(Uri.parse(text))) {
+        throw 'Could not launch $href';
+      }
+    } else if (href?.startsWith('#') ?? text.startsWith('#')) {
+      String ref = text.substring(1);
+      int sectionIndex =
+          documentWidgetSections.indexWhere((element) => element.label == ref);
+      if (sectionIndex != -1) {
+        scrollTo(documentWidgetSections.elementAt(sectionIndex));
+      }
+    } else if (href != null) {
       var node =
           fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
       getDocument(node!);

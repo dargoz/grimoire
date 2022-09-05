@@ -1,18 +1,17 @@
-import 'package:grimoire/core/usecases/no_params.dart';
 import 'package:grimoire/core/usecases/usecase.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, NoParams> {
+class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, String> {
   GetFileTreeUseCase(this._wikiRepository);
 
   final WikiRepository _wikiRepository;
 
   @override
-  Future<List<FileTreeEntity>?> useCase(NoParams params) async {
-    var result = await _wikiRepository.getFileTree(true, 100);
+  Future<List<FileTreeEntity>?> useCase(String params) async {
+    var result = await _wikiRepository.getFileTree(true, 100, projectId: params);
     var filteredResult = result
         .where((element) =>
             !element.name.startsWith('.') &&

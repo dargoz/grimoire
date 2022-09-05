@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:grimoire/core/usecases/no_params.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_file_tree_use_case.dart';
 
@@ -8,7 +7,7 @@ import '../../../../data/fake_wiki_repository.dart';
 void main() {
   test('Get File Tree Use Case Test', () async {
     var useCase = GetFileTreeUseCase(FakeWikiRepository());
-    var actualResult = await useCase.executeUseCase(NoParams());
+    var actualResult = await useCase.executeUseCase('');
     var expectedResult = List<FileTreeEntity>.empty(growable: true);
     addExpectedData(expectedResult);
     expect(actualResult.data!.toString(), expectedResult.toString());
