@@ -297,7 +297,6 @@ class ExplorerPage extends StatelessWidget {
           }
         }),
         Obx(() {
-          print('section panel build');
           return SectionWidget(
             onTap: documentController.onSectionClick,
             sections: documentController.data.value.data?.sections ?? [],
