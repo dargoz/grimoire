@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_treeview/flutter_treeview.dart' as tree;
 import 'package:get/get.dart';
-import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/key_caps_widget.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -18,7 +16,9 @@ import 'package:grimoire/features/wiki/presentation/controllers/document_control
 import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
 import '../models/file_tree_model.dart';
-import '../widgets/highlight_builder.dart';
+import '../widgets/html_custom_render.dart';
+import '../widgets/section_widget.dart';
+import '../widgets/version_widget.dart';
 
 class ExplorerPage extends StatelessWidget {
   final _keyboardController = Get.put(KeyboardController());
@@ -35,7 +35,6 @@ class ExplorerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        print('will pop');
         return true;
       },
       child: RawKeyboardListener(
@@ -126,40 +125,6 @@ class ExplorerPage extends StatelessWidget {
     );
   }
 
-  Widget versionWidget(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.6,
-      height: 80,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-      ),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://secure.gravatar.com/avatar/018afd3eb4d4dcb676df54b56db7c80e?s=64&d=identicon'),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(),
-                Text(
-                    'Author : ${documentController.data.value.data?.versionModel?.authorName}'),
-                Text(
-                    'Last Update : ${documentController.data.value.data?.versionModel?.committedDate}'),
-                const Spacer(),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget documentWidget(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
@@ -205,48 +170,54 @@ class ExplorerPage extends StatelessWidget {
                     'code': customCodeRender,
                     'h1': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) =>
-                            documentController.documentWidgetSections.add(Section(
+                        onRender: (label, key) => documentController
+                            .documentWidgetSections
+                            .add(Section(
                                 id: '${label.hashCode}',
                                 attr: '1',
                                 label: label,
                                 sectionKey: key))),
                     'h2': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) =>
-                            documentController.documentWidgetSections.add(Section(
+                        onRender: (label, key) => documentController
+                            .documentWidgetSections
+                            .add(Section(
                                 id: '${label.hashCode}',
                                 attr: '2',
                                 label: label,
                                 sectionKey: key))),
                     'h3': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) =>
-                            documentController.documentWidgetSections.add(Section(
+                        onRender: (label, key) => documentController
+                            .documentWidgetSections
+                            .add(Section(
                                 id: '${label.hashCode}',
                                 attr: '3',
                                 label: label,
                                 sectionKey: key))),
                     'h4': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) =>
-                            documentController.documentWidgetSections.add(Section(
+                        onRender: (label, key) => documentController
+                            .documentWidgetSections
+                            .add(Section(
                                 id: '${label.hashCode}',
                                 attr: '4',
                                 label: label,
                                 sectionKey: key))),
                     'h5': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) =>
-                            documentController.documentWidgetSections.add(Section(
+                        onRender: (label, key) => documentController
+                            .documentWidgetSections
+                            .add(Section(
                                 id: '${label.hashCode}',
                                 attr: '5',
                                 label: label,
                                 sectionKey: key))),
                     'h6': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) =>
-                            documentController.documentWidgetSections.add(Section(
+                        onRender: (label, key) => documentController
+                            .documentWidgetSections
+                            .add(Section(
                                 id: '${label.hashCode}',
                                 attr: '6',
                                 label: label,
@@ -262,23 +233,12 @@ class ExplorerPage extends StatelessWidget {
               ),
             ))
           ],
-        )
-
-        /*child: Markdown(
-                        controller: ScrollController(),
-                        data: controller.data.value.data?.content ?? '',
-                        padding: const EdgeInsets.all(10),
-                        builders: {
-                          'code': CodeElementBuilder(),
-                        },
-                        onTapLink: (text, href, title) => controller.redirect(
-                            text, href, _treeController.state.value.data!),
-                      ),*/
-        );
+        ));
   }
 
   Widget buildContent(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         panelContainer(context,
             childWidget: Column(
@@ -317,7 +277,14 @@ class ExplorerPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                 child: Column(
                   children: [
-                    versionWidget(context),
+                    VersionWidget(
+                      author: documentController
+                              .data.value.data?.versionModel?.authorName ??
+                          '',
+                      lastModifiedDate: documentController
+                              .data.value.data?.versionModel?.committedDate ??
+                          '',
+                    ),
                     const Divider(
                       color: Colors.transparent,
                     ),
@@ -329,19 +296,13 @@ class ExplorerPage extends StatelessWidget {
               return const ResourceErrorWidget();
           }
         }),
-        panelContainer(context, childWidget: Obx(() {
+        Obx(() {
           print('section panel build');
-          return tree.TreeView(
-              onNodeTap: (node) {
-                documentController.onSectionClick(node);
-              },
-              controller: tree.TreeViewController(
-                children: documentController
-                    .data.value.data?.sections
-                    .map((e) => e.toNode())
-                    .toList() ?? [],
-              ));
-        }))
+          return SectionWidget(
+            onTap: documentController.onSectionClick,
+            sections: documentController.data.value.data?.sections ?? [],
+          );
+        })
       ],
     );
   }
@@ -352,51 +313,52 @@ class ExplorerPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       margin: const EdgeInsets.fromLTRB(8, 16, 8, 16),
       constraints: const BoxConstraints(minWidth: 100, minHeight: 100),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-      ),
       child: childWidget,
     );
   }
 
   Widget _searchItem(BuildContext context, int index) {
-    return MouseRegion(
-      onEnter: (pointerEvent) {
-        documentController.onItemHover(index, true);
+    return GestureDetector(
+      onTap: () {
+        _keyboardController.hideSearchBar();
+        documentController.onSearchResultTap(index);
       },
-      onExit: (pointerEvent) {
-        documentController.onItemHover(index, false);
-      },
-      cursor: SystemMouseCursors.click,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 64,
-        decoration: BoxDecoration(
-          color: documentController.hovers[index]
-              ? const Color.fromARGB(255, 196, 239, 255)
-              : Colors.white,
-          border: const Border(
-            bottom: BorderSide(width: 1.0, color: Colors.grey),
+      child: MouseRegion(
+        onEnter: (pointerEvent) {
+          documentController.onItemHover(index, true);
+        },
+        onExit: (pointerEvent) {
+          documentController.onItemHover(index, false);
+        },
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: documentController.hovers[index]
+                ? const Color.fromARGB(255, 196, 239, 255)
+                : Colors.white,
+            border: const Border(
+              bottom: BorderSide(width: 1.0, color: Colors.grey),
+            ),
           ),
+          child: Builder(builder: (builderContext) {
+            var item = documentController.searchData.value.data![index];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.fromLTRB(8, 4, 4, 4),
+                  color: const Color.fromARGB(255, 171, 194, 206),
+                  child: Text(item.document?.fileName ?? 'unknown'),
+                ),
+                Html(
+                  data: item.marker.isEmpty ? '' : item.marker[0].snippet,
+                )
+              ],
+            );
+          }),
         ),
-        child: Builder(builder: (builderContext) {
-          var item = documentController.searchData.value.data![index];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.fromLTRB(8, 4, 4, 4),
-                color: const Color.fromARGB(255, 171, 194, 206),
-                child: Text(item.document?.fileName ?? 'unknown'),
-              ),
-              Html(
-                data: item.marker.isEmpty ? '' : item.marker[0].snippet,
-              )
-            ],
-          );
-        }),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:grimoire/routes/app_route.dart';
 import 'package:grimoire/translation/app_translation.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
-        fontFamily: 'RobotoMono',
+        fontFamily: GoogleFonts.notoSans().fontFamily,
       ),
       translations: AppTranslation(),
       locale: Get.deviceLocale,

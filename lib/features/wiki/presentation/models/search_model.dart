@@ -11,4 +11,9 @@ class SearchModel {
   DocumentModel? document;
   List<MarkerModel> marker;
   int textMatch;
+
+  @override
+  String toString() {
+    return 'SearchModel{document: $document, marker: $marker, textMatch: $textMatch}';
+  }
 }

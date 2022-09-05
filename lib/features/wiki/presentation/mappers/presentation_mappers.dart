@@ -49,6 +49,7 @@ extension DocumentEntityMapper on DocumentEntity {
   DocumentModel toDocumentModel() {
     return DocumentModel(
         versionModel: commitEntity?.toVersionModel(),
+        blobId: blobId,
         sections: sections?.map((e) => e.toSection()).toList() ?? [],
         fileName: fileName,
         filePath: filePath,
@@ -57,14 +58,19 @@ extension DocumentEntityMapper on DocumentEntity {
   }
 }
 
-extension SectionEntityMapper on SectionEntity {
+extension DocumentModelMapper on DocumentModel {
+  FileTreeModel toFileTreeModel() {
+    return FileTreeModel(
+        id: blobId, name: fileName, type: 'blob', path: filePath);
+  }
+}
 
+extension SectionEntityMapper on SectionEntity {
   Section toSection() {
     var key = GlobalKey();
     return Section(
         id: '${key.hashCode}', label: label, sectionKey: key, attr: attr);
   }
-
 }
 
 extension NodeMapper on FileTreeModel {
@@ -78,12 +84,7 @@ extension NodeMapper on FileTreeModel {
 
   FileTreeEntity toEntity() {
     return FileTreeEntity(
-        id: id,
-        name: name,
-        type: type,
-        path: path,
-        children: [],
-        mode: '');
+        id: id, name: name, type: type, path: path, children: [], mode: '');
   }
 }
 
@@ -124,28 +125,23 @@ extension NodeListMapper on List<FileTreeModel> {
 }
 
 extension SectionNodeMapper on Section {
-
   Node toNode() {
     return Node(key: id, label: label);
   }
-
 }
 
 extension MarkerModelMapper on HighlightEntity {
-
   MarkerModel toMarkerModel() {
     return MarkerModel(
         field: field, matchedTokens: matchedTokens, snippet: snippet);
   }
-
 }
 
 extension SearchModelMapper on SearchResultEntity {
-
   SearchModel toSearchModel() {
-    return SearchModel(document: documentEntity?.toDocumentModel(),
+    return SearchModel(
+        document: documentEntity?.toDocumentModel(),
         marker: highlights?.map((e) => e.toMarkerModel()).toList() ?? [],
         textMatch: textMatch);
   }
-
 }

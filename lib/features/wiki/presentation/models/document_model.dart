@@ -5,6 +5,7 @@ class DocumentModel {
   DocumentModel(
       {required this.versionModel,
       required this.sections,
+      required this.blobId,
       required this.fileName,
       required this.filePath,
       required this.size,
@@ -12,6 +13,7 @@ class DocumentModel {
 
   VersionModel? versionModel;
   List<Section> sections;
+  String blobId;
   String fileName;
   String filePath;
   int size;

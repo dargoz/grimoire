@@ -21,12 +21,16 @@ class DocumentController extends GetxController {
       const Resource<List<SearchModel>>.initial('initial_search').obs;
   var documentWidgetSections = List<Section>.empty(growable: true);
   var hovers = List<bool>.empty(growable: true).obs;
+  var sectionHovers = List<bool>.empty(growable: true).obs;
 
   void getDocument(FileTreeModel fileTreeModel) async {
     documentWidgetSections.clear();
     data.value = const Resource<DocumentModel>.loading('fetch data');
     var result =
         await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
+    sectionHovers.value = List<bool>.filled(
+        result.data?.sections?.length ?? 0, false,
+        growable: true);
     data.value = result.map((e) => e!.toDocumentModel());
   }
 
@@ -46,6 +50,7 @@ class DocumentController extends GetxController {
   }
 
   void scrollTo(Section section) {
+    print('scroll to');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var targetContext = section.sectionKey.currentContext;
       if (kDebugMode) print('targetContext : $targetContext');
@@ -77,5 +82,15 @@ class DocumentController extends GetxController {
 
   onItemHover(int index, bool flag) {
     hovers[index] = flag;
+  }
+
+  onSectionItemHover(int position, bool state) {
+    sectionHovers[position] = state;
+  }
+
+  void onSearchResultTap(int index) {
+    var itemFound = searchData.value.data?[index];
+    print('search item found : ${itemFound?.document?.filePath}');
+    getDocument(itemFound!.document!.toFileTreeModel());
   }
 }
