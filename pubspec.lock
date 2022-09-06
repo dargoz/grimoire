@@ -369,10 +369,12 @@ packages:
   go_router:
     dependency: "direct main"
     description:
-      name: go_router
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.3.0"
+      path: "packages/go_router"
+      ref: go_router_v5
+      resolved-ref: f9d5b19217684cb125ac52bb4b75d4fde31aa816
+      url: "https://github.com/flutter/packages.git"
+    source: git
+    version: "5.0.0"
   google_fonts:
     dependency: "direct main"
     description:
