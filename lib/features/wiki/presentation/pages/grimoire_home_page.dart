@@ -7,8 +7,8 @@ import 'package:grimoire/features/wiki/presentation/widgets/loading_widget.dart'
 import '../controllers/document_controller.dart';
 import '../controllers/file_tree_controller.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+class GrimoireHomePage extends StatelessWidget {
+  GrimoireHomePage({Key? key}) : super(key: key);
 
   final documentController = Get.put(DocumentController());
   final _fileTreeController = Get.put(FileTreeController());
@@ -22,7 +22,8 @@ class HomePage extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
               image: Image.asset(
-                'resources/images/grimoire_bg.jpg',
+                'assets/images/grimoire_bg.jpg',
+                package: 'grimoire',
               ).image,
               fit: BoxFit.cover),
         ),
@@ -35,7 +36,8 @@ class HomePage extends StatelessWidget {
                 flex: 1,
               ),
               Image.asset(
-                'resources/icons/grimoire_logo_bw.png',
+                'assets/icons/grimoire_logo_bw.png',
+                package: 'grimoire',
                 scale: 2.5,
               ),
               const Spacer(
@@ -60,7 +62,7 @@ class HomePage extends StatelessWidget {
                   case Status.loading:
                     break;
                   case Status.completed:
-                    context.go('/explorer');
+                    context.go('/grimoire/explorer');
                     break;
                   case Status.error:
                     _showErrorDialog(context,
@@ -69,19 +71,19 @@ class HomePage extends StatelessWidget {
                 }
                 return Row(
                   children: [
-                    appsContainer('resources/icons/grimoire_logo_bw.png',
+                    appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {
                           _showLoadingDialog(context);
                           _fileTreeController.getFileTree('39138680');
                         }),
                     const Spacer(),
-                    appsContainer('resources/icons/grimoire_logo_bw.png',
+                    appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {
                       _showLoadingDialog(context);
                       _fileTreeController.getFileTree('27745171');
                     }),
                     const Spacer(),
-                    appsContainer('resources/icons/grimoire_logo_bw.png',
+                    appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {}),
                   ],
                 );
@@ -109,6 +111,7 @@ class HomePage extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(16))),
           child: Image.asset(
             assetPath,
+            package: 'grimoire',
             scale: 10,
           ),
         ),
