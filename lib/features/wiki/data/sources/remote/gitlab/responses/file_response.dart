@@ -27,7 +27,7 @@ class FileResponse {
   String blobId;
   String commitId;
   String lastCommitId;
-  bool executeFilemode;
+  bool? executeFilemode;
 
   factory FileResponse.fromJson(Map<String, dynamic> json) =>
       _$FileResponseFromJson(json);

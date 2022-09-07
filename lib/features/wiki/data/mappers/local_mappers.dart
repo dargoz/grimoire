@@ -33,7 +33,7 @@ extension DocumentMapper on FileResponse {
         blobId: blobId,
         commitId: commitId,
         lastCommitId: lastCommitId,
-        executeFilemode: executeFilemode,
+        executeFilemode: executeFilemode ?? false,
         commitObject: CommitObject());
   }
 }
