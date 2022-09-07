@@ -32,7 +32,7 @@ class DocumentController extends GetxController {
     sectionHovers.value = List<bool>.filled(
         result.data?.sections?.length ?? 0, false,
         growable: true);
-    data.value = result.map((e) => e!.toDocumentModel());
+    data.value = result.map((e) => e?.toDocumentModel());
   }
 
   void redirect(
