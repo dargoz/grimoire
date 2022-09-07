@@ -75,6 +75,7 @@ extension SectionEntityMapper on SectionEntity {
 
 extension NodeMapper on FileTreeModel {
   Node toNode() {
+    print('tree model map $id :: $name');
     return Node(
         key: id,
         label: name,
@@ -103,6 +104,7 @@ extension NodeListMapper on List<FileTreeModel> {
       }
       if (element.children.isNotEmpty) {
         node = findNode(models: element.children, nodeKey: nodeKey);
+        if (node != null) break;
       }
     }
     return node;
