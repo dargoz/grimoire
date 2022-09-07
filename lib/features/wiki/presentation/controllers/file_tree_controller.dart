@@ -31,4 +31,12 @@ class FileTreeController extends GetxController {
     print('node founded : ${node?.name ?? 'not found'}');
     _repositoryController.getDocument(node!);
   }
+
+  void getHomeDocument() {
+    var node = state.value.data?.findNodeByPath(models: state.value.data!, path: 'README.md');
+    if (node != null) {
+      _repositoryController.getDocument(node);
+    }
+
+  }
 }

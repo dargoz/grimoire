@@ -22,13 +22,14 @@ import '../widgets/version_widget.dart';
 
 class ExplorerPage extends StatelessWidget {
   final _keyboardController = Get.put(KeyboardController());
-  final DocumentController documentController = Get.find();
+  final DocumentController _documentController = Get.find();
   final FileTreeController _treeController = Get.find();
 
   ExplorerPage({Key? key}) : super(key: key) {
     _treeController.state.value = Resource<List<FileTreeModel>>.initial(
         'page init',
         data: _treeController.state.value.data);
+    _treeController.getHomeDocument();
   }
 
   @override
@@ -107,13 +108,13 @@ class ExplorerPage extends StatelessWidget {
                           _keyboardController.hideSearchBar();
                         }
                       },
-                      onQueryChanged: documentController.onQueryChanged,
+                      onQueryChanged: _documentController.onQueryChanged,
                       itemList: <Widget>[
-                        if (documentController.searchData.value.status ==
+                        if (_documentController.searchData.value.status ==
                             Status.completed)
                           for (int index = 0;
                               index <
-                                  documentController
+                                  _documentController
                                       .searchData.value.data!.length;
                               index++)
                             _searchItem(context, index),
@@ -154,7 +155,7 @@ class ExplorerPage extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(4, 2, 0, 0),
                       child: Center(
                         child: Text(
-                          documentController.data.value.data?.fileName ?? '',
+                          _documentController.data.value.data?.fileName ?? '',
                           style: const TextStyle(fontSize: 12),
                         ),
                       ))
@@ -170,7 +171,7 @@ class ExplorerPage extends StatelessWidget {
                     'code': customCodeRender,
                     'h1': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) => documentController
+                        onRender: (label, key) => _documentController
                             .documentWidgetSections
                             .add(Section(
                                 id: '${label.hashCode}',
@@ -179,7 +180,7 @@ class ExplorerPage extends StatelessWidget {
                                 sectionKey: key))),
                     'h2': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) => documentController
+                        onRender: (label, key) => _documentController
                             .documentWidgetSections
                             .add(Section(
                                 id: '${label.hashCode}',
@@ -188,7 +189,7 @@ class ExplorerPage extends StatelessWidget {
                                 sectionKey: key))),
                     'h3': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) => documentController
+                        onRender: (label, key) => _documentController
                             .documentWidgetSections
                             .add(Section(
                                 id: '${label.hashCode}',
@@ -197,7 +198,7 @@ class ExplorerPage extends StatelessWidget {
                                 sectionKey: key))),
                     'h4': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) => documentController
+                        onRender: (label, key) => _documentController
                             .documentWidgetSections
                             .add(Section(
                                 id: '${label.hashCode}',
@@ -206,7 +207,7 @@ class ExplorerPage extends StatelessWidget {
                                 sectionKey: key))),
                     'h5': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) => documentController
+                        onRender: (label, key) => _documentController
                             .documentWidgetSections
                             .add(Section(
                                 id: '${label.hashCode}',
@@ -215,7 +216,7 @@ class ExplorerPage extends StatelessWidget {
                                 sectionKey: key))),
                     'h6': (renderContext, widget) => customHeaderRender(
                         renderContext, widget,
-                        onRender: (label, key) => documentController
+                        onRender: (label, key) => _documentController
                             .documentWidgetSections
                             .add(Section(
                                 id: '${label.hashCode}',
@@ -224,10 +225,10 @@ class ExplorerPage extends StatelessWidget {
                                 sectionKey: key)))
                   },
                   data: md.markdownToHtml(
-                      documentController.data.value.data?.content ?? ''),
+                      _documentController.data.value.data?.content ?? ''),
                   onAnchorTap: (text, renderContext, map, element) {
                     print('anchor tap : $text');
-                    documentController.redirect(text ?? '', map['href'],
+                    _documentController.redirect(text ?? '', map['href'],
                         _treeController.state.value.data!);
                   },
                 ),
@@ -261,7 +262,7 @@ class ExplorerPage extends StatelessWidget {
               ],
             )),
         Obx(() {
-          switch (documentController.data.value.status) {
+          switch (_documentController.data.value.status) {
             case Status.loading:
               return Expanded(
                   child: SizedBox(
@@ -279,10 +280,10 @@ class ExplorerPage extends StatelessWidget {
                 child: Column(
                   children: [
                     VersionWidget(
-                      author: documentController
+                      author: _documentController
                               .data.value.data?.versionModel?.authorName ??
                           '',
-                      lastModifiedDate: documentController
+                      lastModifiedDate: _documentController
                               .data.value.data?.versionModel?.committedDate ??
                           '',
                     ),
@@ -299,8 +300,8 @@ class ExplorerPage extends StatelessWidget {
         }),
         Obx(() {
           return SectionWidget(
-            onTap: documentController.onSectionClick,
-            sections: documentController.data.value.data?.sections ?? [],
+            onTap: _documentController.onSectionClick,
+            sections: _documentController.data.value.data?.sections ?? [],
           );
         })
       ],
@@ -321,20 +322,20 @@ class ExplorerPage extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         _keyboardController.hideSearchBar();
-        documentController.onSearchResultTap(index);
+        _documentController.onSearchResultTap(index);
       },
       child: MouseRegion(
         onEnter: (pointerEvent) {
-          documentController.onItemHover(index, true);
+          _documentController.onItemHover(index, true);
         },
         onExit: (pointerEvent) {
-          documentController.onItemHover(index, false);
+          _documentController.onItemHover(index, false);
         },
         cursor: SystemMouseCursors.click,
         child: Container(
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: documentController.hovers[index]
+            color: _documentController.hovers[index]
                 ? const Color.fromARGB(255, 196, 239, 255)
                 : Colors.white,
             border: const Border(
@@ -342,7 +343,7 @@ class ExplorerPage extends StatelessWidget {
             ),
           ),
           child: Builder(builder: (builderContext) {
-            var item = documentController.searchData.value.data![index];
+            var item = _documentController.searchData.value.data![index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
