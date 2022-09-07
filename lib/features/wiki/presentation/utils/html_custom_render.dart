@@ -18,13 +18,13 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
   if (language.isEmpty) {
     return Container(
       padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 240, 240, 240),
-        borderRadius: const BorderRadius.all(Radius.circular(4))
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 240, 240, 240),
+        borderRadius: BorderRadius.all(Radius.circular(4))
       ),
       child: Text(
         renderContext.tree.element!.text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 12
         ),
       ),
@@ -62,11 +62,6 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
 Widget customHeaderRender(RenderContext renderContext, Widget widget,
     {required void Function(String label, GlobalKey key) onRender}) {
   var id = '';
-
-  renderContext.tree.element?.attributes.addAll({
-    'id':
-        '${renderContext.tree.element?.text.toLowerCase().replaceAll(' ', '-')}'
-  });
   if (renderContext.tree.element?.attributes['id'] != null) {
     String lg = renderContext.tree.element?.attributes['id'] as String;
     id = lg;
