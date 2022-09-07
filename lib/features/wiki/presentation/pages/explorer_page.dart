@@ -111,7 +111,8 @@ class ExplorerPage extends StatelessWidget {
                       onQueryChanged: _documentController.onQueryChanged,
                       itemList: <Widget>[
                         if (_documentController.searchData.value.status ==
-                            Status.completed && _documentController.hovers.isNotEmpty)
+                                Status.completed &&
+                            _documentController.hovers.isNotEmpty)
                           for (int index = 0;
                               index <
                                   _documentController
