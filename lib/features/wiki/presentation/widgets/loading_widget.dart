@@ -8,7 +8,9 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: LottieBuilder.asset(
-          'resources/lottie/loading_animation_bored_hand.json'),
+        'assets/lottie/loading_animation_bored_hand.json',
+        package: 'grimoire',
+      ),
     );
   }
 }
