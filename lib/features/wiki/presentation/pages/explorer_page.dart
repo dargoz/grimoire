@@ -113,7 +113,8 @@ class ExplorerPage extends StatelessWidget {
                       onQueryChanged: _documentController.onQueryChanged,
                       itemList: <Widget>[
                         if (_documentController.searchData.value.status ==
-                            Status.completed)
+                                Status.completed &&
+                            _documentController.hovers.isNotEmpty)
                           for (int index = 0;
                               index <
                                   _documentController
@@ -303,7 +304,15 @@ class ExplorerPage extends StatelessWidget {
                 ),
               ));
             case Status.error:
-              return const ResourceErrorWidget();
+              print('response : error :');
+              return Expanded(
+                  child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: ResourceErrorWidget(
+                    errorCode: _documentController.data.value.errorCode,
+                    errorMessage: _documentController.data.value.message),
+              ));
           }
         }),
         Obx(() {

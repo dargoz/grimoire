@@ -62,6 +62,7 @@ class GrimoireHomePage extends StatelessWidget {
                   case Status.loading:
                     break;
                   case Status.completed:
+                    _hideLoadingDialog();
                     context.go('/grimoire/explorer');
                     break;
                   case Status.error:
@@ -80,7 +81,7 @@ class GrimoireHomePage extends StatelessWidget {
                     appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {
                       _showLoadingDialog(context);
-                      _fileTreeController.getFileTree('27745171');
+                      _fileTreeController.getFileTree('2033');
                     }),
                     const Spacer(),
                     appsContainer('assets/icons/grimoire_logo_bw.png',
@@ -147,11 +148,19 @@ class GrimoireHomePage extends StatelessWidget {
     );
   }
 
+  void _hideLoadingDialog() {
+    if(documentController.dialogContext != null) {
+      Navigator.pop(documentController.dialogContext!);
+    }
+
+  }
+
   Future<void> _showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
+      builder: (BuildContext mContext) {
+        documentController.dialogContext = mContext;
         return const LoadingWidget();
       },
     );

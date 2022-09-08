@@ -10,12 +10,14 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return GrimoireHomePage();
       },
-    ),
-    GoRoute(
-      path: '/grimoire/explorer',
-      builder: (BuildContext context, GoRouterState state) {
-        return ExplorerPage();
-      },
+      routes: <GoRoute>[
+        GoRoute(
+          path: 'grimoire/explorer',
+          builder: (BuildContext context, GoRouterState state) {
+            return ExplorerPage();
+          },
+        ),
+      ]
     ),
   ],
 );

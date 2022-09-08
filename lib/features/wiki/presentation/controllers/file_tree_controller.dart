@@ -16,8 +16,7 @@ class FileTreeController extends GetxController {
 
   void getFileTree(String projectId) async {
     var result = await _getFileTreeUseCase.executeUseCase(projectId);
-    var newState =
-        Resource<List<FileTreeModel>>.completed(result.data!.toModel());
+    var newState = result.map((e) => e?.toModel());
     state.value = newState;
   }
 
