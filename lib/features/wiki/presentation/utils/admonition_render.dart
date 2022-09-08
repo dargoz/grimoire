@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/html_parser.dart';
 
+import '../widgets/admonition_widget.dart';
+
 Widget admonitionRender(RenderContext renderContext, Widget widget) {
   var type = '';
   print('admonition render test');
@@ -9,27 +11,13 @@ Widget admonitionRender(RenderContext renderContext, Widget widget) {
     type = lg.substring(5);
   }
   print('content : ${renderContext.tree.element?.text}');
-  return Container(
-    decoration: const BoxDecoration(
-      color: Color.fromARGB(255, 76, 179, 212),
-      borderRadius: BorderRadius.all(Radius.circular(6)),
-    ),
-    child: Container(
-      margin: const EdgeInsets.fromLTRB(6, 0, 0, 0),
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 238, 249, 253),
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(type),
-            Text(renderContext.tree.element?.text ?? '')
-          ],
-        ),
-      ),
-    ),
+  var contents = renderContext.tree.element?.text.split('\n');
+  if (contents?[contents.length -1].trim().isEmpty ?? false) {
+    contents?.removeAt(contents.length - 1);
+  }
+  var content = contents?.join('\n');
+  return AdmonitionWidget(
+    title: type,
+    content: content,
   );
 }
