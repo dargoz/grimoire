@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
+import 'package:grimoire/features/wiki/presentation/utils/admonition_render.dart';
+import 'package:grimoire/features/wiki/presentation/utils/admonition_syntax.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/key_caps_widget.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
@@ -16,7 +18,7 @@ import 'package:grimoire/features/wiki/presentation/controllers/document_control
 import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
 import '../models/file_tree_model.dart';
-import '../widgets/html_custom_render.dart';
+import '../utils/html_custom_render.dart';
 import '../widgets/section_widget.dart';
 import '../widgets/version_widget.dart';
 
@@ -168,6 +170,7 @@ class ExplorerPage extends StatelessWidget {
               controller: ScrollController(),
               child: SelectionArea(
                 child: Html(
+                  tagsList: Html.tags..add('admonition'),
                   customRender: {
                     'code': customCodeRender,
                     'h1': (renderContext, widget) => customHeaderRender(
@@ -223,10 +226,15 @@ class ExplorerPage extends StatelessWidget {
                                 id: '${label.hashCode}',
                                 attr: '6',
                                 label: label,
-                                sectionKey: key)))
+                                sectionKey: key))),
+                    'admonition': admonitionRender
                   },
                   data: md.markdownToHtml(
-                      _documentController.data.value.data?.content ?? ''),
+                      _documentController.data.value.data?.content ?? '',
+                      blockSyntaxes: const [
+                        md.HeaderWithIdSyntax(),
+                        AdmonitionSyntax()
+                      ]),
                   onAnchorTap: (text, renderContext, map, element) {
                     print('anchor tap : $text');
                     _documentController.redirect(text ?? '', map['href'],
