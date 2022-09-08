@@ -56,7 +56,7 @@ class WikiRepositoryImpl extends WikiRepository {
     _localDataSource.saveProject(_projectId);
     List<RepositoryTreeResponse> response =
         await _remoteDataSource.getRepositoryTree(RepositoryTreeRequest(
-            id: _projectId, recursive: true, perPage: 100));
+            id: _projectId, recursive: true, perPage: 100), "main");
     return response.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
 }

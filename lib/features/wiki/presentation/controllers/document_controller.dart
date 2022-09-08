@@ -17,6 +17,8 @@ class DocumentController extends GetxController {
   final SearchDocumentUseCase _searchDocumentUseCase =
       getIt<SearchDocumentUseCase>();
 
+  BuildContext? dialogContext;
+
   var data = const Resource<DocumentModel>.initial('initial').obs;
   var searchData =
       const Resource<List<SearchModel>>.initial('initial_search').obs;
