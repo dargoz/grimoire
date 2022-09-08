@@ -46,8 +46,12 @@ class ExplorerPage extends StatelessWidget {
           onKey: _keyboardController.onKeyEvent,
           child: Scaffold(
               appBar: AppBar(
-                title: const Text('Grimoire'),
+                title: const Text('Grimoire', style: TextStyle(
+                  color: Color(0xFF1c1e21)
+                ),),
                 toolbarHeight: 48,
+                backgroundColor: const Color(0xFFfafafa),
+                iconTheme: const IconThemeData(color: Color(0xFF1c1e21)),
                 actions: [
                   MouseRegion(
                       cursor: SystemMouseCursors.click,
@@ -61,7 +65,7 @@ class ExplorerPage extends StatelessWidget {
                             decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(32)),
-                                color: Colors.white),
+                                color: Color(0xFFebedf0)),
                             child: Row(
                               children: const [
                                 Padding(
@@ -73,7 +77,7 @@ class ExplorerPage extends StatelessWidget {
                                 ),
                                 Text(
                                   'Search',
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: Colors.black87),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
@@ -130,121 +134,116 @@ class ExplorerPage extends StatelessWidget {
   }
 
   Widget documentWidget(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: 32,
+          padding: const EdgeInsets.all(8),
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 238, 238, 238),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const FaIcon(
+                FontAwesomeIcons.fileLines,
+                size: 12,
+              ),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 2, 0, 0),
+                  child: Center(
+                    child: Text(
+                      _documentController.data.value.data?.fileName ?? '',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ))
+            ],
+          ),
         ),
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 32,
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 238, 238, 238),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const FaIcon(
-                    FontAwesomeIcons.fileLines,
-                    size: 12,
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(4, 2, 0, 0),
-                      child: Center(
-                        child: Text(
-                          _documentController.data.value.data?.fileName ?? '',
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ))
-                ],
-              ),
+        Expanded(
+            child: SingleChildScrollView(
+          controller: ScrollController(),
+          child: SelectionArea(
+            child: Html(
+              tagsList: Html.tags..add('admonition'),
+              customRender: {
+                'code': customCodeRender,
+                'h1': (renderContext, widget) => customHeaderRender(
+                    renderContext, widget,
+                    onRender: (label, key) => _documentController
+                        .documentWidgetSections
+                        .add(Section(
+                            id: '${label.hashCode}',
+                            attr: '1',
+                            label: label,
+                            sectionKey: key))),
+                'h2': (renderContext, widget) => customHeaderRender(
+                    renderContext, widget,
+                    onRender: (label, key) => _documentController
+                        .documentWidgetSections
+                        .add(Section(
+                            id: '${label.hashCode}',
+                            attr: '2',
+                            label: label,
+                            sectionKey: key))),
+                'h3': (renderContext, widget) => customHeaderRender(
+                    renderContext, widget,
+                    onRender: (label, key) => _documentController
+                        .documentWidgetSections
+                        .add(Section(
+                            id: '${label.hashCode}',
+                            attr: '3',
+                            label: label,
+                            sectionKey: key))),
+                'h4': (renderContext, widget) => customHeaderRender(
+                    renderContext, widget,
+                    onRender: (label, key) => _documentController
+                        .documentWidgetSections
+                        .add(Section(
+                            id: '${label.hashCode}',
+                            attr: '4',
+                            label: label,
+                            sectionKey: key))),
+                'h5': (renderContext, widget) => customHeaderRender(
+                    renderContext, widget,
+                    onRender: (label, key) => _documentController
+                        .documentWidgetSections
+                        .add(Section(
+                            id: '${label.hashCode}',
+                            attr: '5',
+                            label: label,
+                            sectionKey: key))),
+                'h6': (renderContext, widget) => customHeaderRender(
+                    renderContext, widget,
+                    onRender: (label, key) => _documentController
+                        .documentWidgetSections
+                        .add(Section(
+                            id: '${label.hashCode}',
+                            attr: '6',
+                            label: label,
+                            sectionKey: key))),
+                'admonition': admonitionRender
+              },
+              data: md.markdownToHtml(
+                  _documentController.data.value.data?.content ?? '',
+                  blockSyntaxes: const [
+                    md.HeaderWithIdSyntax(),
+                    AdmonitionSyntax()
+                  ]),
+              onAnchorTap: (text, renderContext, map, element) {
+                print('anchor tap : $text');
+                _documentController.redirect(text ?? '', map['href'],
+                    _treeController.state.value.data!);
+              },
             ),
-            Expanded(
-                child: SingleChildScrollView(
-              controller: ScrollController(),
-              child: SelectionArea(
-                child: Html(
-                  tagsList: Html.tags..add('admonition'),
-                  customRender: {
-                    'code': customCodeRender,
-                    'h1': (renderContext, widget) => customHeaderRender(
-                        renderContext, widget,
-                        onRender: (label, key) => _documentController
-                            .documentWidgetSections
-                            .add(Section(
-                                id: '${label.hashCode}',
-                                attr: '1',
-                                label: label,
-                                sectionKey: key))),
-                    'h2': (renderContext, widget) => customHeaderRender(
-                        renderContext, widget,
-                        onRender: (label, key) => _documentController
-                            .documentWidgetSections
-                            .add(Section(
-                                id: '${label.hashCode}',
-                                attr: '2',
-                                label: label,
-                                sectionKey: key))),
-                    'h3': (renderContext, widget) => customHeaderRender(
-                        renderContext, widget,
-                        onRender: (label, key) => _documentController
-                            .documentWidgetSections
-                            .add(Section(
-                                id: '${label.hashCode}',
-                                attr: '3',
-                                label: label,
-                                sectionKey: key))),
-                    'h4': (renderContext, widget) => customHeaderRender(
-                        renderContext, widget,
-                        onRender: (label, key) => _documentController
-                            .documentWidgetSections
-                            .add(Section(
-                                id: '${label.hashCode}',
-                                attr: '4',
-                                label: label,
-                                sectionKey: key))),
-                    'h5': (renderContext, widget) => customHeaderRender(
-                        renderContext, widget,
-                        onRender: (label, key) => _documentController
-                            .documentWidgetSections
-                            .add(Section(
-                                id: '${label.hashCode}',
-                                attr: '5',
-                                label: label,
-                                sectionKey: key))),
-                    'h6': (renderContext, widget) => customHeaderRender(
-                        renderContext, widget,
-                        onRender: (label, key) => _documentController
-                            .documentWidgetSections
-                            .add(Section(
-                                id: '${label.hashCode}',
-                                attr: '6',
-                                label: label,
-                                sectionKey: key))),
-                    'admonition': admonitionRender
-                  },
-                  data: md.markdownToHtml(
-                      _documentController.data.value.data?.content ?? '',
-                      blockSyntaxes: const [
-                        md.HeaderWithIdSyntax(),
-                        AdmonitionSyntax()
-                      ]),
-                  onAnchorTap: (text, renderContext, map, element) {
-                    print('anchor tap : $text');
-                    _documentController.redirect(text ?? '', map['href'],
-                        _treeController.state.value.data!);
-                  },
-                ),
-              ),
-            ))
-          ],
-        ));
+          ),
+        ))
+      ],
+    );
   }
 
   Widget buildContent(BuildContext context) {
@@ -253,22 +252,7 @@ class ExplorerPage extends StatelessWidget {
       children: [
         panelContainer(context,
             childWidget: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  child: TextField(
-                    style: TextStyle(fontSize: 14),
-                    decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.fromLTRB(16, 24, 24, 0),
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        labelText: 'search file..'),
-                  ),
-                ),
-                Expanded(child: FileTreeWidget())
-              ],
+              children: [Expanded(child: FileTreeWidget())],
             )),
         Obx(() {
           switch (_documentController.data.value.status) {
@@ -285,7 +269,7 @@ class ExplorerPage extends StatelessWidget {
                   child: Container(
                 width: MediaQuery.of(context).size.width * 0.5,
                 height: MediaQuery.of(context).size.height,
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Column(
                   children: [
                     VersionWidget(
@@ -329,7 +313,12 @@ class ExplorerPage extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.2,
       height: MediaQuery.of(context).size.height,
-      margin: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      decoration: const BoxDecoration(
+        border: Border(
+          right: BorderSide(width: 1.0, color: Colors.grey),
+        ),
+      ),
       constraints: const BoxConstraints(minWidth: 100, minHeight: 100),
       child: childWidget,
     );
