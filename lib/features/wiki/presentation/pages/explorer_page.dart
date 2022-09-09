@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/features/wiki/presentation/utils/admonition_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/admonition_syntax.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/breadcrumb_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
@@ -83,7 +84,7 @@ class ExplorerPage extends StatelessWidget {
                       onQueryChanged: _documentController.onQueryChanged,
                       itemList: <Widget>[
                         if (_documentController.searchData.value.status ==
-                                Status.completed)
+                            Status.completed)
                           for (int index = 0;
                               index <
                                   _documentController
@@ -217,7 +218,13 @@ class ExplorerPage extends StatelessWidget {
       children: [
         panelContainer(context,
             childWidget: Column(
-              children: [Expanded(child: FileTreeWidget())],
+              children: [
+                Expanded(
+                    child: FileTreeWidget(
+                  fileTreeModels: _treeController.state.value.data ?? [],
+                      onTap: _documentController.getDocument,
+                ))
+              ],
             )),
         Obx(() {
           switch (_documentController.data.value.status) {
@@ -237,6 +244,12 @@ class ExplorerPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Column(
                   children: [
+                    BreadcrumbWidget(
+                      path: _documentController.data.value.data?.filePath ?? "",
+                      onPressed: (String label) {
+                        print('breadcrumb menu : $label');
+                      },
+                    ),
                     VersionWidget(
                       author: _documentController
                               .data.value.data?.versionModel?.authorName ??
@@ -244,9 +257,6 @@ class ExplorerPage extends StatelessWidget {
                       lastModifiedDate: _documentController
                               .data.value.data?.versionModel?.committedDate ??
                           '',
-                    ),
-                    const Divider(
-                      color: Colors.transparent,
                     ),
                     Expanded(child: documentWidget(context)),
                   ],
@@ -288,5 +298,4 @@ class ExplorerPage extends StatelessWidget {
       child: childWidget,
     );
   }
-
 }

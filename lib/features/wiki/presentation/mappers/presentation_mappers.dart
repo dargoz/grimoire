@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_treeview/flutter_treeview.dart';
 import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
@@ -74,14 +73,6 @@ extension SectionEntityMapper on SectionEntity {
 }
 
 extension NodeMapper on FileTreeModel {
-  Node toNode() {
-    print('tree model map $id :: $name');
-    return Node(
-        key: id,
-        label: name,
-        icon: type == 'tree' ? Icons.folder : Icons.file_present,
-        children: children.toNodeList());
-  }
 
   FileTreeEntity toEntity() {
     return FileTreeEntity(
@@ -90,9 +81,6 @@ extension NodeMapper on FileTreeModel {
 }
 
 extension NodeListMapper on List<FileTreeModel> {
-  List<Node> toNodeList() {
-    return map((e) => e.toNode()).toList();
-  }
 
   FileTreeModel? findNode(
       {required List<FileTreeModel> models, required String nodeKey}) {
@@ -126,11 +114,6 @@ extension NodeListMapper on List<FileTreeModel> {
   }
 }
 
-extension SectionNodeMapper on Section {
-  Node toNode() {
-    return Node(key: id, label: label);
-  }
-}
 
 extension MarkerModelMapper on HighlightEntity {
   MarkerModel toMarkerModel() {

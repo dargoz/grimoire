@@ -8,7 +8,7 @@ class BgStateColor implements MaterialStateProperty<Color?> {
   @override
   Color? resolve(Set<MaterialState> states) {
     Color? color = baseColor;
-    Color? darkerVersion = Color.lerp(color, Colors.black, 0.7);
+    Color? darkerVersion = Color.lerp(color, Colors.white, 0.3);
     // Darken our button color for each state we want to reflect. Buttons will
     // incrementally darken as more states are applied.
     if (states.isHovered) {
@@ -16,6 +16,9 @@ class BgStateColor implements MaterialStateProperty<Color?> {
     }
     if (states.isPressed) {
       color = Color.lerp(color, darkerVersion, 0.3);
+    }
+    if (states.isDisabled) {
+      color = const Color(0xFFeeeeee);
     }
     return color;
   }
