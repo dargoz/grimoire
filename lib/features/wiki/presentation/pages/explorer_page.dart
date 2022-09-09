@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/features/wiki/presentation/utils/admonition_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/admonition_syntax.dart';
-import 'package:grimoire/features/wiki/presentation/widgets/key_caps_widget.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
 import 'package:grimoire/core/models/resource.dart';
@@ -19,6 +19,7 @@ import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
 import '../models/file_tree_model.dart';
 import '../utils/html_custom_render.dart';
+import '../widgets/app_search_widget.dart';
 import '../widgets/section_widget.dart';
 import '../widgets/version_widget.dart';
 
@@ -46,52 +47,17 @@ class ExplorerPage extends StatelessWidget {
           onKey: _keyboardController.onKeyEvent,
           child: Scaffold(
               appBar: AppBar(
-                title: const Text('Grimoire', style: TextStyle(
-                  color: Color(0xFF1c1e21)
-                ),),
+                title: const Text(
+                  'Grimoire',
+                  style: TextStyle(color: Color(0xFF1c1e21)),
+                ),
                 toolbarHeight: 48,
                 backgroundColor: const Color(0xFFfafafa),
                 iconTheme: const IconThemeData(color: Color(0xFF1c1e21)),
                 actions: [
-                  MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          _keyboardController.showSearchBar();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(32)),
-                                color: Color(0xFFebedf0)),
-                            child: Row(
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                  child: Icon(
-                                    Icons.search,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                Text(
-                                  'Search',
-                                  style: TextStyle(color: Colors.black87),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                  child: KeyCapsWidget(text: 'Ctrl'),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(8, 0, 16, 0),
-                                  child: KeyCapsWidget(text: 'Space'),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      )),
+                  AppBarSearchWidget(
+                    onTap: () => _keyboardController.showSearchBar(),
+                  ),
                   const Icon(Icons.help),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -117,14 +83,19 @@ class ExplorerPage extends StatelessWidget {
                       onQueryChanged: _documentController.onQueryChanged,
                       itemList: <Widget>[
                         if (_documentController.searchData.value.status ==
-                                Status.completed &&
-                            _documentController.hovers.isNotEmpty)
+                                Status.completed)
                           for (int index = 0;
                               index <
                                   _documentController
                                       .searchData.value.data!.length;
                               index++)
-                            _searchItem(context, index),
+                            SearchItemWidget(
+                                searchModel: _documentController
+                                    .searchData.value.data![index],
+                                onTap: () {
+                                  _keyboardController.hideSearchBar();
+                                  _documentController.onSearchResultTap(index);
+                                }),
                       ],
                     );
                   })
@@ -174,54 +145,48 @@ class ExplorerPage extends StatelessWidget {
                 'code': customCodeRender,
                 'h1': (renderContext, widget) => customHeaderRender(
                     renderContext, widget,
-                    onRender: (label, key) => _documentController
-                        .documentWidgetSections
-                        .add(Section(
+                    onRender: (label, key) =>
+                        _documentController.documentWidgetSections.add(Section(
                             id: '${label.hashCode}',
                             attr: '1',
                             label: label,
                             sectionKey: key))),
                 'h2': (renderContext, widget) => customHeaderRender(
                     renderContext, widget,
-                    onRender: (label, key) => _documentController
-                        .documentWidgetSections
-                        .add(Section(
+                    onRender: (label, key) =>
+                        _documentController.documentWidgetSections.add(Section(
                             id: '${label.hashCode}',
                             attr: '2',
                             label: label,
                             sectionKey: key))),
                 'h3': (renderContext, widget) => customHeaderRender(
                     renderContext, widget,
-                    onRender: (label, key) => _documentController
-                        .documentWidgetSections
-                        .add(Section(
+                    onRender: (label, key) =>
+                        _documentController.documentWidgetSections.add(Section(
                             id: '${label.hashCode}',
                             attr: '3',
                             label: label,
                             sectionKey: key))),
                 'h4': (renderContext, widget) => customHeaderRender(
                     renderContext, widget,
-                    onRender: (label, key) => _documentController
-                        .documentWidgetSections
-                        .add(Section(
+                    onRender: (label, key) =>
+                        _documentController.documentWidgetSections.add(Section(
                             id: '${label.hashCode}',
                             attr: '4',
                             label: label,
                             sectionKey: key))),
                 'h5': (renderContext, widget) => customHeaderRender(
                     renderContext, widget,
-                    onRender: (label, key) => _documentController
-                        .documentWidgetSections
-                        .add(Section(
+                    onRender: (label, key) =>
+                        _documentController.documentWidgetSections.add(Section(
                             id: '${label.hashCode}',
                             attr: '5',
                             label: label,
                             sectionKey: key))),
                 'h6': (renderContext, widget) => customHeaderRender(
                     renderContext, widget,
-                    onRender: (label, key) => _documentController
-                        .documentWidgetSections
-                        .add(Section(
+                    onRender: (label, key) =>
+                        _documentController.documentWidgetSections.add(Section(
                             id: '${label.hashCode}',
                             attr: '6',
                             label: label,
@@ -236,8 +201,8 @@ class ExplorerPage extends StatelessWidget {
                   ]),
               onAnchorTap: (text, renderContext, map, element) {
                 print('anchor tap : $text');
-                _documentController.redirect(text ?? '', map['href'],
-                    _treeController.state.value.data!);
+                _documentController.redirect(
+                    text ?? '', map['href'], _treeController.state.value.data!);
               },
             ),
           ),
@@ -324,49 +289,4 @@ class ExplorerPage extends StatelessWidget {
     );
   }
 
-  Widget _searchItem(BuildContext context, int index) {
-    return GestureDetector(
-      onTap: () {
-        _keyboardController.hideSearchBar();
-        _documentController.onSearchResultTap(index);
-      },
-      child: MouseRegion(
-        onEnter: (pointerEvent) {
-          _documentController.onItemHover(index, true);
-        },
-        onExit: (pointerEvent) {
-          _documentController.onItemHover(index, false);
-        },
-        cursor: SystemMouseCursors.click,
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: _documentController.hovers[index]
-                ? const Color.fromARGB(255, 196, 239, 255)
-                : Colors.white,
-            border: const Border(
-              bottom: BorderSide(width: 1.0, color: Colors.grey),
-            ),
-          ),
-          child: Builder(builder: (builderContext) {
-            var item = _documentController.searchData.value.data![index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.fromLTRB(8, 4, 4, 4),
-                  color: const Color.fromARGB(255, 171, 194, 206),
-                  child: Text(item.document?.fileName ?? 'unknown'),
-                ),
-                Html(
-                  data: item.marker.isEmpty ? '' : item.marker[0].snippet,
-                )
-              ],
-            );
-          }),
-        ),
-      ),
-    );
-  }
 }
