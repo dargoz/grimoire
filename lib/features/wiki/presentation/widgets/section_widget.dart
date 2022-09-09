@@ -42,7 +42,7 @@ class SectionWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
           decoration: const BoxDecoration(
-              border: Border(left: BorderSide(color: Colors.grey, width: 5))),
+              border: Border(left: BorderSide(color: Colors.grey, width: 4))),
           child: Padding(
             padding: EdgeInsets.fromLTRB(tabSize, 0, 0, 4),
             child: Obx(

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grimoire/core/models/resource.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/loading_widget.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/resource_error_widget.dart';
 
 import '../controllers/document_controller.dart';
 import '../controllers/file_tree_controller.dart';
@@ -66,17 +67,19 @@ class GrimoireHomePage extends StatelessWidget {
                     context.go('/grimoire/explorer');
                     break;
                   case Status.error:
-                    _showErrorDialog(context,
-                        errorMessage: _fileTreeController.state.value.message);
-                    break;
+                    _hideLoadingDialog();
+                    return ResourceErrorWidget(
+                      errorMessage: _fileTreeController.state.value.message,
+                      errorCode: _fileTreeController.state.value.errorCode,
+                    );
                 }
                 return Row(
                   children: [
                     appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {
-                          _showLoadingDialog(context);
-                          _fileTreeController.getFileTree('39138680');
-                        }),
+                      _showLoadingDialog(context);
+                      _fileTreeController.getFileTree('39138680');
+                    }),
                     const Spacer(),
                     appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {
@@ -120,32 +123,10 @@ class GrimoireHomePage extends StatelessWidget {
     );
   }
 
-  Future<void> _showErrorDialog(BuildContext context,
-      {String? errorMessage}) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Oops..'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(errorMessage ?? 'unknown error'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void _hideLoadingDialog() {
+    if (documentController.dialogContext != null) {
+      Navigator.pop(documentController.dialogContext!);
+    }
   }
 
   void _hideLoadingDialog() {

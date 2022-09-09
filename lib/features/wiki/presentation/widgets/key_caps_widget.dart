@@ -17,6 +17,7 @@ class KeyCapsWidget extends StatelessWidget {
           text,
           style: const TextStyle(
             color: Colors.black54,
+            fontSize: 12
           ),
         ),
       ),

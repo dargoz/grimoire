@@ -23,7 +23,6 @@ class DocumentController extends GetxController {
   var searchData =
       const Resource<List<SearchModel>>.initial('initial_search').obs;
   var documentWidgetSections = List<Section>.empty(growable: true);
-  var hovers = List<bool>.empty(growable: true).obs;
   var sectionHovers = List<bool>.empty(growable: true).obs;
 
   void getDocument(FileTreeModel fileTreeModel) async {
@@ -86,17 +85,11 @@ class DocumentController extends GetxController {
   void onQueryChanged(String query) async {
     if (query.isNotEmpty) {
       var searchResult = await _searchDocumentUseCase.executeUseCase(query);
-      hovers.value = List<bool>.filled(searchResult.data?.length ?? 0, false,
-          growable: true);
       searchData.value = searchResult
           .map((data) => data!.map((item) => item.toSearchModel()).toList());
     } else {
       searchData.value = const Resource.initial('reset');
     }
-  }
-
-  onItemHover(int index, bool flag) {
-    hovers[index] = flag;
   }
 
   onSectionItemHover(int position, bool state) {
