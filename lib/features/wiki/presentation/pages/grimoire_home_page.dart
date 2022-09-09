@@ -129,13 +129,6 @@ class GrimoireHomePage extends StatelessWidget {
     }
   }
 
-  void _hideLoadingDialog() {
-    if(documentController.dialogContext != null) {
-      Navigator.pop(documentController.dialogContext!);
-    }
-
-  }
-
   Future<void> _showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
