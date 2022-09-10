@@ -11,4 +11,9 @@ class FileTreeModel {
   String type;
   List<FileTreeModel> children;
   String path;
+
+  @override
+  String toString() {
+    return 'FileTreeModel{id: $id, name: $name, type: $type, children: $children, path: $path}';
+  }
 }

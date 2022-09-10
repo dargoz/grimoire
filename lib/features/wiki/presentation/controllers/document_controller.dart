@@ -26,6 +26,7 @@ class DocumentController extends GetxController {
   var sectionHovers = List<bool>.empty(growable: true).obs;
 
   void getDocument(FileTreeModel fileTreeModel) async {
+    print('tree model : $fileTreeModel');
     documentWidgetSections.clear();
     data.value = const Resource<DocumentModel>.loading('fetch data');
     var result =

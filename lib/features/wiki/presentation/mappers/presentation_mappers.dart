@@ -73,15 +73,18 @@ extension SectionEntityMapper on SectionEntity {
 }
 
 extension NodeMapper on FileTreeModel {
-
   FileTreeEntity toEntity() {
     return FileTreeEntity(
-        id: id, name: name, type: type, path: path, children: [], mode: '');
+        id: id,
+        name: name,
+        type: type,
+        path: path,
+        children: children.map((e) => e.toEntity()).toList(),
+        mode: '');
   }
 }
 
 extension NodeListMapper on List<FileTreeModel> {
-
   FileTreeModel? findNode(
       {required List<FileTreeModel> models, required String nodeKey}) {
     FileTreeModel? node;
@@ -113,7 +116,6 @@ extension NodeListMapper on List<FileTreeModel> {
     return node;
   }
 }
-
 
 extension MarkerModelMapper on HighlightEntity {
   MarkerModel toMarkerModel() {
