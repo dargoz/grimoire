@@ -16,7 +16,7 @@ class FileTreeWidget extends StatelessWidget {
       controller: ScrollController(),
       child: Column(
         children: [
-          for (var fileTree in fileTreeModels) fileTree.toExpansionTile(onTap)
+          for (var fileTree in fileTreeModels) fileTree.toExpansionTile(onTap, false)
         ],
       ),
     );
@@ -24,7 +24,7 @@ class FileTreeWidget extends StatelessWidget {
 }
 
 extension FileTreeToExpansion on FileTreeModel {
-  Widget toExpansionTile(void Function(FileTreeModel fileTreeModel)? onTap) {
+  Widget toExpansionTile(void Function(FileTreeModel fileTreeModel)? onTap, bool hasParent) {
     return children.isNotEmpty
         ? Theme(
             data: ThemeData(dividerColor: Colors.transparent),
@@ -43,7 +43,8 @@ extension FileTreeToExpansion on FileTreeModel {
                 style: const TextStyle(
                     fontSize: 18.0, fontWeight: FontWeight.bold),
               ),
-              children: children.map((e) => e.toExpansionTile(onTap)).toList(),
+              hasParent: hasParent,
+              children: children.map((e) => e.toExpansionTile(onTap, true)).toList(),
             ))
         : ListTile(
             title: Text(name),
