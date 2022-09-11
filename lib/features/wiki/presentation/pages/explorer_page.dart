@@ -19,6 +19,8 @@ import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
 import '../models/file_tree_model.dart';
 import '../utils/html_custom_render.dart';
+import '../utils/reference_render.dart';
+import '../utils/reference_syntax.dart';
 import '../widgets/app_search_widget.dart';
 import '../widgets/section_widget.dart';
 import '../widgets/version_widget.dart';
@@ -107,7 +109,7 @@ class ExplorerPage extends StatelessWidget {
   Widget documentWidget(BuildContext context) {
     return SelectionArea(
       child: Html(
-        tagsList: Html.tags..add('admonition'),
+        tagsList: Html.tags..add('admonition')..add('reference'),
         customRender: {
           'code': customCodeRender,
           'h1': (renderContext, widget) => customHeaderRender(
@@ -158,11 +160,12 @@ class ExplorerPage extends StatelessWidget {
                       attr: '6',
                       label: label,
                       sectionKey: key))),
-          'admonition': admonitionRender
+          'admonition': admonitionRender,
+          'reference': referenceRender
         },
         data: md.markdownToHtml(
             _documentController.data.value.data?.content ?? '',
-            blockSyntaxes: const [md.HeaderWithIdSyntax(), AdmonitionSyntax()]),
+            blockSyntaxes: const [md.HeaderWithIdSyntax(), AdmonitionSyntax(), ReferenceSyntax()]),
         onAnchorTap: (text, renderContext, map, element) {
           print('anchor tap : $text');
           _documentController.redirect(

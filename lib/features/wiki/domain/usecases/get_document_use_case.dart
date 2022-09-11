@@ -83,7 +83,13 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
   }
 
   String _generateDefaultContent(FileTreeEntity params) {
+    String contentButton = '&&&\n';
+    for (var child in params.children) {
+      String pageTitle = '${child.type == 'tree' ? '🗃️' : '📄'} ${child.name}\n';
+      contentButton += pageTitle;
+    }
+    contentButton += '&&&';
     return '# ${params.name}\n'
-        '${params.children.toString()}';
+        '$contentButton';
   }
 }

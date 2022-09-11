@@ -5,8 +5,8 @@ import 'package:markdown/markdown.dart';
 import 'flavor_patterns.dart';
 
 /// inspiration : https://docusaurus.io/docs/markdown-features/admonitions
-class AdmonitionSyntax extends BlockSyntax {
-  const AdmonitionSyntax();
+class ReferenceSyntax extends BlockSyntax {
+  const ReferenceSyntax();
 
   @override
   bool canParse(BlockParser parser) {
@@ -18,8 +18,8 @@ class AdmonitionSyntax extends BlockSyntax {
     //
     // > If the info string comes after a backtick fence, it may not contain
     // > any backtick characters.
-    return (codeFence.codeUnitAt(0) != $colon ||
-        !infoString!.codeUnits.contains($colon));
+    return (codeFence.codeUnitAt(0) != $ampersand ||
+        !infoString!.codeUnits.contains($ampersand));
   }
 
   @override
@@ -60,7 +60,7 @@ class AdmonitionSyntax extends BlockSyntax {
       var escapeHtml = const HtmlEscape(HtmlEscapeMode.element);
       text = escapeHtml.convert(text);
     }
-    final code = Element.text('admonition', text);
+    final code = Element.text('reference', text);
 
     // the info-string should be trimmed
     // http://spec.commonmark.org/0.22/#example-100
@@ -76,7 +76,7 @@ class AdmonitionSyntax extends BlockSyntax {
         var escapeHtmlAttribute = const HtmlEscape(HtmlEscapeMode.attribute);
         infoString = escapeHtmlAttribute.convert(infoString);
       }
-      code.attributes['class'] = 'type-$infoString';
+      code.attributes['class'] = 'refer-$infoString';
     }
 
     final element = Element('pre', [code]);
@@ -85,5 +85,5 @@ class AdmonitionSyntax extends BlockSyntax {
   }
 
   @override
-  RegExp get pattern => admonitionPattern;
+  RegExp get pattern => referencePattern;
 }
