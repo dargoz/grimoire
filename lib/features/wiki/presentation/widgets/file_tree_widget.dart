@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
 
 import 'custom_expansion_tile.dart';
+import 'custom_list_tile.dart';
 
 class FileTreeWidget extends StatelessWidget {
   const FileTreeWidget({Key? key, required this.fileTreeModels, this.onTap})
@@ -16,7 +17,8 @@ class FileTreeWidget extends StatelessWidget {
       controller: ScrollController(),
       child: Column(
         children: [
-          for (var fileTree in fileTreeModels) fileTree.toExpansionTile(onTap, false)
+          for (var fileTree in fileTreeModels)
+            fileTree.toExpansionTile(onTap, false)
         ],
       ),
     );
@@ -24,7 +26,8 @@ class FileTreeWidget extends StatelessWidget {
 }
 
 extension FileTreeToExpansion on FileTreeModel {
-  Widget toExpansionTile(void Function(FileTreeModel fileTreeModel)? onTap, bool hasParent) {
+  Widget toExpansionTile(
+      void Function(FileTreeModel fileTreeModel)? onTap, bool hasParent) {
     return children.isNotEmpty
         ? Theme(
             data: ThemeData(dividerColor: Colors.transparent),
@@ -41,13 +44,16 @@ extension FileTreeToExpansion on FileTreeModel {
               title: Text(
                 name,
                 style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.bold),
+                    color: Colors.black45,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
               ),
               hasParent: hasParent,
-              children: children.map((e) => e.toExpansionTile(onTap, true)).toList(),
+              children:
+                  children.map((e) => e.toExpansionTile(onTap, true)).toList(),
             ))
-        : ListTile(
-            title: Text(name),
+        : CustomListTile(
+            title: name,
             onTap: onTap == null ? null : () => onTap(this),
           );
   }
