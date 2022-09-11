@@ -268,7 +268,7 @@ class _ExpansionTileState extends State<CustomExpansionTile>
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
   static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.5);
+      Tween<double>(begin: -0.25, end: 0.0);
 
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -345,7 +345,7 @@ class _ExpansionTileState extends State<CustomExpansionTile>
   Widget? _buildIcon(BuildContext context) {
     return RotationTransition(
       turns: _iconTurns,
-      child: const Icon(Icons.expand_more),
+      child: Icon(Icons.expand_more, color: widget.iconColor ?? Colors.black45,),
     );
   }
 
@@ -410,7 +410,7 @@ class _ExpansionTileState extends State<CustomExpansionTile>
                       onPressed: _handleTap,
                       child: widget.trailing ??
                           _buildTrailingIcon(context) ??
-                          const Icon(Icons.keyboard_arrow_down))
+                          Icon(Icons.keyboard_arrow_down, color: widget.iconColor ?? Colors.black45,))
                 ],
               ),
             ),
