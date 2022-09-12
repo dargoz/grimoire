@@ -30,11 +30,13 @@ class CustomListTile extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: Text(
             title,
-            style: const TextStyle(color: Colors.black45, fontSize: 16),
+            style: const TextStyle(
+                color: Colors.black45,
+                fontSize: 16,
+                fontWeight: FontWeight.bold),
           ),
         ),
       ),
     );
   }
-
 }
