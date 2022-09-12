@@ -173,7 +173,8 @@ class ExplorerPage extends StatelessWidget {
             blockSyntaxes: const [
               md.HeaderWithIdSyntax(),
               AdmonitionSyntax(),
-              ReferenceSyntax()
+              ReferenceSyntax(),
+              md.TableSyntax()
             ]),
         onAnchorTap: (text, renderContext, map, element) {
           print('anchor tap : $text');

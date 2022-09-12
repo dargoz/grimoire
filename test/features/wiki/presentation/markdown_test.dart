@@ -11,4 +11,14 @@ void main() {
         markdownToHtml(markdown, blockSyntaxes: const [AdmonitionSyntax(), ReferenceSyntax()]);
     print('result : $result');
   });
+
+  test('markdown table', () async {
+    var markdown = '# table sample\n'
+        '| step   | 1. Layar Home BCA mobile        | 2. Layar Menu m-info                   | 3. Layar Info Saldo Rekeing           |\n'
+        '|--------|---------------------------------|----------------------------------------|---------------------------------------|\n'
+        '| screen | ![img](.assets/home_screen.png) | ![img](.assets/detail_screen.png)      | ![img](.assets/info_screen.png)       |\n';
+    var result = markdownToHtml(markdown,
+        blockSyntaxes: const [AdmonitionSyntax(), ReferenceSyntax(), TableSyntax()]);
+    print('result : $result');
+  });
 }
