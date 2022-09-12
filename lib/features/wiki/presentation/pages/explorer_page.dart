@@ -109,7 +109,9 @@ class ExplorerPage extends StatelessWidget {
   Widget documentWidget(BuildContext context) {
     return SelectionArea(
       child: Html(
-        tagsList: Html.tags..add('admonition')..add('reference'),
+        tagsList: Html.tags
+          ..add('admonition')
+          ..add('reference'),
         customRender: {
           'code': customCodeRender,
           'h1': (renderContext, widget) => customHeaderRender(
@@ -161,11 +163,18 @@ class ExplorerPage extends StatelessWidget {
                       label: label,
                       sectionKey: key))),
           'admonition': admonitionRender,
-          'reference': referenceRender
+          'reference': (renderContext, widget) =>
+              referenceRender(renderContext, widget, onTap: (content) {
+                _documentController.getDocument(content);
+              })
         },
         data: md.markdownToHtml(
             _documentController.data.value.data?.content ?? '',
-            blockSyntaxes: const [md.HeaderWithIdSyntax(), AdmonitionSyntax(), ReferenceSyntax()]),
+            blockSyntaxes: const [
+              md.HeaderWithIdSyntax(),
+              AdmonitionSyntax(),
+              ReferenceSyntax()
+            ]),
         onAnchorTap: (text, renderContext, map, element) {
           print('anchor tap : $text');
           _documentController.redirect(

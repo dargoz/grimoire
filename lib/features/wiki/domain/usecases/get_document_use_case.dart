@@ -1,4 +1,4 @@
-import 'dart:convert' show base64, utf8;
+import 'dart:convert' show base64, jsonEncode, utf8;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -85,8 +85,7 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
   String _generateDefaultContent(FileTreeEntity params) {
     String contentButton = '&&&\n';
     for (var child in params.children) {
-      String pageTitle = '${child.type == 'tree' ? '🗃️' : '📄'} ${child.name}\n';
-      contentButton += pageTitle;
+      contentButton += '${jsonEncode(child.toJson())}\n';
     }
     contentButton += '&&&';
     return '# ${params.name}\n'
