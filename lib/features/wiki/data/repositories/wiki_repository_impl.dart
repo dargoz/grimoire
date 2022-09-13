@@ -59,4 +59,27 @@ class WikiRepositoryImpl extends WikiRepository {
             id: _projectId, recursive: true, perPage: 100), "main");
     return response.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
+
+  @override
+  Future<DocumentEntity> getImage(String id, String filePath, {String projectId = ''}) async {
+    if (projectId.isNotEmpty) _projectId = projectId;
+    var cache = await _localDataSource.getDocument(id);
+    if (cache != null) {
+      if (kDebugMode) {
+        print("using image cache");
+      }
+      return cache.toDocumentEntity();
+    }
+    FileResponse fileResponse =
+        await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
+    CommitResponse commitResponse = await _remoteDataSource.getCommit(
+        _projectId, fileResponse.lastCommitId);
+    var documentEntity = fileResponse.toDocumentEntity();
+    documentEntity.commitEntity = commitResponse.toCommitEntity();
+    var fileObject = fileResponse.toFileObject();
+    fileObject.blobId = id;
+    fileObject.commitObject = commitResponse.toCommitObject();
+    _localDataSource.saveDocument(fileObject);
+    return documentEntity;
+  }
 }

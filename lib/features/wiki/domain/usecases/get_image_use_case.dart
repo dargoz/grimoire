@@ -1,0 +1,27 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+
+import 'package:grimoire/core/usecases/usecase.dart';
+import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
+import 'package:injectable/injectable.dart';
+
+import '../repositories/wiki_repository.dart';
+
+@injectable
+class GetImageUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
+  GetImageUseCase(this._wikiRepository);
+
+  final WikiRepository _wikiRepository;
+
+  @override
+  Future<DocumentEntity> useCase(FileTreeEntity params) async {
+    print('path : ${params.path}');
+    params.id = sha256.convert(utf8.encode(params.path)).toString();
+    params.path = params.path.replaceAll('/', '%2F');
+    params.path = params.path.replaceAll('.', '%2E');
+    var document = await _wikiRepository.getImage(params.id, params.path);
+    return document;
+  }
+}

@@ -8,4 +8,7 @@ abstract class WikiRepository {
 
   Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage,
       {String projectId = ''});
+
+  Future<DocumentEntity> getImage(String id, String filePath,
+      {String projectId = ''});
 }

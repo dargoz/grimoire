@@ -48,8 +48,6 @@ class ReferenceSyntax extends BlockSyntax {
     final match = pattern.firstMatch(parser.current)!;
     final endBlock = match.group(1);
     var infoString = match.group(2)!;
-    print('endBlock : $endBlock');
-    print('infoString : $infoString');
     final childLines = parseChildLines(parser, endBlock);
 
     // The Markdown tests expect a trailing newline.

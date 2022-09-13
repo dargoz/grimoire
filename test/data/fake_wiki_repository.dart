@@ -26,4 +26,10 @@ class FakeWikiRepository extends WikiRepository {
         json.map((e) => RepositoryTreeResponse.fromJson(e)));
     return result.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
+
+  @override
+  Future<DocumentEntity> getImage(String id, String filePath, {String projectId = ''}) {
+    // TODO: implement getImage
+    throw UnimplementedError();
+  }
 }

@@ -22,6 +22,7 @@ import 'features/wiki/domain/repositories/search_repository.dart' as _i9;
 import 'features/wiki/domain/repositories/wiki_repository.dart' as _i14;
 import 'features/wiki/domain/usecases/get_document_use_case.dart' as _i16;
 import 'features/wiki/domain/usecases/get_file_tree_use_case.dart' as _i17;
+import 'features/wiki/domain/usecases/get_image_use_case.dart' as _i18;
 import 'features/wiki/domain/usecases/search_document_use_case.dart'
     as _i13; // ignore_for_file: unnecessary_lambdas
 
@@ -45,5 +46,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i14.WikiRepository>(), get<_i9.SearchRepository>()));
   gh.factory<_i17.GetFileTreeUseCase>(
       () => _i17.GetFileTreeUseCase(get<_i14.WikiRepository>()));
+  gh.factory<_i18.GetImageUseCase>(
+      () => _i18.GetImageUseCase(get<_i14.WikiRepository>()));
   return get;
 }

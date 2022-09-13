@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/core/models/resource.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_document_use_case.dart';
+import 'package:grimoire/features/wiki/domain/usecases/get_image_use_case.dart';
 import 'package:grimoire/features/wiki/domain/usecases/search_document_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
@@ -14,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DocumentController extends GetxController {
   final GetDocumentUseCase _getDocumentUseCase = getIt<GetDocumentUseCase>();
+  final GetImageUseCase _getImageUseCase = getIt<GetImageUseCase>();
   final SearchDocumentUseCase _searchDocumentUseCase =
       getIt<SearchDocumentUseCase>();
 
@@ -101,5 +106,20 @@ class DocumentController extends GetxController {
     var itemFound = searchData.value.data?[index];
     print('search item found : ${itemFound?.document?.filePath}');
     getDocument(itemFound!.document!.toFileTreeModel());
+  }
+
+  Future<Widget> getImage(String parentPath, String imageSource) async {
+    var model = FileTreeModel(
+        id: '',
+        name: imageSource,
+        type: 'blob',
+        path:
+            '${parentPath.substring(0, parentPath.lastIndexOf('/'))}/$imageSource');
+    var result = await _getImageUseCase.executeUseCase(model.toEntity());
+    if (result.status == Status.completed) {
+      return Image.memory(base64.decode(result.data!.content));
+    } else {
+      return const Icon(Icons.broken_image_outlined);
+    }
   }
 }

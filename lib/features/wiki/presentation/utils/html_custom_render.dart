@@ -92,10 +92,6 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
   }
   if (kDebugMode) {
     print('---------------------------------------------------');
-    print('render context : ${renderContext.tree.name}');
-    print('render attributes : ${renderContext.tree.attributes}');
-    print('id : $id');
-
     onRender(id, globalKey);
     print("widget : ${widget.toString()} :: ${widget.key}");
   }

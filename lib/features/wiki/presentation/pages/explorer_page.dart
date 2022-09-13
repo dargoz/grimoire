@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
-import 'package:grimoire/features/wiki/presentation/utils/admonition_render.dart';
-import 'package:grimoire/features/wiki/presentation/utils/admonition_syntax.dart';
+
 import 'package:grimoire/features/wiki/presentation/widgets/breadcrumb_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
-import 'package:markdown/markdown.dart' as md;
-import 'package:flutter_html/flutter_html.dart';
+
 import 'package:grimoire/core/models/resource.dart';
 
 import 'package:grimoire/features/wiki/presentation/widgets/loading_widget.dart';
@@ -18,10 +16,9 @@ import 'package:grimoire/features/wiki/presentation/controllers/document_control
 import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
 import '../models/file_tree_model.dart';
-import '../utils/html_custom_render.dart';
-import '../utils/reference_render.dart';
-import '../utils/reference_syntax.dart';
+
 import '../widgets/app_search_widget.dart';
+import '../widgets/document_widget.dart';
 import '../widgets/section_widget.dart';
 import '../widgets/version_widget.dart';
 
@@ -106,85 +103,6 @@ class ExplorerPage extends StatelessWidget {
     );
   }
 
-  Widget documentWidget(BuildContext context) {
-    return SelectionArea(
-      child: Html(
-        tagsList: Html.tags
-          ..add('admonition')
-          ..add('reference'),
-        customRender: {
-          'code': customCodeRender,
-          'h1': (renderContext, widget) => customHeaderRender(
-              renderContext, widget,
-              onRender: (label, key) =>
-                  _documentController.documentWidgetSections.add(Section(
-                      id: '${label.hashCode}',
-                      attr: '1',
-                      label: label,
-                      sectionKey: key))),
-          'h2': (renderContext, widget) => customHeaderRender(
-              renderContext, widget,
-              onRender: (label, key) =>
-                  _documentController.documentWidgetSections.add(Section(
-                      id: '${label.hashCode}',
-                      attr: '2',
-                      label: label,
-                      sectionKey: key))),
-          'h3': (renderContext, widget) => customHeaderRender(
-              renderContext, widget,
-              onRender: (label, key) =>
-                  _documentController.documentWidgetSections.add(Section(
-                      id: '${label.hashCode}',
-                      attr: '3',
-                      label: label,
-                      sectionKey: key))),
-          'h4': (renderContext, widget) => customHeaderRender(
-              renderContext, widget,
-              onRender: (label, key) =>
-                  _documentController.documentWidgetSections.add(Section(
-                      id: '${label.hashCode}',
-                      attr: '4',
-                      label: label,
-                      sectionKey: key))),
-          'h5': (renderContext, widget) => customHeaderRender(
-              renderContext, widget,
-              onRender: (label, key) =>
-                  _documentController.documentWidgetSections.add(Section(
-                      id: '${label.hashCode}',
-                      attr: '5',
-                      label: label,
-                      sectionKey: key))),
-          'h6': (renderContext, widget) => customHeaderRender(
-              renderContext, widget,
-              onRender: (label, key) =>
-                  _documentController.documentWidgetSections.add(Section(
-                      id: '${label.hashCode}',
-                      attr: '6',
-                      label: label,
-                      sectionKey: key))),
-          'admonition': admonitionRender,
-          'reference': (renderContext, widget) =>
-              referenceRender(renderContext, widget, onTap: (content) {
-                _documentController.getDocument(content);
-              })
-        },
-        data: md.markdownToHtml(
-            _documentController.data.value.data?.content ?? '',
-            blockSyntaxes: const [
-              md.HeaderWithIdSyntax(),
-              AdmonitionSyntax(),
-              ReferenceSyntax(),
-              md.TableSyntax()
-            ]),
-        onAnchorTap: (text, renderContext, map, element) {
-          print('anchor tap : $text');
-          _documentController.redirect(
-              text ?? '', map['href'], _treeController.state.value.data!);
-        },
-      ),
-    );
-  }
-
   Widget buildContent(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +159,35 @@ class ExplorerPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                        child: documentWidget(context),
+                        child: documentWidget(
+                            context: context,
+                            htmlContent:
+                                _documentController.data.value.data?.content,
+                            onSectionRender: (label, key, attr) =>
+                                _documentController.documentWidgetSections.add(
+                                    Section(
+                                        id: '${label.hashCode}',
+                                        attr: attr,
+                                        label: label,
+                                        sectionKey: key)),
+                            onReferenceTap: (content) {
+                              _documentController.getDocument(content);
+                            },
+                            onAnchorTap: (text, renderContext, map, element) {
+                              print('anchor tap : $text');
+                              _documentController.redirect(
+                                  text ?? '',
+                                  map['href'],
+                                  _treeController.state.value.data!);
+                            },
+                            imageProvider: (imageSource) {
+                              print('imageSource : $imageSource');
+                              return _documentController.getImage(
+                                  _documentController
+                                          .data.value.data?.filePath ??
+                                      '',
+                                  imageSource ?? '');
+                            }),
                       ),
                     ],
                   ),
