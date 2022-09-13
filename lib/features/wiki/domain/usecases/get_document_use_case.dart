@@ -1,5 +1,4 @@
 import 'dart:convert' show base64, jsonEncode, utf8;
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:grimoire/core/usecases/usecase.dart';
@@ -19,11 +18,20 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
 
   @override
   Future<DocumentEntity> useCase(FileTreeEntity params) async {
-    if (params.type == 'tree') params.path += '/README.md';
+    DocumentEntity document;
+    if (params.type == 'tree') {
+      if (params.children
+              .indexWhere((element) => element.name == 'README.md') ==
+          -1) {
+        document = _defaultDocument(params);
+        return document;
+      } else {
+        params.path += '/README.md';
+      }
+    }
     params.path = params.path.replaceAll('/', '%2F');
     params.path = params.path.replaceAll('.', '%2E');
 
-    DocumentEntity document;
     try {
       document = await _wikiRepository.getDocument(params.id, params.path);
       var contentCodeUnits = base64.decode(document.content);
