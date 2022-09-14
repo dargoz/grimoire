@@ -76,6 +76,7 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
       break;
     case 'h2':
       fontSize = 32;
+      fontWeight = FontWeight.bold;
       break;
     case 'h3':
       fontSize = 24;
