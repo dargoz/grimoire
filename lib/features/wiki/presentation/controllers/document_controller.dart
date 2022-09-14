@@ -32,6 +32,7 @@ class DocumentController extends GetxController {
 
   void getDocument(FileTreeModel fileTreeModel) async {
     print('tree model : $fileTreeModel');
+    if (data.value.data?.filePath == fileTreeModel.path) return;
     documentWidgetSections.clear();
     data.value = const Resource<DocumentModel>.loading('fetch data');
     var result =

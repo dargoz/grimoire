@@ -20,6 +20,18 @@ class SectionWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            children: const [
+              Icon(
+                Icons.list,
+                color: Colors.grey,
+              ),
+              Text(
+                'Table of Content',
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
+          ),
           for (var index = 0; index < sections.length; index++)
             _sectionItem(sections[index], index)
         ],
@@ -40,9 +52,11 @@ class SectionWidget extends StatelessWidget {
         },
         cursor: SystemMouseCursors.click,
         child: Container(
-          padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+          margin: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(8, 4, 0, 0),
           decoration: const BoxDecoration(
-              border: Border(left: BorderSide(color: Colors.grey, width: 4))),
+              border:
+                  Border(left: BorderSide(color: Color(0xffd9d9d9), width: 4))),
           child: Padding(
             padding: EdgeInsets.fromLTRB(tabSize, 0, 0, 4),
             child: Obx(
