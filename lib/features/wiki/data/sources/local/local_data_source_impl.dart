@@ -42,7 +42,8 @@ class LocalDataSourceImpl extends LocalDataSource {
   void saveDocument(FileObject fileObject) async {
     var encryptedBox = await Hive.openBox(documentBox,
         encryptionCipher: HiveAesCipher(encryptionKey!));
-    encryptedBox.put(fileObject.blobId, fileObject);
+    var id = '${fileObject.blobId}${fileObject.filePath}';
+    encryptedBox.put(id, fileObject);
   }
 
   @override

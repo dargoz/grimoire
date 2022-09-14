@@ -29,8 +29,6 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
         params.path += '/README.md';
       }
     }
-    params.path = params.path.replaceAll('/', '%2F');
-    params.path = params.path.replaceAll('.', '%2E');
 
     try {
       document = await _wikiRepository.getDocument(params.id, params.path);

@@ -30,13 +30,15 @@ class WikiRepositoryImpl extends WikiRepository {
       _projectId = cacheProject;
     }
     if (projectId.isNotEmpty) _projectId = projectId;
-    var cache = await _localDataSource.getDocument(id);
+    var cache = await _localDataSource.getDocument(id + filePath);
     if (cache != null) {
       if (kDebugMode) {
         print("using cache");
       }
       return cache.toDocumentEntity();
     }
+    filePath = filePath.replaceAll('/', '%2F');
+    filePath = filePath.replaceAll('.', '%2E');
     FileResponse fileResponse =
         await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
     CommitResponse commitResponse = await _remoteDataSource.getCommit(
@@ -63,13 +65,15 @@ class WikiRepositoryImpl extends WikiRepository {
   @override
   Future<DocumentEntity> getImage(String id, String filePath, {String projectId = ''}) async {
     if (projectId.isNotEmpty) _projectId = projectId;
-    var cache = await _localDataSource.getDocument(id);
+    var cache = await _localDataSource.getDocument(id + filePath);
     if (cache != null) {
       if (kDebugMode) {
         print("using image cache");
       }
       return cache.toDocumentEntity();
     }
+    filePath = filePath.replaceAll('/', '%2F');
+    filePath = filePath.replaceAll('.', '%2E');
     FileResponse fileResponse =
         await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
     CommitResponse commitResponse = await _remoteDataSource.getCommit(

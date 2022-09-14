@@ -19,8 +19,6 @@ class GetImageUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
   Future<DocumentEntity> useCase(FileTreeEntity params) async {
     print('path : ${params.path}');
     params.id = sha256.convert(utf8.encode(params.path)).toString();
-    params.path = params.path.replaceAll('/', '%2F');
-    params.path = params.path.replaceAll('.', '%2E');
     var document = await _wikiRepository.getImage(params.id, params.path);
     return document;
   }
