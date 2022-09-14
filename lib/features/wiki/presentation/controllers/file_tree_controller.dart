@@ -38,4 +38,8 @@ class FileTreeController extends GetxController {
     }
 
   }
+
+  FileTreeModel? findReference(FileTreeModel content) {
+    return state.value.data?.findNodeByPath(models: state.value.data!, path: content.path);
+  }
 }

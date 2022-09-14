@@ -22,13 +22,13 @@ void main() {
   });
 
   test('markdown reference', () async {
-    var markdown = '# Reference Test\n\n&&&\ntitle1\ntitle2\ntitle3\n&&&\n';
+    var markdown = '# Reference Test\n\n&&&path\ntitle1\ntitle2\ntitle3\n&&&\n';
     var result =
         markdownToHtml(markdown, blockSyntaxes: const [ReferenceSyntax()]);
     expect(
         result,
         '<h1>Reference Test</h1>\n'
-        '<pre><reference>title1\n'
+        '<pre><reference class="refer-path">title1\n'
         'title2\n'
         'title3\n'
         '</reference></pre>\n');
@@ -40,8 +40,6 @@ void main() {
         '|--------|---------------------------------|----------------------------------------|---------------------------------------|\n'
         '| screen | ![img](.assets/home_screen.png) | ![img](.assets/detail_screen.png)      | ![img](.assets/info_screen.png)       |\n';
     var result = markdownToHtml(markdown, blockSyntaxes: const [
-      AdmonitionSyntax(),
-      ReferenceSyntax(),
       TableSyntax()
     ]);
     expect(
