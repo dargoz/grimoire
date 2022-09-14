@@ -36,7 +36,7 @@ extension FileTreeToExpansion on FileTreeModel {
               initiallyExpanded: true,
               // trailing: const SizedBox.shrink(),
               childrenPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-              onExpansionChanged: (isExpanded) {
+              onExpansionTileTap: () {
                 if (onTap != null) {
                   onTap(this);
                 }

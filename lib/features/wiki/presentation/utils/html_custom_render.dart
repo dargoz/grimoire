@@ -71,23 +71,24 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
   var fontWeight = FontWeight.normal;
   switch (renderContext.tree.name) {
     case 'h1':
-      fontSize = 24;
+      fontSize = 48;
       fontWeight = FontWeight.bold;
       break;
     case 'h2':
-      fontSize = 22;
+      fontSize = 32;
+      fontWeight = FontWeight.bold;
       break;
     case 'h3':
-      fontSize = 20;
+      fontSize = 24;
       break;
     case 'h4':
-      fontSize = 18;
+      fontSize = 20;
       break;
     case 'h5':
-      fontSize = 16;
+      fontSize = 18;
       break;
     case 'h6':
-      fontSize = 14;
+      fontSize = 16;
       break;
   }
   if (kDebugMode) {

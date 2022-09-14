@@ -65,6 +65,7 @@ class CustomExpansionTile extends StatefulWidget {
     this.collapsedIconColor,
     this.controlAffinity,
     this.hasParent = false,
+    this.onExpansionTileTap,
   })  : assert(initiallyExpanded != null),
         assert(maintainState != null),
         assert(
@@ -100,6 +101,7 @@ class CustomExpansionTile extends StatefulWidget {
   /// the value false.
   final ValueChanged<bool>? onExpansionChanged;
 
+  final void Function()? onExpansionTileTap;
   /// The widgets that are displayed when the tile expands.
   ///
   /// Typically [ListTile] widgets.
@@ -388,7 +390,14 @@ class _ExpansionTileState extends State<CustomExpansionTile>
             iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
             textColor: _headerColor.value,
             child: TextButton(
-              onPressed: _isExpanded ? null : _handleTap,
+              onPressed: () {
+                if (widget.onExpansionTileTap != null) {
+                  widget.onExpansionTileTap!();
+                }
+                if (!_isExpanded) {
+                  _handleTap();
+                }
+              },
               style: ElevatedButton.styleFrom(
                 enabledMouseCursor: SystemMouseCursors.click,
                 disabledMouseCursor: SystemMouseCursors.text,
