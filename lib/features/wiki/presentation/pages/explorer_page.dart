@@ -142,7 +142,10 @@ class ExplorerPage extends StatelessWidget {
                           path: _documentController.data.value.data?.filePath ??
                               "",
                           onPressed: (String label) {
-                            print('breadcrumb menu : $label');
+                            var model = FileTreeModel(
+                                id: '', name: '', type: 'tree', path: label);
+                            _documentController.getDocument(
+                                _treeController.findReference(model) ?? model);
                           },
                         ),
                       ),
@@ -171,7 +174,10 @@ class ExplorerPage extends StatelessWidget {
                                         label: label,
                                         sectionKey: key)),
                             onReferenceTap: (content) {
-                              _documentController.getDocument(content);
+                              _documentController.getDocument(content.id.isEmpty
+                                  ? _treeController.findReference(content) ??
+                                      content
+                                  : content);
                             },
                             onAnchorTap: (text, renderContext, map, element) {
                               print('anchor tap : $text');

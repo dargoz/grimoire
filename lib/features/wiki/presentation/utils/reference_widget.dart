@@ -39,7 +39,7 @@ class ReferenceWidget extends StatelessWidget {
                     child: Text(
                       '${content.type == 'tree' ? '🗃' : '📄'} ${content.name.replaceAll('.md', '')}',
                       style: const TextStyle(color: Colors.black87,
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                          fontSize: 24,),
                     )),
               )
           ]),

@@ -86,7 +86,7 @@ extension MenuConverter on List<Menu> {
       path += '${item.label}/';
       if(item == menu) break;
     }
-    return '${path}README.md';
+    return path.substring(0, path.length-1);
   }
 
 }
