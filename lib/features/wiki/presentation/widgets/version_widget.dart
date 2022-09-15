@@ -10,8 +10,9 @@ class VersionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Container(
-      width: MediaQuery.of(context).size.width * 0.6,
+      width: MediaQuery.of(context).size.width * (isPortrait ? 1 : 0.6),
       padding: const EdgeInsets.all(8),
       child: Row(
         children: [

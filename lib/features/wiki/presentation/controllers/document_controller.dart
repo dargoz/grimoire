@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/core/models/resource.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_document_use_case.dart';
@@ -28,7 +27,6 @@ class DocumentController extends GetxController {
   var searchData =
       const Resource<List<SearchModel>>.initial('initial_search').obs;
   var documentWidgetSections = List<Section>.empty(growable: true);
-  var sectionHovers = List<bool>.empty(growable: true).obs;
 
   void getDocument(FileTreeModel fileTreeModel) async {
     print('tree model : $fileTreeModel');
@@ -37,9 +35,6 @@ class DocumentController extends GetxController {
     data.value = const Resource<DocumentModel>.loading('fetch data');
     var result =
         await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
-    sectionHovers.value = List<bool>.filled(
-        result.data?.sections?.length ?? 0, false,
-        growable: true);
     data.value = result.map((e) => e?.toDocumentModel());
   }
 
@@ -97,10 +92,6 @@ class DocumentController extends GetxController {
     } else {
       searchData.value = const Resource.initial('reset');
     }
-  }
-
-  onSectionItemHover(int position, bool state) {
-    sectionHovers[position] = state;
   }
 
   void onSearchResultTap(int index) {
