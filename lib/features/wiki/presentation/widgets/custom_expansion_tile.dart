@@ -102,6 +102,7 @@ class CustomExpansionTile extends StatefulWidget {
   final ValueChanged<bool>? onExpansionChanged;
 
   final void Function()? onExpansionTileTap;
+
   /// The widgets that are displayed when the tile expands.
   ///
   /// Typically [ListTile] widgets.
@@ -347,7 +348,10 @@ class _ExpansionTileState extends State<CustomExpansionTile>
   Widget? _buildIcon(BuildContext context) {
     return RotationTransition(
       turns: _iconTurns,
-      child: Icon(Icons.expand_more, color: widget.iconColor ?? Colors.black45,),
+      child: Icon(
+        Icons.expand_more,
+        color: widget.iconColor ?? Colors.black45,
+      ),
     );
   }
 
@@ -406,20 +410,27 @@ class _ExpansionTileState extends State<CustomExpansionTile>
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8))),
               ).copyWith(
-                  backgroundColor: const BgStateColor(Colors.transparent),
+                  backgroundColor: BgStateColor(
+                      widget.backgroundColor ?? Colors.transparent),
                   elevation: const ElevationStateColor()),
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: widget.title,
-                  ),
+                  Flexible(
+                      flex: 6,
+                      fit: FlexFit.tight,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                        child: widget.title,
+                      )),
                   const Spacer(),
                   TextButton(
                       onPressed: _handleTap,
                       child: widget.trailing ??
                           _buildTrailingIcon(context) ??
-                          Icon(Icons.keyboard_arrow_down, color: widget.iconColor ?? Colors.black45,))
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            color: widget.iconColor ?? Colors.black45,
+                          ))
                 ],
               ),
             ),
@@ -462,7 +473,7 @@ class _ExpansionTileState extends State<CustomExpansionTile>
     _backgroundColorTween
       ..begin = widget.collapsedBackgroundColor ??
           expansionTileTheme.collapsedBackgroundColor
-      ..end = widget.backgroundColor ?? expansionTileTheme.backgroundColor;
+      ..end = expansionTileTheme.backgroundColor;
     super.didChangeDependencies();
   }
 

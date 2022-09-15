@@ -12,6 +12,7 @@ import 'package:grimoire/features/wiki/presentation/widgets/resource_error_widge
 import 'package:grimoire/features/wiki/presentation/widgets/search_bar_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/document_controller.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/section_widget_v2.dart';
 
 import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
@@ -104,19 +105,22 @@ class ExplorerPage extends StatelessWidget {
   }
 
   Widget buildContent(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        panelContainer(context,
-            childWidget: Column(
-              children: [
-                Expanded(
-                    child: FileTreeWidget(
-                  fileTreeModels: _treeController.state.value.data ?? [],
-                  onTap: _documentController.getDocument,
-                ))
-              ],
-            )),
+        if (!isPortrait)
+          panelContainer(context,
+              childWidget: Column(
+                children: [
+                  Expanded(
+                      child: FileTreeWidget(
+                    fileTreeModels: _treeController.state.value.data ?? [],
+                    onTap: _documentController.getDocument,
+                  ))
+                ],
+              )),
         Obx(() {
           switch (_documentController.data.value.status) {
             case Status.loading:
@@ -129,7 +133,7 @@ class ExplorerPage extends StatelessWidget {
             case Status.initial:
             case Status.completed:
               return Expanded(
-                  child: Container(
+                  child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 height: MediaQuery.of(context).size.height,
                 child: SingleChildScrollView(
@@ -160,6 +164,13 @@ class ExplorerPage extends StatelessWidget {
                               '',
                         ),
                       ),
+                      if (isPortrait)
+                        SectionWidgetV2(
+                          sections:
+                              _documentController.data.value.data?.sections ??
+                                  [],
+                          onTap: _documentController.onSectionClick,
+                        ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                         child: documentWidget(
@@ -211,12 +222,13 @@ class ExplorerPage extends StatelessWidget {
               ));
           }
         }),
-        Obx(() {
-          return SectionWidget(
-            onTap: _documentController.onSectionClick,
-            sections: _documentController.data.value.data?.sections ?? [],
-          );
-        })
+        if (!isPortrait)
+          Obx(() {
+            return SectionWidget(
+              onTap: _documentController.onSectionClick,
+              sections: _documentController.data.value.data?.sections ?? [],
+            );
+          })
       ],
     );
   }
