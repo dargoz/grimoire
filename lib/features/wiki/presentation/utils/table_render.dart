@@ -26,7 +26,7 @@ Widget tableRender(
           children: tr
               .map<Widget>((td) => td.children.isEmpty
                   ? Text(td.element?.text ?? '')
-                  : _innerWidget(td.children, imageProvider))
+                  : _innerWidget(td, imageProvider))
               .toList()));
     }
   }
@@ -39,27 +39,25 @@ Widget tableRender(
   );
 }
 
-Widget _innerWidget(List<StyledElement> children,
+Widget _innerWidget(StyledElement styledElement,
     Future<Widget>? Function(String?) imageProvider) {
-  print('inner tag name : ${children[0].name}');
-  print('attr : ${children[0].attributes}');
-  print('value : ${children[0].element?.text}');
-  if (children[0].name == 'img') {
+  print('*~*~*~*~*~*~*~**~*~*');
+  print('element : ${styledElement.element?.text}');
+  print('inner children : ${styledElement.children.toList()}');
+  print('*~*~*~*~*~*~*~**~*~*');
+
+  if (styledElement.children[0].name == 'img') {
     return FutureBuilder<Widget>(
-        future: imageProvider(children[0].attributes['src']),
+        future: imageProvider(styledElement.children[0].attributes['src']),
         initialData: const Icon(Icons.broken_image),
         builder: (buildContext, snapshot) =>
             snapshot.data ?? const Icon(Icons.broken_image));
   }
   return TableCell(
       verticalAlignment: TableCellVerticalAlignment.middle,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: children
-            .map((e) => Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(e.element?.text ?? '')))
-            .toList(),
-      ));
+      child: _renderElement(styledElement));
+}
+
+Widget _renderElement(StyledElement element) {
+  return Html(data: element.element?.innerHtml);
 }

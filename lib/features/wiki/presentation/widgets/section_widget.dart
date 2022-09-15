@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/section_item_widget.dart';
 
-
-
 class SectionWidget extends StatelessWidget {
   const SectionWidget({super.key, required this.sections, required this.onTap});
-
 
   final List<Section> sections;
   final void Function(String sectionKey) onTap;
@@ -32,9 +29,12 @@ class SectionWidget extends StatelessWidget {
             ],
           ),
           for (var index = 0; index < sections.length; index++)
-            SectionItemWidget(section: sections[index], onTap: onTap,)
+            SectionItemWidget(
+              section: sections[index],
+              onTap: onTap,
+            )
         ],
       ),
     );
   }
-
+}
