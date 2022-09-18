@@ -38,6 +38,14 @@ class DocumentController extends GetxController {
     data.value = result.map((e) => e?.toDocumentModel());
   }
 
+  void getHomeDocument(FileTreeModel fileTreeModel) async {
+    documentWidgetSections.clear();
+    data.value = const Resource<DocumentModel>.loading('fetch data');
+    var result =
+    await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
+    data.value = result.map((e) => e?.toDocumentModel());
+  }
+
   void redirect(
       String text, String? href, List<FileTreeModel> fileTreeModels) async {
     if (kDebugMode) {

@@ -34,7 +34,7 @@ class FileTreeController extends GetxController {
   void getHomeDocument() {
     var node = state.value.data?.findNodeByPath(models: state.value.data!, path: 'README.md');
     if (node != null) {
-      _repositoryController.getDocument(node);
+      _repositoryController.getHomeDocument(node);
     }
 
   }
