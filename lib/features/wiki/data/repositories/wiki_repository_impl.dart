@@ -31,6 +31,7 @@ class WikiRepositoryImpl extends WikiRepository {
     }
     if (projectId.isNotEmpty) _projectId = projectId;
     var cache = await _localDataSource.getDocument(id + filePath);
+    print('cache document : $cache');
     if (cache != null) {
       if (kDebugMode) {
         print("using cache");
@@ -39,15 +40,19 @@ class WikiRepositoryImpl extends WikiRepository {
     }
     filePath = filePath.replaceAll('/', '%2F');
     filePath = filePath.replaceAll('.', '%2E');
+    print('call get repository file : $filePath');
     FileResponse fileResponse =
         await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
     CommitResponse commitResponse = await _remoteDataSource.getCommit(
         _projectId, fileResponse.lastCommitId);
+    print('mapping response... : $commitResponse');
     var documentEntity = fileResponse.toDocumentEntity();
     documentEntity.commitEntity = commitResponse.toCommitEntity();
     var fileObject = fileResponse.toFileObject();
     fileObject.commitObject = commitResponse.toCommitObject();
+    print('start save document : $filePath');
     _localDataSource.saveDocument(fileObject);
+    print('return entity : $documentEntity');
     return documentEntity;
   }
 

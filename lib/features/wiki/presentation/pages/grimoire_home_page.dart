@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grimoire/core/models/resource.dart';
+import 'package:grimoire/features/wiki/presentation/controllers/document_controller.dart';
+import 'package:grimoire/features/wiki/presentation/controllers/search_controller.dart';
+import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/loading_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/resource_error_widget.dart';
 
-import '../controllers/document_controller.dart';
 import '../controllers/file_tree_controller.dart';
 
-class GrimoireHomePage extends StatelessWidget {
-  GrimoireHomePage({Key? key}) : super(key: key);
+final fileTreeStateNotifierProvider =
+    StateNotifierProvider<FileTreeController, Resource<List<FileTreeModel>>>(
+        (ref) => FileTreeController(ref));
 
-  final documentController = Get.put(DocumentController());
-  final _fileTreeController = Get.put(FileTreeController());
+final documentStateNotifierProvider =
+    StateNotifierProvider<DocumentController, Resource<DocumentModel>>(
+        (ref) => DocumentController(ref));
+
+final searchStateNotifierProvider =
+    StateNotifierProvider<SearchController, Resource<List<SearchModel>>>(
+        (ref) => SearchController(ref));
+
+class GrimoireHomePage extends ConsumerWidget {
+  const GrimoireHomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    BuildContext? mDialogContext;
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
@@ -57,34 +71,37 @@ class GrimoireHomePage extends StatelessWidget {
               const Spacer(
                 flex: 1,
               ),
-              Obx(() {
-                switch (_fileTreeController.state.value.status) {
+              Consumer(builder: (mContext, ref, child) {
+                var state = ref.watch(fileTreeStateNotifierProvider);
+                switch (state.status) {
                   case Status.initial:
                   case Status.loading:
                     break;
                   case Status.completed:
-                    _hideLoadingDialog();
-                    context.go('/grimoire/explorer');
+                    _hideLoadingDialog(mDialogContext);
                     break;
                   case Status.error:
-                    _hideLoadingDialog();
                     return ResourceErrorWidget(
-                      errorMessage: _fileTreeController.state.value.message,
-                      errorCode: _fileTreeController.state.value.errorCode,
+                      errorMessage: state.message,
+                      errorCode: state.errorCode,
                     );
                 }
                 return Row(
                   children: [
                     appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {
-                      _showLoadingDialog(context);
-                      _fileTreeController.getFileTree('39138680');
+                      _showLoadingDialog(context, mDialogContext);
+                      ref
+                          .read(fileTreeStateNotifierProvider.notifier)
+                          .getFileTree('39138680');
                     }),
                     const Spacer(),
                     appsContainer('assets/icons/grimoire_logo_bw.png',
                         onTap: () {
-                      _showLoadingDialog(context);
-                      _fileTreeController.getFileTree('27745171');
+                          _showLoadingDialog(context, mDialogContext);
+                      ref
+                          .read(fileTreeStateNotifierProvider.notifier)
+                          .getFileTree('27745171');
                     }),
                     const Spacer(),
                     appsContainer('assets/icons/grimoire_logo_bw.png',
@@ -123,18 +140,19 @@ class GrimoireHomePage extends StatelessWidget {
     );
   }
 
-  void _hideLoadingDialog() {
-    if (documentController.dialogContext != null) {
-      Navigator.pop(documentController.dialogContext!);
+  void _hideLoadingDialog(BuildContext? dialogContext) {
+    if (dialogContext != null) {
+      Navigator.pop(dialogContext);
     }
   }
 
-  Future<void> _showLoadingDialog(BuildContext context) async {
+  Future<void> _showLoadingDialog(
+      BuildContext context, BuildContext? dialogContext) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext mContext) {
-        documentController.dialogContext = mContext;
+        dialogContext = mContext;
         return const LoadingWidget();
       },
     );

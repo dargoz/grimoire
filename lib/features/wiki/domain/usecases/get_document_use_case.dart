@@ -32,18 +32,21 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
 
     try {
       document = await _wikiRepository.getDocument(params.id, params.path);
+      print('decoding base64');
       var contentCodeUnits = base64.decode(document.content);
+      print('decoding utf8');
       String decodedContent = utf8.decode(contentCodeUnits);
       document.content = decodedContent;
+      print('parse section');
       document.sections = _parseDocumentSections(decodedContent);
       try {
         await _searchRepository.addDocument(document);
       } catch (e) {
-        print(e);
+        print('search repo exception : $e');
       }
-      if (kDebugMode) {
-        print('indexing done');
-      }
+
+      print('indexing done');
+
     } on DioError catch (e) {
       if (e.response?.statusCode == 404 &&
           (e.response?.data.toString().contains('File Not Found') ?? false)) {
@@ -51,10 +54,11 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
 
         document = _defaultDocument(params);
       } else {
+        print('rethrowing catch');
         rethrow;
       }
     }
-
+    print('return doc $document');
     return document;
   }
 

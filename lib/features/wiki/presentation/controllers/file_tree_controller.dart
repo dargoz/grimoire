@@ -1,23 +1,33 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grimoire/core/models/resource.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_file_tree_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/document_controller.dart';
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
+import 'package:grimoire/features/wiki/presentation/pages/grimoire_home_page.dart';
 import 'package:grimoire/injection.dart';
 
-class FileTreeController extends GetxController {
+class FileTreeController extends StateNotifier<Resource<List<FileTreeModel>>> {
   final GetFileTreeUseCase _getFileTreeUseCase = getIt<GetFileTreeUseCase>();
+  late final DocumentController _documentController;
 
-  final DocumentController _repositoryController = Get.find();
+  BuildContext? dialogContext;
 
-  var state = const Resource<List<FileTreeModel>>.initial('initial').obs;
+  FileTreeController(Ref ref)
+      : super(const Resource<List<FileTreeModel>>.initial('initial')) {
+    _documentController = ref.read(documentStateNotifierProvider.notifier);
+  }
 
   void getFileTree(String projectId) async {
+    print('start get file tree');
     var result = await _getFileTreeUseCase.executeUseCase(projectId);
+    print('result file tree $result');
     var newState = result.map((e) => e?.toModel());
-    state.value = newState;
+    print('map to state $newState');
+    state = newState;
+    print('state updated');
   }
 
   void onNodeTap(String nodeKey) {
@@ -25,21 +35,18 @@ class FileTreeController extends GetxController {
       print('node : $nodeKey');
     }
     FileTreeModel? node =
-        state.value.data?.findNode(models: state.value.data!, nodeKey: nodeKey);
+        state.data?.findNode(models: state.data!, nodeKey: nodeKey);
 
     print('node founded : ${node?.name ?? 'not found'}');
-    _repositoryController.getDocument(node!);
-  }
-
-  void getHomeDocument() {
-    var node = state.value.data?.findNodeByPath(models: state.value.data!, path: 'README.md');
-    if (node != null) {
-      _repositoryController.getHomeDocument(node);
-    }
-
+    _documentController.getDocument(node!);
   }
 
   FileTreeModel? findReference(FileTreeModel content) {
-    return state.value.data?.findNodeByPath(models: state.value.data!, path: content.path);
+    return state.data?.findNodeByPath(models: state.data!, path: content.path);
+  }
+
+  void success() {
+    state =
+        Resource<List<FileTreeModel>>.initial('page init', data: state.data);
   }
 }
