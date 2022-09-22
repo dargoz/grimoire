@@ -54,7 +54,7 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
-  Future<String> loadProject() async {
+  Future<String?> loadProject() async {
     var encryptedBox = await Hive.openBox(projectBox,
         encryptionCipher: HiveAesCipher(encryptionKey!));
     return encryptedBox.get('project_id');

@@ -1,9 +1,7 @@
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/highlight.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/schema_model.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/requests/add_document_request.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/typesense/responses/search_response.dart';
 import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
-import 'package:grimoire/features/wiki/domain/entities/search_result_entity.dart';
 import 'package:typesense/typesense.dart';
 
 import '../sources/remote/gitlab/responses/commit_response.dart';
@@ -120,13 +118,3 @@ extension HighlightMapper on Highlight {
   }
 }
 
-extension SearchMapper on SearchResponse {
-  List<SearchResultEntity> toSearchEntity() {
-    return hits
-        .map((e) => SearchResultEntity(
-            documentEntity: e.document.toDocumentEntity(),
-            highlights: e.highlights.map((highlight) => highlight.toHighLightEntity()).toList(),
-            textMatch: e.textMatch))
-        .toList();
-  }
-}

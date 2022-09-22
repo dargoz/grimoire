@@ -1,24 +1,23 @@
 import 'dart:convert' show base64, jsonEncode, utf8;
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:grimoire/core/usecases/usecase.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/section_entity.dart';
-import 'package:grimoire/features/wiki/domain/repositories/search_repository.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
-  GetDocumentUseCase(this._wikiRepository, this._searchRepository);
+  GetDocumentUseCase(this._wikiRepository);
 
   final WikiRepository _wikiRepository;
-  final SearchRepository _searchRepository;
+
 
   @override
   Future<DocumentEntity> useCase(FileTreeEntity params) async {
     DocumentEntity document;
+    print('-----start get document use case-----');
     if (params.type == 'tree') {
       if (params.children
               .indexWhere((element) => element.name == 'README.md') ==
@@ -31,19 +30,17 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
     }
 
     try {
+      print('==== try to fetch document ====');
       document = await _wikiRepository.getDocument(params.id, params.path);
+      print('Receive get document data : ');
       var contentCodeUnits = base64.decode(document.content);
+      print('== base64 decode ==');
       String decodedContent = utf8.decode(contentCodeUnits);
+      print('== utf8 decode ==');
       document.content = decodedContent;
       document.sections = _parseDocumentSections(decodedContent);
-      try {
-        await _searchRepository.addDocument(document);
-      } catch (e) {
-        print(e);
-      }
-      if (kDebugMode) {
-        print('indexing done');
-      }
+
+
     } on DioError catch (e) {
       if (e.response?.statusCode == 404 &&
           (e.response?.data.toString().contains('File Not Found') ?? false)) {
@@ -54,7 +51,7 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
         rethrow;
       }
     }
-
+    print('== return document ==');
     return document;
   }
 
