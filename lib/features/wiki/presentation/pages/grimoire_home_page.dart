@@ -8,7 +8,6 @@ import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/loading_widget.dart';
-import 'package:grimoire/features/wiki/presentation/widgets/resource_error_widget.dart';
 
 import '../controllers/file_tree_controller.dart';
 
@@ -24,14 +23,31 @@ final searchStateNotifierProvider =
     StateNotifierProvider<SearchController, Resource<List<SearchModel>>>(
         (ref) => SearchController(ref));
 
+BuildContext? _mDialogContext;
+
 class GrimoireHomePage extends ConsumerWidget {
   const GrimoireHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    BuildContext? mDialogContext;
+    print('----- build called...');
+    var state = ref.read(fileTreeStateNotifierProvider.notifier);
+
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+    ref.listen<Resource<List<FileTreeModel>>>(fileTreeStateNotifierProvider,
+        (previous, next) async {
+      print('previous : ${previous?.status}');
+      print('next : ${next.status}');
+      if (previous?.status == Status.completed) return;
+      if (next.status != Status.loading) {
+        _hideLoadingDialog(_mDialogContext);
+        if (next.status == Status.completed) {
+          state.success();
+          context.go('/grimoire/explorer');
+        }
+      }
+    });
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -71,44 +87,26 @@ class GrimoireHomePage extends ConsumerWidget {
               const Spacer(
                 flex: 1,
               ),
-              Consumer(builder: (mContext, ref, child) {
-                var state = ref.watch(fileTreeStateNotifierProvider);
-                switch (state.status) {
-                  case Status.initial:
-                  case Status.loading:
-                    break;
-                  case Status.completed:
-                    _hideLoadingDialog(mDialogContext);
-                    break;
-                  case Status.error:
-                    return ResourceErrorWidget(
-                      errorMessage: state.message,
-                      errorCode: state.errorCode,
-                    );
-                }
-                return Row(
-                  children: [
-                    appsContainer('assets/icons/grimoire_logo_bw.png',
-                        onTap: () {
-                      _showLoadingDialog(context, mDialogContext);
-                      ref
-                          .read(fileTreeStateNotifierProvider.notifier)
-                          .getFileTree('39138680');
-                    }),
-                    const Spacer(),
-                    appsContainer('assets/icons/grimoire_logo_bw.png',
-                        onTap: () {
-                          _showLoadingDialog(context, mDialogContext);
-                      ref
-                          .read(fileTreeStateNotifierProvider.notifier)
-                          .getFileTree('27745171');
-                    }),
-                    const Spacer(),
-                    appsContainer('assets/icons/grimoire_logo_bw.png',
-                        onTap: () {}),
-                  ],
-                );
-              }),
+              Row(
+                children: [
+                  appsContainer('assets/icons/grimoire_logo_bw.png', onTap: () {
+                    _showLoadingDialog(context);
+                    ref
+                        .read(fileTreeStateNotifierProvider.notifier)
+                        .getFileTree('39138680');
+                  }),
+                  const Spacer(),
+                  appsContainer('assets/icons/grimoire_logo_bw.png', onTap: () {
+                    _showLoadingDialog(context);
+                    ref
+                        .read(fileTreeStateNotifierProvider.notifier)
+                        .getFileTree('27745171');
+                  }),
+                  const Spacer(),
+                  appsContainer('assets/icons/grimoire_logo_bw.png',
+                      onTap: () {}),
+                ],
+              ),
               const Spacer(
                 flex: 2,
               ),
@@ -141,18 +139,18 @@ class GrimoireHomePage extends ConsumerWidget {
   }
 
   void _hideLoadingDialog(BuildContext? dialogContext) {
+    print('hide loading : $dialogContext');
     if (dialogContext != null) {
       Navigator.pop(dialogContext);
     }
   }
 
-  Future<void> _showLoadingDialog(
-      BuildContext context, BuildContext? dialogContext) async {
+  Future<void> _showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext mContext) {
-        dialogContext = mContext;
+        _mDialogContext = mContext;
         return const LoadingWidget();
       },
     );
