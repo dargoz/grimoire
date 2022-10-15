@@ -1,13 +1,14 @@
 import 'dart:convert' show base64, jsonEncode, utf8;
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:grimoire/core/usecases/usecase.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/section_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/search_repository.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../../core/errors/catcher.dart';
+import '../../../../core/usecases/UseCase.dart';
 
 @injectable
 class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
@@ -39,11 +40,12 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
       try {
         await _searchRepository.addDocument(document);
       } catch (e) {
-        print(e);
+        print('error apa neh.. : $e');
+        Catcher.captureException(e);
       }
-      if (kDebugMode) {
-        print('indexing done');
-      }
+
+      print('indexing done');
+
     } on DioError catch (e) {
       if (e.response?.statusCode == 404 &&
           (e.response?.data.toString().contains('File Not Found') ?? false)) {
@@ -51,10 +53,11 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
 
         document = _defaultDocument(params);
       } else {
+        print('rethrowing catch');
         rethrow;
       }
     }
-
+    print('return doc');
     return document;
   }
 

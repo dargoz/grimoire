@@ -1,4 +1,4 @@
-import 'package:grimoire/core/usecases/usecase.dart';
+import '../../../../core/usecases/UseCase.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';
 import 'package:injectable/injectable.dart';

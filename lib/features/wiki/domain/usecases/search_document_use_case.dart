@@ -1,8 +1,8 @@
-import 'package:grimoire/core/usecases/usecase.dart';
 import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/search_repository.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/usecases/UseCase.dart';
 import '../entities/search_result_entity.dart';
 
 @injectable

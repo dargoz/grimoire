@@ -16,14 +16,20 @@ void main() {
     String apiResponseString = getString('file_response.json');
     var json = jsonDecode(apiResponseString);
     var result = FileResponse.fromJson(json).toDocumentEntity().toDocumentRequest();
-    var collection = await typeSense.client.collections.create(result.toSchemaModel().toSchema());
+    var collection = await typeSense.client.collections.create(result.toSchemaModel('2033').toSchema());
     print('collection : ${collection.toString()}');
   });
 
   test('search document', () async {
     var searchDataSource = SearchDataSourceImpl();
-    var response = await searchDataSource.searchDocument('wiki', SearchQueryRequest(q: 'table of content', queryBy: 'content'));
-    print('response :\n${response.toJson()}');
+    try {
+      var response = await searchDataSource.searchDocument('2033', SearchQueryRequest(q: 'table of content', queryBy: 'content'));
+      print('response :\n${response.toJson()}');
+    } catch (e) {
+      print('exception : ${e.runtimeType}');
+
+    }
+
     /*var documents = typeSense.client.collection('files').documents.search('searchParameters');
     print('collection : ${document}');*/
   });
@@ -36,7 +42,7 @@ void main() {
 
   test('drop collection', () async {
     var searchDataSource = SearchDataSourceImpl();
-    var result = await searchDataSource.typeSenseClient.client.collection('wiki').delete();
+    var result = await searchDataSource.typeSenseClient.client.collection('2033').delete();
     print('documents :\n$result');
   });
 }

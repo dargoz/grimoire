@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-class KeyboardController extends GetxController {
+class KeyboardController extends StateNotifier<int> {
   final searchBarController = FloatingSearchBarController();
   List<LogicalKeyboardKey> keys = [];
 
   FocusNode focusNode = FocusNode();
+
+  KeyboardController(Ref ref): super(0);
 
   void onKeyEvent(RawKeyEvent event) {
     final key = event.logicalKey;

@@ -1,49 +1,52 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:grimoire/core/models/resource.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:grimoire/features/wiki/domain/usecases/get_document_use_case.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_image_use_case.dart';
-import 'package:grimoire/features/wiki/domain/usecases/search_document_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
-import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/injection.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DocumentController extends GetxController {
+import '../../../../core/models/resource.dart';
+import '../utils/html_custom_render.dart';
+
+class DocumentController extends StateNotifier<Resource<DocumentModel>> {
   final GetDocumentUseCase _getDocumentUseCase = getIt<GetDocumentUseCase>();
   final GetImageUseCase _getImageUseCase = getIt<GetImageUseCase>();
-  final SearchDocumentUseCase _searchDocumentUseCase =
-      getIt<SearchDocumentUseCase>();
 
-  BuildContext? dialogContext;
-
-  var data = const Resource<DocumentModel>.initial('initial').obs;
-  var searchData =
-      const Resource<List<SearchModel>>.initial('initial_search').obs;
   var documentWidgetSections = List<Section>.empty(growable: true);
 
+  AutoScrollController scrollController = AutoScrollController();
+
+  DocumentController(Ref ref)
+      : super(const Resource<DocumentModel>.initial('initial'));
+
   void getDocument(FileTreeModel fileTreeModel) async {
-    print('tree model : $fileTreeModel');
-    if (data.value.data?.filePath == fileTreeModel.path) return;
+    log('tree model : $fileTreeModel');
+    if (state.data?.filePath == fileTreeModel.path) return;
     documentWidgetSections.clear();
-    data.value = const Resource<DocumentModel>.loading('fetch data');
+    globalSectionIndex = 0;
+    state = const Resource<DocumentModel>.loading('fetch data');
     var result =
-        await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
-    data.value = result.map((e) => e?.toDocumentModel());
+    await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
+    state = result.map((e) => e?.toDocumentModel());
   }
 
   void getHomeDocument(FileTreeModel fileTreeModel) async {
     documentWidgetSections.clear();
-    data.value = const Resource<DocumentModel>.loading('fetch data');
+    globalSectionIndex = 0;
+    state = const Resource<DocumentModel>.loading('fetch data');
     var result =
     await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
-    data.value = result.map((e) => e?.toDocumentModel());
+    state = result.map((e) => e?.toDocumentModel());
   }
 
   void redirect(
@@ -62,50 +65,26 @@ class DocumentController extends GetxController {
     } else if (href?.startsWith('#') ?? text.startsWith('#')) {
       String ref = text.substring(1);
       int sectionIndex =
-          documentWidgetSections.indexWhere((element) => element.label == ref);
+      documentWidgetSections.indexWhere((element) => element.label == ref);
       if (sectionIndex != -1) {
-        scrollTo(documentWidgetSections.elementAt(sectionIndex));
+        scrollTo(sectionIndex);
       }
     } else if (href != null) {
       var node =
-          fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
-      getDocument(node!);
+      fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
+      getHomeDocument(node!);
     }
   }
 
-  void scrollTo(Section section) {
-    print('scroll to');
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var targetContext = section.sectionKey.currentContext;
-      if (kDebugMode) print('targetContext : $targetContext');
-      if (targetContext != null) {
-        Scrollable.ensureVisible(targetContext);
-      }
-    });
+  void scrollTo(int index) {
+    scrollController.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
   }
 
   void onSectionClick(String nodeKey) {
-    var sectionIndex = data.value.data?.sections
-            .indexWhere((element) => element.id == nodeKey) ??
-        0;
-    var section = documentWidgetSections.elementAt(sectionIndex);
-    scrollTo(section);
-  }
-
-  void onQueryChanged(String query) async {
-    if (query.isNotEmpty) {
-      var searchResult = await _searchDocumentUseCase.executeUseCase(query);
-      searchData.value = searchResult
-          .map((data) => data!.map((item) => item.toSearchModel()).toList());
-    } else {
-      searchData.value = const Resource.initial('reset');
-    }
-  }
-
-  void onSearchResultTap(int index) {
-    var itemFound = searchData.value.data?[index];
-    print('search item found : ${itemFound?.document?.filePath}');
-    getDocument(itemFound!.document!.toFileTreeModel());
+    var sectionIndex =
+        state.data?.sections.indexWhere((element) => element.id == nodeKey) ??
+            0;
+    scrollTo(sectionIndex);
   }
 
   Future<Widget> getImage(String parentPath, String imageSource) async {
@@ -114,7 +93,7 @@ class DocumentController extends GetxController {
         name: imageSource,
         type: 'blob',
         path:
-            '${parentPath.substring(0, parentPath.lastIndexOf('/'))}/$imageSource');
+        '${parentPath.substring(0, parentPath.lastIndexOf('/'))}/$imageSource');
     var result = await _getImageUseCase.executeUseCase(model.toEntity());
     if (result.status == Status.completed) {
       return Image.memory(base64.decode(result.data!.content));

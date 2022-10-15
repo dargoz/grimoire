@@ -50,11 +50,14 @@ extension FileTreeToExpansion on FileTreeModel {
                     fontWeight: FontWeight.bold),
               ),
               hasParent: hasParent,
-              children:
-                  children.map((e) => e.toExpansionTile(onTap, true)).toList(),
+              children: [
+                for (var child in children)
+                  if (child.name != 'README.md')
+                    child.toExpansionTile(onTap, true)
+              ],
             ))
         : CustomListTile(
-            title: name,
+            title: name.replaceAll('.md', ''),
             onTap: onTap == null ? null : () => onTap(this),
           );
   }

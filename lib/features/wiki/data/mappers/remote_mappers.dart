@@ -62,7 +62,7 @@ extension SchemaMapper on SchemaModel {
 }
 
 extension FieldSchemaMapper on AddDocumentRequest {
-  SchemaModel toSchemaModel() {
+  SchemaModel toSchemaModel(String collectionName) {
     var fields = <Field>{};
     toJson().forEach((key, value) {
       Field field;
@@ -79,7 +79,7 @@ extension FieldSchemaMapper on AddDocumentRequest {
       }
       fields.add(field);
     });
-    return SchemaModel('wiki', fields);
+    return SchemaModel(collectionName, fields);
   }
 }
 

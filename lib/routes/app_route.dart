@@ -14,7 +14,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: 'grimoire/explorer',
           builder: (BuildContext context, GoRouterState state) {
-            return ExplorerPage();
+            return const ExplorerPage();
           },
         ),
       ]

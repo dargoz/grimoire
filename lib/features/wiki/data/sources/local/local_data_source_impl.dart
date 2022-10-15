@@ -9,6 +9,8 @@ import 'package:hive/hive.dart';
 import 'package:grimoire/features/wiki/data/sources/local/local_data_source.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../core/errors/catcher.dart';
+
 @Singleton(as: LocalDataSource)
 class LocalDataSourceImpl extends LocalDataSource {
   Uint8List? encryptionKey;
@@ -23,19 +25,23 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   void _initializeSecureStorage() async {
-    const secureStorage = FlutterSecureStorage();
-    // if key not exists return null
-    final secureKey = await secureStorage.read(key: 'key');
-    if (secureKey == null) {
-      final key = Hive.generateSecureKey();
-      await secureStorage.write(
-        key: 'key',
-        value: base64UrlEncode(key),
-      );
+    try {
+      const secureStorage = FlutterSecureStorage();
+      // if key not exists return null
+      final secureKey = await secureStorage.read(key: 'key');
+      if (secureKey == null) {
+            final key = Hive.generateSecureKey();
+            await secureStorage.write(
+              key: 'key',
+              value: base64UrlEncode(key),
+            );
+          }
+      final key = await secureStorage.read(key: 'key');
+      encryptionKey = base64Url.decode(key!);
+      print('Encryption key: $encryptionKey');
+    } catch (e) {
+      Catcher.captureException(e);
     }
-    final key = await secureStorage.read(key: 'key');
-    encryptionKey = base64Url.decode(key!);
-    print('Encryption key: $encryptionKey');
   }
 
   @override
@@ -54,7 +60,7 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
-  Future<String> loadProject() async {
+  Future<String?> loadProject() async {
     var encryptedBox = await Hive.openBox(projectBox,
         encryptionCipher: HiveAesCipher(encryptionKey!));
     return encryptedBox.get('project_id');

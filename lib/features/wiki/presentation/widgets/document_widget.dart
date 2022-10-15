@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 
 import 'package:grimoire/features/wiki/presentation/utils/admonition_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/admonition_syntax.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../models/file_tree_model.dart';
 import '../utils/html_custom_render.dart';
@@ -14,12 +15,13 @@ import '../utils/table_render.dart';
 
 Widget documentWidget(
     {required BuildContext context,
-    required void Function(String label, GlobalKey key, String attr)
-        onSectionRender,
-    required Future<Widget>? Function(String?) imageProvider,
-    String? htmlContent,
-    void Function(FileTreeModel)? onReferenceTap,
-    OnTap? onAnchorTap}) {
+      required AutoScrollController controller,
+      required void Function(String label, GlobalKey key, String attr)
+      onSectionRender,
+      required Future<Widget>? Function(String?) imageProvider,
+      String? htmlContent,
+      void Function(FileTreeModel)? onReferenceTap,
+      OnTap? onAnchorTap}) {
   return SelectionArea(
     child: Html(
       tagsList: Html.tags
@@ -29,22 +31,28 @@ Widget documentWidget(
         'code': customCodeRender,
         'h1': (renderContext, widget) => customHeaderRender(
             renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '1')),
+            onRender: (label, key) => onSectionRender(label, key, '1'),
+            controller: controller),
         'h2': (renderContext, widget) => customHeaderRender(
             renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '2')),
+            onRender: (label, key) => onSectionRender(label, key, '2'),
+            controller: controller),
         'h3': (renderContext, widget) => customHeaderRender(
             renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '3')),
+            onRender: (label, key) => onSectionRender(label, key, '3'),
+            controller: controller),
         'h4': (renderContext, widget) => customHeaderRender(
             renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '4')),
+            onRender: (label, key) => onSectionRender(label, key, '4'),
+            controller: controller),
         'h5': (renderContext, widget) => customHeaderRender(
             renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '5')),
+            onRender: (label, key) => onSectionRender(label, key, '5'),
+            controller: controller),
         'h6': (renderContext, widget) => customHeaderRender(
             renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '6')),
+            onRender: (label, key) => onSectionRender(label, key, '6'),
+            controller: controller),
         'table': (renderContext, widget) => tableRender(
             renderContext: renderContext,
             widget: widget,

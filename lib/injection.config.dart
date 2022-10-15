@@ -34,8 +34,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i3.LocalDataSource>(_i4.LocalDataSourceImpl());
   gh.singleton<_i5.RestClient>(_i6.RestClientImpl());
   gh.singleton<_i7.SearchDataSource>(_i8.SearchDataSourceImpl());
-  gh.singleton<_i9.SearchRepository>(
-      _i10.SearchRepositoryImpl(get<_i7.SearchDataSource>()));
+  gh.singleton<_i9.SearchRepository>(_i10.SearchRepositoryImpl(
+      get<_i7.SearchDataSource>(), get<_i3.LocalDataSource>()));
   gh.singleton<_i11.RemoteDataSource>(
       _i12.RemoteDataSourceImpl(get<_i5.RestClient>()));
   gh.factory<_i13.SearchDocumentUseCase>(

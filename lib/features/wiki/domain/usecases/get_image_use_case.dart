@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
-import 'package:grimoire/core/usecases/usecase.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/usecases/UseCase.dart';
 import '../repositories/wiki_repository.dart';
 
 @injectable

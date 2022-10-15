@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/routes/app_route.dart';
 import 'package:grimoire/translation/app_translation.dart';
@@ -9,7 +10,7 @@ import 'injection.dart';
 void main() async {
   await Hive.initFlutter();
   configureDependencies();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp(),));
 }
 
 class MyApp extends StatelessWidget {
