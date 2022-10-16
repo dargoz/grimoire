@@ -2,9 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 class CustomInterceptors extends Interceptor {
+  String token;
+
+  CustomInterceptors(this.token);
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers['Authorization'] = 'Bearer ${'glpat-6VtJb2k-Ns8SXGApxzbb'}';
+    options.headers['Authorization'] = 'Bearer $token';
     if (kDebugMode) {
       print(
           '[INTERCEPTOR] REQUEST[${options.method}] => PATH: ${options.path}');

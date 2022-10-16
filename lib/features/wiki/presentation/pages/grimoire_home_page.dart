@@ -108,19 +108,6 @@ class GrimoireHomePage extends ConsumerWidget {
               const Spacer(
                 flex: 1,
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: TextField(
-                  decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32))),
-                      labelText: 'What do you seek ?'),
-                ),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
               Row(
                 children: [
                   appsContainer('assets/icons/grimoire_logo_bw.png', onTap: () {

@@ -34,40 +34,38 @@ class _SearchItemState extends State<SearchItemWidget> {
           });
         },
         cursor: SystemMouseCursors.click,
-        child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          decoration: BoxDecoration(
-            color: _isHover
-                ? const Color.fromARGB(255, 196, 239, 255)
-                : Colors.white,
-            border: const Border(
-              bottom: BorderSide(width: 1.0, color: Colors.grey),
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
+              child: Text(
+                  widget.searchModel.document?.fileName ?? 'unknown'),
             ),
-          ),
-          child: Builder(builder: (builderContext) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  padding: const EdgeInsets.fromLTRB(8, 4, 4, 4),
-                  color: const Color.fromARGB(255, 171, 194, 206),
-                  child: Text(
-                      widget.searchModel.document?.fileName ?? 'unknown'),
-                ),
-                Html(
+            Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              padding: const EdgeInsets.fromLTRB(8, 16, 4, 16),
+              decoration: BoxDecoration(
+                color: _isHover
+                    ? const Color.fromARGB(255, 196, 239, 255)
+                    : Colors.white,
+                border: Border.all(color: Colors.grey),
+                borderRadius: const BorderRadius.all(Radius.circular(4))
+              ),
+              child: Builder(builder: (builderContext) {
+                return Html(
                   data: widget.searchModel.marker.isEmpty ? '' : widget
                       .searchModel.marker[0].snippet,
-                )
-              ],
-            );
-          }),
+                );
+              }),
+            )
+          ],
         ),
       ),
     );

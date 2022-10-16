@@ -7,11 +7,11 @@ import 'package:grimoire/features/wiki/presentation/models/section.dart';
 import 'package:grimoire/features/wiki/presentation/pages/grimoire_home_page.dart';
 
 import 'package:grimoire/features/wiki/presentation/widgets/breadcrumb_widget.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/search_bar_widget_v2.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
 
 
 import 'package:grimoire/features/wiki/presentation/widgets/resource_error_widget.dart';
-import 'package:grimoire/features/wiki/presentation/widgets/search_bar_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/document_controller.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/section_widget_v2.dart';
@@ -88,7 +88,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                   buildContent(context),
                   Consumer(builder: (context, ref, child) {
                     var searchState = ref.watch(searchStateNotifierProvider);
-                    return SearchBarWidget(
+                    return SearchBarWidgetV2(
                       controller: _keyboardController.searchBarController,
                       onFocusChanged: (isFocus) {
                         if (!isFocus) {

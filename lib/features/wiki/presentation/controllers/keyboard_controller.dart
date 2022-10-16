@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import '../widgets/search_bar_widget_v2.dart';
 
 class KeyboardController extends StateNotifier<int> {
-  final searchBarController = FloatingSearchBarController();
+  final searchBarController = SearchBarController();
   List<LogicalKeyboardKey> keys = [];
 
   FocusNode focusNode = FocusNode();
 
-  KeyboardController(Ref ref): super(0);
+  KeyboardController(Ref ref) : super(0);
 
   void onKeyEvent(RawKeyEvent event) {
     final key = event.logicalKey;
@@ -21,6 +21,9 @@ class KeyboardController extends StateNotifier<int> {
       if (keys.contains(LogicalKeyboardKey.controlLeft) &&
           keys.contains(LogicalKeyboardKey.space)) {
         showSearchBar();
+      } else if (keys.contains(LogicalKeyboardKey.escape) &&
+          searchBarController.isOpen) {
+        hideSearchBar();
       }
     } else {
       keys.remove(key);
@@ -30,11 +33,9 @@ class KeyboardController extends StateNotifier<int> {
 
   void showSearchBar() {
     searchBarController.show();
-    searchBarController.open();
   }
 
   void hideSearchBar() {
-    searchBarController.close();
     searchBarController.hide();
     focusNode.requestFocus();
   }
