@@ -21,19 +21,16 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
       padding: const EdgeInsets.all(2),
       decoration: const BoxDecoration(
           color: Color.fromARGB(255, 240, 240, 240),
-          borderRadius: BorderRadius.all(Radius.circular(4))
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(4))),
       child: Text(
         renderContext.tree.element!.text,
-        style: const TextStyle(
-            fontSize: 12
-        ),
+        style: const TextStyle(fontSize: 12),
       ),
     );
   } else {
     return SizedBox(
       width:
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width,
+          MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width,
       child: HighlightView(
         // The original code to be highlighted
         renderContext.tree.element!.text,
@@ -45,8 +42,8 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
         // Specify highlight theme
         // All available themes are listed in `themes` folder
         theme: MediaQueryData.fromWindow(WidgetsBinding.instance.window)
-            .platformBrightness ==
-            Brightness.light
+                    .platformBrightness ==
+                Brightness.light
             ? atomOneLightTheme
             : atomOneDarkTheme,
 
@@ -63,7 +60,8 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
 int globalSectionIndex = 0;
 
 Widget customHeaderRender(RenderContext renderContext, Widget widget,
-    {required void Function(String label, GlobalKey key) onRender, required AutoScrollController controller}) {
+    {required void Function(String label, GlobalKey key) onRender,
+    required AutoScrollController controller}) {
   var id = '';
   if (renderContext.tree.element?.attributes['id'] != null) {
     String lg = renderContext.tree.element?.attributes['id'] as String;
@@ -100,11 +98,16 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
     print("widget : ${widget.toString()} :: ${widget.key}");
   }
 
-  var renderWidget = AutoScrollTag(key: ValueKey(globalKey), controller: controller, index: globalSectionIndex++, child: Text(
-    renderContext.tree.element?.text ?? 'error_parsing',
-    key: globalKey,
-    style: TextStyle(fontSize: fontSize, fontWeight:  fontWeight),
-  ),);
+  var renderWidget = AutoScrollTag(
+    key: ValueKey(globalKey),
+    controller: controller,
+    index: globalSectionIndex++,
+    child: Text(
+      renderContext.tree.element?.text ?? 'error_parsing',
+      key: globalKey,
+      style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+    ),
+  );
 
   if (renderContext.tree.name == 'h1') {
     return Column(

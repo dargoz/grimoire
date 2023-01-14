@@ -5,8 +5,8 @@ abstract class Failure {
   Failure({required this.errorCode, required this.errorMessage});
 }
 
-class ServerFailure extends Failure {
-  ServerFailure({required super.errorCode, required super.errorMessage});
+class ServerApiFailure extends Failure {
+  ServerApiFailure({required super.errorCode, required super.errorMessage});
 }
 
 class CacheFailure extends Failure {

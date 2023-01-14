@@ -24,7 +24,8 @@ class FileTreeEntity {
     return 'FileTreeEntity{id: $id, name: $name, type: $type, path: $path, children: $children, mode: $mode}';
   }
 
-  factory FileTreeEntity.fromJson(Map<String, dynamic> json) => _$FileTreeEntityFromJson(json);
+  factory FileTreeEntity.fromJson(Map<String, dynamic> json) =>
+      _$FileTreeEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$FileTreeEntityToJson(this);
 }

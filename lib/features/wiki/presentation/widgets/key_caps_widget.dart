@@ -15,10 +15,7 @@ class KeyCapsWidget extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
         child: Text(
           text,
-          style: const TextStyle(
-            color: Colors.black54,
-            fontSize: 12
-          ),
+          style: const TextStyle(color: Colors.black54, fontSize: 12),
         ),
       ),
     );

@@ -41,10 +41,11 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
   bool _isVisible = false;
   bool _isFocus = false;
   FocusNode textFocus = FocusNode();
+  void Function()? listener;
 
   @override
   void initState() {
-    widget.controller.addListener(() {
+    listener = () {
       setState(() {
         _isVisible = widget.controller.isOpen;
         if (_isFocus != _isVisible) {
@@ -55,7 +56,8 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
           textFocus.requestFocus();
         }
       });
-    });
+    };
+    if (listener != null) widget.controller.addListener(listener!);
     super.initState();
   }
 
@@ -108,19 +110,17 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
                   ),
                 ),
                 Container(
-                    constraints: const BoxConstraints(
-                      minHeight: 200,
-                      maxHeight: 340
-                    ),
+                    constraints:
+                        const BoxConstraints(minHeight: 200, maxHeight: 340),
                     child: SingleChildScrollView(
-                  controller: ScrollController(),
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: Column(
-                      children: widget.itemList,
-                    ),
-                  ),
-                )),
+                      controller: ScrollController(),
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                        child: Column(
+                          children: widget.itemList,
+                        ),
+                      ),
+                    )),
                 const Divider(
                   height: 2,
                   color: Colors.grey,
@@ -163,5 +163,11 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    if (listener != null) widget.controller.removeListener(listener!);
+    super.dispose();
   }
 }

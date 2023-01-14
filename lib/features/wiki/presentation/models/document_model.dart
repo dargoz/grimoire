@@ -9,7 +9,10 @@ class DocumentModel {
       required this.fileName,
       required this.filePath,
       required this.size,
-      required this.content});
+      required this.content,
+      required this.contentSha256,
+      required this.commitId,
+      required this.executeFilemode});
 
   VersionModel? versionModel;
   List<Section> sections;
@@ -18,4 +21,7 @@ class DocumentModel {
   String filePath;
   int size;
   String content;
+  String contentSha256;
+  String commitId;
+  bool executeFilemode;
 }

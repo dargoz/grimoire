@@ -11,7 +11,7 @@ Widget admonitionRender(RenderContext renderContext, Widget widget) {
   }
 
   var contents = renderContext.tree.element?.text.split('\n');
-  if (contents?[contents.length -1].trim().isEmpty ?? false) {
+  if (contents?[contents.length - 1].trim().isEmpty ?? false) {
     contents?.removeAt(contents.length - 1);
   }
   var content = contents?.join('\n');

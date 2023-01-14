@@ -1,33 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:grimoire/features/wiki/presentation/controllers/file_tree_controller.dart';
+import 'package:go_router/go_router.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/search_controller.dart';
-import 'package:grimoire/features/wiki/presentation/models/section.dart';
-import 'package:grimoire/features/wiki/presentation/pages/grimoire_home_page.dart';
-
-import 'package:grimoire/features/wiki/presentation/widgets/breadcrumb_widget.dart';
-import 'package:grimoire/features/wiki/presentation/widgets/search_bar_widget_v2.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
 
-
-import 'package:grimoire/features/wiki/presentation/widgets/resource_error_widget.dart';
-import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
-import 'package:grimoire/features/wiki/presentation/controllers/document_controller.dart';
-import 'package:grimoire/features/wiki/presentation/widgets/section_widget_v2.dart';
-
+import '../../../../core/designs/widgets/response_error_widget.dart';
 import '../../../../core/models/resource.dart';
+import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
-import '../models/file_tree_model.dart';
-
 import '../widgets/app_search_widget.dart';
-import '../widgets/document_widget.dart';
-import '../widgets/loading_widget.dart';
-import '../widgets/section_widget.dart';
-import '../widgets/version_widget.dart';
+import '../widgets/search_bar_widget_v2.dart';
 
 class ExplorerPage extends ConsumerStatefulWidget {
-  const ExplorerPage({Key? key}) : super(key: key);
+  const ExplorerPage({Key? key, required this.child}) : super(key: key);
+
+  final Widget child;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ExplorerPageState();
@@ -35,17 +23,15 @@ class ExplorerPage extends ConsumerStatefulWidget {
 
 class _ExplorerPageState extends ConsumerState<ExplorerPage> {
   late final KeyboardController _keyboardController;
-  late final FileTreeController _fileTreeController;
-  late final DocumentController _documentController;
   late final SearchController _searchController;
+  late final FileTreeController _fileController;
 
   @override
   void initState() {
     print('init state explorer');
     _keyboardController = ref.read(keyboardStateNotifierProvider.notifier);
-    _fileTreeController = ref.read(fileTreeStateNotifierProvider.notifier);
-    _documentController = ref.read(documentStateNotifierProvider.notifier);
     _searchController = ref.read(searchStateNotifierProvider.notifier);
+    _fileController = ref.read(fileTreeStateNotifierProvider.notifier);
     super.initState();
   }
 
@@ -61,9 +47,18 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
           onKey: _keyboardController.onKeyEvent,
           child: Scaffold(
               appBar: AppBar(
-                title: const Text(
-                  'Grimoire',
-                  style: TextStyle(color: Color(0xFF1c1e21)),
+                title: Row(
+                  children: [
+                    const Text(
+                      'Grimoire',
+                      style: TextStyle(color: Color(0xFF1c1e21)),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          _fileController.refresh();
+                        },
+                        icon: const Icon(Icons.refresh))
+                  ],
                 ),
                 toolbarHeight: 48,
                 backgroundColor: const Color(0xFFfafafa),
@@ -99,8 +94,8 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                       itemList: <Widget>[
                         if (searchState.status == Status.completed)
                           for (int index = 0;
-                          index < searchState.data!.length;
-                          index++)
+                              index < searchState.data!.length;
+                              index++)
                             SearchItemWidget(
                                 searchModel: searchState.data![index],
                                 onTap: () {
@@ -118,7 +113,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
   Widget buildContent(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    var fileTreeState = ref.read(fileTreeStateNotifierProvider);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -126,114 +121,27 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
           panelContainer(context,
               childWidget: Column(
                 children: [
-                  Expanded(
-                      child: FileTreeWidget(
-                        fileTreeModels: fileTreeState.data ?? [],
-                        onTap: _documentController.getDocument,
-                      ))
+                  ref.watch(fileTreeStateNotifierProvider).when(
+                      data: (model) {
+                        return Expanded(
+                            child: FileTreeWidget(
+                          fileTreeModels: model.data ?? [],
+                          onTap: (fileTreeModel) {
+                            var path =
+                                fileTreeModel.path.replaceAll('/', '%2F');
+                            context.go("/document/$path");
+                          },
+                        ));
+                      },
+                      error: (object, stackTrace) {
+                        return const ResponseErrorWidget();
+                      },
+                      loading: () => const Text('loading..'))
                 ],
               )),
-        Consumer(builder: (context, ref, child) {
-          var state = ref.watch(documentStateNotifierProvider);
-          switch (state.status) {
-            case Status.loading:
-              return Expanded(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: const LoadingWidget(),
-                  ));
-            case Status.initial:
-            case Status.completed:
-              return Expanded(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    height: MediaQuery.of(context).size.height,
-                    child: SingleChildScrollView(
-                      controller: _documentController.scrollController,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
-                            child: BreadcrumbWidget(
-                              path: state.data?.filePath ?? "",
-                              onPressed: (String label) {
-                                var model = FileTreeModel(
-                                    id: '', name: '', type: 'tree', path: label);
-                                _documentController.getDocument(
-                                    _fileTreeController.findReference(model) ??
-                                        model);
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                            child: VersionWidget(
-                              author: state.data?.versionModel?.authorName ?? '',
-                              lastModifiedDate:
-                              state.data?.versionModel?.committedDate ?? '',
-                            ),
-                          ),
-                          if (isPortrait)
-                            SectionWidgetV2(
-                              sections: state.data?.sections ?? [],
-                              onTap: _documentController.onSectionClick,
-                            ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                            child: documentWidget(
-                                context: context,
-                                controller: _documentController.scrollController,
-                                htmlContent: state.data?.content,
-                                onSectionRender: (label, key, attr) =>
-                                    _documentController.documentWidgetSections.add(
-                                        Section(
-                                            id: '${label.hashCode}',
-                                            attr: attr,
-                                            label: label,
-                                            sectionKey: key)),
-                                onReferenceTap: (content) {
-                                  _documentController.getDocument(content.id.isEmpty
-                                      ? _fileTreeController
-                                      .findReference(content) ??
-                                      content
-                                      : content);
-                                },
-                                onAnchorTap: (text, renderContext, map, element) {
-                                  print('anchor tap : $text');
-                                  _documentController.redirect(
-                                      text ?? '', map['href'], fileTreeState.data!);
-                                },
-                                imageProvider: (imageSource) {
-                                  print('imageSource : $imageSource');
-                                  return _documentController.getImage(
-                                      state.data?.filePath ?? '',
-                                      imageSource ?? '');
-                                }),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ));
-            case Status.error:
-              print('response : error :');
-              return Expanded(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: ResourceErrorWidget(
-                        errorCode: state.errorCode, errorMessage: state.message),
-                  ));
-          }
-        }),
-        if (!isPortrait)
-          Consumer(builder: (context, ref, child) {
-            var state = ref.watch(documentStateNotifierProvider);
-            return SectionWidget(
-              onTap: _documentController.onSectionClick,
-              sections: state.data?.sections ?? [],
-            );
-          })
+        Flexible(
+          child: widget.child,
+        ),
       ],
     );
   }

@@ -1,6 +1,4 @@
 import 'package:grimoire/features/wiki/data/sources/remote/remote_data_source.dart';
-import 'package:grimoire/features/wiki/data/sources/remote/rest_client_impl.dart';
-import '../../../../../core/models/configs.dart';
 import './gitlab/requests/repository_tree_request.dart';
 import './gitlab/responses/commit_response.dart';
 import './gitlab/responses/file_response.dart';
@@ -10,11 +8,9 @@ import 'package:injectable/injectable.dart';
 
 @Singleton(as: RemoteDataSource)
 class RemoteDataSourceImpl extends RemoteDataSource {
-  RemoteDataSourceImpl() {
-    _restClient = RestClientImpl(globalConfig);
-  }
+  RemoteDataSourceImpl(this._restClient);
 
-  late final RestClient _restClient;
+  final RestClient _restClient;
 
   @override
   Future<CommitResponse> getCommit(String projectId, String commitId) {

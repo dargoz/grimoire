@@ -4,9 +4,7 @@ import 'document_model.dart';
 
 class SearchModel {
   SearchModel(
-      {required this.document,
-      required this.marker,
-      required this.textMatch});
+      {required this.document, required this.marker, required this.textMatch});
 
   DocumentModel? document;
   List<MarkerModel> marker;

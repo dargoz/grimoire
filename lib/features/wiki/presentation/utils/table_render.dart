@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -6,13 +9,10 @@ Widget tableRender(
     required Widget widget,
     required Future<Widget>? Function(String?) imageProvider}) {
   var contents = renderContext.tree.children;
-  print('render context : ${renderContext.tree.name}');
-  print('render attributes : ${renderContext.tree.attributes}');
-  print('table content : ${contents.length}');
   List<TableRow> tableRows = List.empty(growable: true);
   for (var content in contents) {
-    print('element child : ${content.name}');
-    print('element child has children : ${content.children.length}');
+    log('element child : ${content.name}');
+    log('element child has children : ${content.children.length}');
 
     for (var tableContent in content.children) {
       var tr = tableContent.children;
@@ -41,10 +41,12 @@ Widget tableRender(
 
 Widget _innerWidget(StyledElement styledElement,
     Future<Widget>? Function(String?) imageProvider) {
-  print('*~*~*~*~*~*~*~**~*~*');
-  print('element : ${styledElement.element?.text}');
-  print('inner children : ${styledElement.children.toList()}');
-  print('*~*~*~*~*~*~*~**~*~*');
+  if (kDebugMode) {
+    log('*~*~*~*~*~*~*~**~*~*');
+    log('element : ${styledElement.element?.text}');
+    log('inner children : ${styledElement.children.toList()}');
+    log('*~*~*~*~*~*~*~**~*~*');
+  }
 
   if (styledElement.children[0].name == 'img') {
     return FutureBuilder<Widget>(

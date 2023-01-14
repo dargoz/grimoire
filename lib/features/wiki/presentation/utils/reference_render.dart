@@ -18,7 +18,7 @@ Widget referenceRender(RenderContext renderContext, Widget widget,
   if (contents?[contents.length - 1].trim().isEmpty ?? false) {
     contents?.removeAt(contents.length - 1);
   }
-  print('list : ${contents.toString()}');
+
   if (ref.isEmpty) {
     return ReferenceWidget(
       contents:
@@ -28,7 +28,8 @@ Widget referenceRender(RenderContext renderContext, Widget widget,
   } else {
     return ReferenceWidget(
       contents: contents
-          ?.map((e) => FileTreeModel(id: '', path: e, type: 'blob', name: e.split('/').last))
+          ?.map((e) => FileTreeModel(
+              id: '', path: e, type: 'blob', name: e.split('/').last))
           .toList(),
       onPressed: onTap,
     );

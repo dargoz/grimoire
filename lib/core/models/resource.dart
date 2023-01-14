@@ -20,8 +20,8 @@ class Resource<T> {
 
   Resource<E> map<E>(E? Function(T? e) toElement) {
     var transformed = Resource<E>.initial(message, data: toElement(data));
-    if (status == Status.initial) {
-      transformed = Resource<E>.initial(message, data: toElement(data));
+    if (status == Status.loading) {
+      transformed = Resource<E>.loading(message, data: toElement(data));
     } else if (status == Status.completed) {
       transformed = Resource<E>.completed(toElement(data));
     } else if (status == Status.error) {

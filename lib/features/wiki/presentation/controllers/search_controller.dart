@@ -1,12 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 
 import '../../../../core/models/resource.dart';
 import '../../../../injection.dart';
 import '../../domain/usecases/search_document_use_case.dart';
-import '../pages/grimoire_home_page.dart';
 import 'document_controller.dart';
+
+final searchStateNotifierProvider =
+    StateNotifierProvider<SearchController, Resource<List<SearchModel>>>(
+        (ref) => SearchController(ref));
 
 class SearchController extends StateNotifier<Resource<List<SearchModel>>> {
   late final DocumentController _documentController;

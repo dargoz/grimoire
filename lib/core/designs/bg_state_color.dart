@@ -22,5 +22,4 @@ class BgStateColor implements MaterialStateProperty<Color?> {
     }
     return color;
   }
-  
 }

@@ -10,12 +10,9 @@ class SearchItemWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _SearchItemState();
-
-
 }
 
 class _SearchItemState extends State<SearchItemWidget> {
-
   bool _isHover = false;
 
   @override
@@ -37,31 +34,24 @@ class _SearchItemState extends State<SearchItemWidget> {
         child: Column(
           children: [
             Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
-              child: Text(
-                  widget.searchModel.document?.fileName ?? 'unknown'),
+              child: Text(widget.searchModel.document?.fileName ?? 'unknown'),
             ),
             Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.fromLTRB(8, 16, 4, 16),
               decoration: BoxDecoration(
-                color: _isHover
-                    ? const Color.fromARGB(255, 196, 239, 255)
-                    : Colors.white,
-                border: Border.all(color: Colors.grey),
-                borderRadius: const BorderRadius.all(Radius.circular(4))
-              ),
+                  color: _isHover
+                      ? const Color.fromARGB(255, 196, 239, 255)
+                      : Colors.white,
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: const BorderRadius.all(Radius.circular(4))),
               child: Builder(builder: (builderContext) {
                 return Html(
-                  data: widget.searchModel.marker.isEmpty ? '' : widget
-                      .searchModel.marker[0].snippet,
+                  data: widget.searchModel.marker.isEmpty
+                      ? ''
+                      : widget.searchModel.marker[0].snippet,
                 );
               }),
             )
@@ -70,5 +60,4 @@ class _SearchItemState extends State<SearchItemWidget> {
       ),
     );
   }
-
 }

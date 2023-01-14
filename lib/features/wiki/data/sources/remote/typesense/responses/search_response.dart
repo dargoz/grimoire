@@ -26,5 +26,4 @@ class SearchResponse {
       _$SearchResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$SearchResponseToJson(this);
-
 }

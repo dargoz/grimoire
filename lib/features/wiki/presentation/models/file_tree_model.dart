@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'file_tree_model.g.dart';
@@ -23,7 +22,8 @@ class FileTreeModel {
     return 'FileTreeModel{id: $id, name: $name, type: $type, children: $children, path: $path}';
   }
 
-  factory FileTreeModel.fromJson(Map<String, dynamic> json) => _$FileTreeModelFromJson(json);
+  factory FileTreeModel.fromJson(Map<String, dynamic> json) =>
+      _$FileTreeModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$FileTreeModelToJson(this);
 }

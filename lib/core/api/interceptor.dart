@@ -1,14 +1,22 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-class CustomInterceptors extends Interceptor {
-  String token;
+import '../configuration/configs.dart';
 
-  CustomInterceptors(this.token);
+class CustomInterceptors extends Interceptor {
+  CustomInterceptors();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers['Authorization'] = 'Bearer $token';
+    options.headers[HttpHeaders.accessControlAllowHeadersHeader] =
+        HttpHeaders.authorizationHeader;
+    options.headers[HttpHeaders.accessControlAllowMethodsHeader] =
+        'GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS';
+    options.headers[HttpHeaders.accessControlAllowOriginHeader] = '*';
+    options.headers[HttpHeaders.authorizationHeader] =
+        'Bearer ${globalConfig.accessToken}';
     if (kDebugMode) {
       print(
           '[INTERCEPTOR] REQUEST[${options.method}] => PATH: ${options.path}');
@@ -20,8 +28,10 @@ class CustomInterceptors extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print(
-        'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+    if (kDebugMode) {
+      print(
+          'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+    }
     super.onResponse(response, handler);
   }
 
@@ -31,9 +41,9 @@ class CustomInterceptors extends Interceptor {
       print(
           'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
       print('[ERROR] data : ${err.response?.data}');
-      print('[ERROR] data : ${err.response?.headers}');
-      print('[ERROR] data : ${err.response?.requestOptions.data}');
-      print('[ERROR] data : ${err.response?.statusCode}');
+      print('[ERROR] headers : ${err.response?.headers}');
+      print('[ERROR] request options : ${err.response?.requestOptions.data}');
+      print('[ERROR] status code : ${err.response?.statusCode}');
     }
     switch (err.response?.statusCode) {
       case 500:
@@ -41,7 +51,7 @@ class CustomInterceptors extends Interceptor {
       case 403:
         return handler.resolve(Response<dynamic>(
             requestOptions: err.response!.requestOptions,
-            statusCode: 200,
+            statusCode: err.response?.statusCode,
             data: err.response?.data));
       default:
         super.onError(err, handler);

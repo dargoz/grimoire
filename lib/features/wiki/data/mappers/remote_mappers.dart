@@ -67,15 +67,15 @@ extension FieldSchemaMapper on AddDocumentRequest {
     toJson().forEach((key, value) {
       Field field;
       if (value is String) {
-        field = Field(key, Type.string);
+        field = Field(key, type: Type.string);
       } else if (value is bool) {
-        field = Field(key, Type.bool);
+        field = Field(key, type: Type.bool);
       } else if (value is int) {
-        field = Field(key, Type.int32);
+        field = Field(key, type: Type.int32);
       } else if (value is double) {
-        field = Field(key, Type.float);
+        field = Field(key, type: Type.float);
       } else {
-        field = Field(key, Type.stringify);
+        field = Field(key, type: Type.stringify);
       }
       fields.add(field);
     });
@@ -125,7 +125,9 @@ extension SearchMapper on SearchResponse {
     return hits
         .map((e) => SearchResultEntity(
             documentEntity: e.document.toDocumentEntity(),
-            highlights: e.highlights.map((highlight) => highlight.toHighLightEntity()).toList(),
+            highlights: e.highlights
+                .map((highlight) => highlight.toHighLightEntity())
+                .toList(),
             textMatch: e.textMatch))
         .toList();
   }

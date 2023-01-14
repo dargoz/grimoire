@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:grimoire/features/wiki/data/mappers/local_mappers.dart';
 import 'package:grimoire/features/wiki/data/mappers/remote_mappers.dart';
@@ -41,18 +43,18 @@ class WikiRepositoryImpl extends WikiRepository {
     }
     filePath = filePath.replaceAll('/', '%2F');
     filePath = filePath.replaceAll('.', '%2E');
-    print('call get repository file : $filePath');
+    log('call get repository file : $filePath');
     FileResponse fileResponse =
         await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
     CommitResponse commitResponse = await _remoteDataSource.getCommit(
         _projectId, fileResponse.lastCommitId);
-    print('mapping response... : $commitResponse');
+
     var documentEntity = fileResponse.toDocumentEntity();
     documentEntity.commitEntity = commitResponse.toCommitEntity();
     var fileObject = fileResponse.toFileObject();
 
     fileObject.commitObject = commitResponse.toCommitObject();
-    print('start save document : $filePath');
+    log('start save document : $filePath');
     _localDataSource.saveDocument(fileObject);
 
     return documentEntity;
@@ -68,13 +70,16 @@ class WikiRepositoryImpl extends WikiRepository {
       Catcher.captureException(e);
     }
     List<RepositoryTreeResponse> response =
-        await _remoteDataSource.getRepositoryTree(RepositoryTreeRequest(
-            id: _projectId, recursive: true, perPage: 100), "main");
+        await _remoteDataSource.getRepositoryTree(
+            RepositoryTreeRequest(
+                id: _projectId, recursive: true, perPage: 100),
+            "main");
     return response.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
 
   @override
-  Future<DocumentEntity> getImage(String id, String filePath, {String projectId = ''}) async {
+  Future<DocumentEntity> getImage(String id, String filePath,
+      {String projectId = ''}) async {
     if (projectId.isNotEmpty) _projectId = projectId;
     var cache = await _localDataSource.getDocument(id + filePath);
     if (cache != null) {
@@ -85,21 +90,17 @@ class WikiRepositoryImpl extends WikiRepository {
     }
     filePath = filePath.replaceAll('/', '%2F');
     filePath = filePath.replaceAll('.', '%2E');
-    print("get response");
     FileResponse fileResponse =
         await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
     CommitResponse commitResponse = await _remoteDataSource.getCommit(
         _projectId, fileResponse.lastCommitId);
-    print("done get commit response");
-    print("convert / map object");
+
     var documentEntity = fileResponse.toDocumentEntity();
     documentEntity.commitEntity = commitResponse.toCommitEntity();
     var fileObject = fileResponse.toFileObject();
     fileObject.blobId = id;
     fileObject.commitObject = commitResponse.toCommitObject();
-    print("start save document");
     _localDataSource.saveDocument(fileObject);
-    print("done save document");
     return documentEntity;
   }
 }

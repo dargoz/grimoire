@@ -14,6 +14,6 @@ abstract class SearchDataSource {
   Future<dynamic> importDocuments(
       String collectionName, List<Map<String, dynamic>> documents);
 
-  Future<SearchResponse> searchDocument(String collectionName,
-      SearchQueryRequest searchQueryRequest);
+  Future<SearchResponse> searchDocument(
+      String collectionName, SearchQueryRequest searchQueryRequest);
 }

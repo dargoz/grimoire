@@ -17,6 +17,15 @@ class AppTranslation extends Translations {
   static const String errorFeedback = "errorFeedback";
   static const String submit = "submit";
 
+  //auth page
+  static const String loginFormDescription = "loginFormDescription";
+  static const String userDomain = "userDomain";
+  static const String password = "password";
+  static const String errorEmptyUserDomain = "errorEmptyUserDomain";
+  static const String errorEmptyPassword = "errorEmptyPassword";
+  static const String about = "about";
+  static const String feedback = "feedback";
+
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': enTranslation,

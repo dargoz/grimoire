@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/search_bar_widget_v2.dart';
 
-import '../widgets/search_bar_widget_v2.dart';
+final keyboardStateNotifierProvider =
+    StateNotifierProvider<KeyboardController, int>(
+        (ref) => KeyboardController(ref));
 
 class KeyboardController extends StateNotifier<int> {
-  final searchBarController = SearchBarController();
+  var searchBarController = SearchBarController();
   List<LogicalKeyboardKey> keys = [];
 
   FocusNode focusNode = FocusNode();

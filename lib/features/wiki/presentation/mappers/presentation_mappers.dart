@@ -53,7 +53,10 @@ extension DocumentEntityMapper on DocumentEntity {
         fileName: fileName,
         filePath: filePath,
         size: size,
-        content: content);
+        content: content,
+        contentSha256: contentSha256,
+        commitId: commitId,
+        executeFilemode: executeFilemode);
   }
 }
 
@@ -61,6 +64,18 @@ extension DocumentModelMapper on DocumentModel {
   FileTreeModel toFileTreeModel() {
     return FileTreeModel(
         id: blobId, name: fileName, type: 'blob', path: filePath);
+  }
+
+  DocumentEntity toEntity() {
+    return DocumentEntity(
+        fileName: fileName,
+        filePath: filePath,
+        size: size,
+        content: content,
+        contentSha256: contentSha256,
+        blobId: blobId,
+        commitId: commitId,
+        executeFilemode: executeFilemode);
   }
 }
 
@@ -111,6 +126,7 @@ extension NodeListMapper on List<FileTreeModel> {
       }
       if (element.children.isNotEmpty) {
         node = findNodeByPath(models: element.children, path: path);
+        if (node != null) break;
       }
     }
     return node;

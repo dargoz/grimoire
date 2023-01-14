@@ -12,7 +12,6 @@ class BreadcrumbWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var menuItems = path.split("/").map((e) => Menu(label: e)).toList();
-    print('breadcrumb items : $menuItems');
 
     menuItems.last.isActive = false;
     return Row(
@@ -45,7 +44,9 @@ class BreadcrumbWidget extends StatelessWidget {
                 ),
               ),
               TextButton(
-                  onPressed: menu.isActive ? () => onPressed(menuItems.toPath(menu)) : null,
+                  onPressed: menu.isActive
+                      ? () => onPressed(menuItems.toPath(menu))
+                      : null,
                   style: ElevatedButton.styleFrom(
                     enabledMouseCursor: SystemMouseCursors.click,
                     disabledMouseCursor: SystemMouseCursors.text,
@@ -79,14 +80,12 @@ class Menu {
 }
 
 extension MenuConverter on List<Menu> {
-
   String toPath(Menu menu) {
     String path = '';
     for (var item in this) {
       path += '${item.label}/';
-      if(item == menu) break;
+      if (item == menu) break;
     }
-    return path.substring(0, path.length-1);
+    return path.substring(0, path.length - 1);
   }
-
 }

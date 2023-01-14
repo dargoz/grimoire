@@ -22,7 +22,8 @@ class SearchDataSourceImpl extends SearchDataSource {
   }
 
   @override
-  Future addDocument(String collectionName, AddDocumentRequest addDocumentRequest) {
+  Future addDocument(
+      String collectionName, AddDocumentRequest addDocumentRequest) {
     return typeSenseClient.client
         .collection(collectionName)
         .documents
@@ -41,7 +42,7 @@ class SearchDataSourceImpl extends SearchDataSource {
 
   @override
   Future<SearchResponse> searchDocument(
-      String collectionName,SearchQueryRequest searchQueryRequest) async {
+      String collectionName, SearchQueryRequest searchQueryRequest) async {
     var result = await typeSenseClient.client
         .collection(collectionName)
         .documents

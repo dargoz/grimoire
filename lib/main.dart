@@ -10,7 +10,9 @@ import 'injection.dart';
 void main() async {
   await Hive.initFlutter();
   configureDependencies();
-  runApp(const ProviderScope(child: MyApp(),));
+  runApp(const ProviderScope(
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
-        fontFamily:'SegoeUI',
+        fontFamily: 'SegoeUI',
       ),
       translations: AppTranslation(),
       locale: Get.deviceLocale,

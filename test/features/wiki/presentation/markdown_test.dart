@@ -36,20 +36,18 @@ void main() {
 
   test('markdown table', () async {
     var markdown = '# table sample\n'
-        '| step   | 1. Layar Home BCA mobile        | 2. Layar Menu m-info                   | 3. Layar Info Saldo Rekeing           |\n'
+        '| step   | 1. Layar Home                   | 2. Layar Menu m-info                   | 3. Layar Info                         |\n'
         '|--------|---------------------------------|----------------------------------------|---------------------------------------|\n'
         '| screen | ![img](.assets/home_screen.png) | ![img](.assets/detail_screen.png)      | ![img](.assets/info_screen.png)       |\n';
-    var result = markdownToHtml(markdown, blockSyntaxes: const [
-      TableSyntax()
-    ]);
+    var result = markdownToHtml(markdown, blockSyntaxes: const [TableSyntax()]);
     expect(
         result,
         '<h1>table sample</h1>\n'
         '<table>'
         '<thead><tr><th>step</th>'
-        '<th>1. Layar Home BCA mobile</th>'
+        '<th>1. Layar Home</th>'
         '<th>2. Layar Menu m-info</th>'
-        '<th>3. Layar Info Saldo Rekeing</th></tr>'
+        '<th>3. Layar Info</th></tr>'
         '</thead>'
         '<tbody><tr><td>screen</td>'
         '<td><img src=".assets/home_screen.png" alt="img" /></td>'

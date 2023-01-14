@@ -24,7 +24,8 @@ class ReferenceWidget extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.25,
                 constraints: const BoxConstraints(minWidth: 300),
                 child: TextButton(
-                    onPressed: () => onPressed == null ? null : onPressed!(content),
+                    onPressed: () =>
+                        onPressed == null ? null : onPressed!(content),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 128),
                       enabledMouseCursor: SystemMouseCursors.click,
@@ -35,11 +36,14 @@ class ReferenceWidget extends StatelessWidget {
                           side: BorderSide(color: Colors.blueGrey),
                           borderRadius: BorderRadius.all(Radius.circular(8))),
                     ).copyWith(
-                        backgroundColor: const BgStateColor(Colors.white),),
+                      backgroundColor: const BgStateColor(Colors.white),
+                    ),
                     child: Text(
                       '${content.type == 'tree' ? '🗃' : '📄'} ${content.name.replaceAll('.md', '')}',
-                      style: const TextStyle(color: Colors.black87,
-                          fontSize: 24,),
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 24,
+                      ),
                     )),
               )
           ]),

@@ -9,4 +9,9 @@ const idTranslation = <String, String>{
   AppTranslation.expectedBehaviour: "❌ Expected Behaviour",
   AppTranslation.errorFeedback: "gagal mengirim feedback",
   AppTranslation.submit: "Kirim",
+  AppTranslation.loginFormDescription: "Harap Masukkan Kredensial Anda",
+  AppTranslation.userDomain: "User Domain",
+  AppTranslation.password: "Access Token",
+  AppTranslation.errorEmptyUserDomain: "User domain tidak boleh kosong",
+  AppTranslation.errorEmptyPassword: "Password tidak boleh kosong",
 };

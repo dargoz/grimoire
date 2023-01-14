@@ -7,7 +7,7 @@ class Catcher {
     _catcherHandler = catcherHandler;
   }
 
-  static void captureException(e) {
+  static void captureException(e, {String? hint}) {
     _catcherHandler?.captureException(e);
   }
 }

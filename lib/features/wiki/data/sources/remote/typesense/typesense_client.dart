@@ -1,14 +1,15 @@
+import 'package:grimoire/core/configuration/configs.dart';
 import 'package:typesense/typesense.dart';
 
 class TypeSenseClient {
   late Client client;
 
   TypeSenseClient() {
-    const host = 'typesense.apps.ocpdev.dti.co.id';
-    const protocol = Protocol.https;
+    final host = globalConfig.typeSenseUrl;
+    const protocol = Protocol.http;
     final config = Configuration(
       // Replace with your configuration
-      'Hu52dwsas2AdxdE',
+      globalConfig.typeSenseApiKey,
       nodes: {
         Node(
           protocol,

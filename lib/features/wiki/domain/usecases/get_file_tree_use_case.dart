@@ -1,7 +1,8 @@
-import '../../../../core/usecases/UseCase.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../../core/usecases/usecase.dart';
 
 @injectable
 class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, String> {
@@ -11,9 +12,11 @@ class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, String> {
 
   @override
   Future<List<FileTreeEntity>?> useCase(String params) async {
-    var result = await _wikiRepository.getFileTree(true, 100, projectId: params);
+    var result =
+        await _wikiRepository.getFileTree(true, 100, projectId: params);
     var filteredResult = result
         .where((element) =>
+            element.name != 'merge_request_templates' &&
             !element.name.startsWith('.') &&
             (element.name.contains('.md') || element.type == 'tree'))
         .toList();

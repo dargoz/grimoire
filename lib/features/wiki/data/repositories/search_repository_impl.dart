@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:grimoire/features/wiki/data/mappers/remote_mappers.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/search_data_source.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/requests/search_query_request.dart';
@@ -34,7 +35,7 @@ class SearchRepositoryImpl extends SearchRepository {
           entity.toDocumentRequest().toSchemaModel(projectId));
       log('creation result : $createResult');
       if (createResult == null) {
-        throw ServerFailure(
+        throw ServerApiFailure(
             errorCode: '500', errorMessage: 'Oops.. something goes wrong');
       }
       return _searchDataSource.addDocument(
@@ -52,7 +53,7 @@ class SearchRepositoryImpl extends SearchRepository {
       return response.toSearchEntity();
     } on ObjectNotFound catch (e) {
       Catcher.captureException(e);
-      throw ServerFailure(
+      throw ServerApiFailure(
           errorCode: '${e.statusCode}', errorMessage: e.message);
     }
   }

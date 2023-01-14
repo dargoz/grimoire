@@ -28,7 +28,8 @@ class FakeWikiRepository extends WikiRepository {
   }
 
   @override
-  Future<DocumentEntity> getImage(String id, String filePath, {String projectId = ''}) {
+  Future<DocumentEntity> getImage(String id, String filePath,
+      {String projectId = ''}) {
     // TODO: implement getImage
     throw UnimplementedError();
   }
