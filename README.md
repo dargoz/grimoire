@@ -30,7 +30,7 @@ Here's some features that will provided :
 ## Windows MSIX tutorial
 https://docs.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing
 ```
-New-SelfSignedCertificate -Type Custom -Subject "CN=PBS Software, O=dargoz, C=ID" -KeyUsage DigitalSignature -FriendlyName "MB Back Office" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
+New-SelfSignedCertificate -Type Custom -Subject "CN=Dargoz Software, O=dargoz, C=ID" -KeyUsage DigitalSignature -FriendlyName "Grimoire" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
 ```
 You can view your certificate in a PowerShell window by using the following commands:
 ```
