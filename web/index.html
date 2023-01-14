@@ -39,17 +39,64 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#loading-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#loading-progress {
+  width: 400px;
+  background-color: grey;
+  border-radius: 25px;
+}
+#loading-bar {
+  width: 1%;
+  height: 16px;
+  border-radius: 25px;
+  background-color: #0084f4;
+}
+#loading-desc, #loading-percent {
+  text-align: center;
+  padding: 16px;
+}
+</style>
 <body>
+  <div id="loading-container">
+    <div>
+      <div id="loading-desc"></div>
+      <div id="loading-progress">
+        <div id="loading-bar"></div>
+      </div>
+      <div id="loading-percent">0%</div>
+    </div>
+  </div>
   <script>
     window.addEventListener('load', function(ev) {
+      var loadingDesc = document.querySelector('#loading-desc');
+      var loadingPercent = document.querySelector('#loading-percent');
+      var loadingBar = document.querySelector('#loading-bar');
+      loadingDesc.textContent = "Loading Grimoire...";
+      loadingPercent.textContent = "30%";
+      loadingBar.style.width = 30 + "%";
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         }
       }).then(function(engineInitializer) {
+        loadingPercent.textContent = "60%";
+        loadingBar.style.width = 60 + "%";
         return engineInitializer.initializeEngine();
       }).then(function(appRunner) {
+        loadingPercent.textContent = "100%";
+        loadingBar.style.width = 100 + "%";
         return appRunner.runApp();
       });
     });
