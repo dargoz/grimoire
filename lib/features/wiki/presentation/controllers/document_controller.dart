@@ -64,8 +64,6 @@ class DocumentController
   Future _fetchDocument(FileTreeModel fileTreeModel) async {
     log('fetch Document tree model : $fileTreeModel');
     if (state.value?.data?.filePath == fileTreeModel.path) return;
-    documentWidgetSections.clear();
-    globalSectionIndex = 0;
     state = await AsyncValue.guard(() async {
       var result =
           await _getDocumentUseCase.executeUseCase(fileTreeModel.toEntity());
@@ -76,8 +74,6 @@ class DocumentController
   Future getDocument(FileTreeModel fileTreeModel) async {
     log('getDocument tree model : $fileTreeModel');
     if (state.value?.data?.filePath == fileTreeModel.path) return;
-    documentWidgetSections.clear();
-    globalSectionIndex = 0;
     _loading();
     state = await AsyncValue.guard(() async {
       var result =
@@ -92,9 +88,7 @@ class DocumentController
     var model = fileTreeData.value?.data
         ?.findNodeByPath(path: path, models: fileTreeData.value?.data ?? []);
     print('document controller model $model');
-    if (model != null) {
-      await getDocument(model);documentWidgetSections.clear();
-      globalSectionIndex = 0;
+    if (model != null && fileTreeData.value?.status != Status.loading) {
       _loading();
       state = await AsyncValue.guard(() async {
         var result =
@@ -104,6 +98,11 @@ class DocumentController
     } else {
       _error('no data');
     }
+  }
+
+  void clear() {
+    globalSectionIndex = 0;
+    documentWidgetSections.clear();
   }
 
   void redirect(
