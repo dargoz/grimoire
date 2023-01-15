@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:grimoire/core/designs/colors/color_schemes.dart';
 
 class AdmonitionWidget extends StatelessWidget {
   const AdmonitionWidget(
@@ -75,61 +76,61 @@ class AdmonitionWidget extends StatelessWidget {
   }
 
   Color _defaultStrokeColor() {
-    if (title.toUpperCase() == _tip) return const Color(0xFF009400);
-    if (title.toUpperCase() == _info) return const Color(0xFF4cb3d4);
-    if (title.toUpperCase() == _caution) return const Color(0xFFe6a700);
-    if (title.toUpperCase() == _danger) return const Color(0xFFe13238);
-    return const Color(0xFF4cb3d4);
+    if (title.toUpperCase() == _tip) return ColorSchemes.tipBase;
+    if (title.toUpperCase() == _info) return ColorSchemes.infoBase;
+    if (title.toUpperCase() == _caution) return ColorSchemes.cautionBase;
+    if (title.toUpperCase() == _danger) return ColorSchemes.dangerBase;
+    return ColorSchemes.infoBase;
   }
 
   Color _defaultBackgroundColor() {
-    if (title.toUpperCase() == _tip) return const Color(0xFFe6f6e6);
-    if (title.toUpperCase() == _info) return const Color(0xFFeef9fd);
-    if (title.toUpperCase() == _caution) return const Color(0xFFfff8e6);
-    if (title.toUpperCase() == _danger) return const Color(0xFFffebec);
-    return const Color(0xFFeef9fd);
+    if (title.toUpperCase() == _tip) return ColorSchemes.tipLighten;
+    if (title.toUpperCase() == _info) return ColorSchemes.infoLighten;
+    if (title.toUpperCase() == _caution) return ColorSchemes.cautionLighten;
+    if (title.toUpperCase() == _danger) return ColorSchemes.dangerLighten;
+    return ColorSchemes.infoLighten;
   }
 
   Color _defaultTextColor() {
-    if (title.toUpperCase() == _tip) return const Color(0xFF003100);
-    if (title.toUpperCase() == _info) return const Color(0xFF193c47);
-    if (title.toUpperCase() == _caution) return const Color(0xFF4d3800);
-    if (title.toUpperCase() == _danger) return const Color(0xFF4b1113);
-    return const Color(0xFF193c47);
+    if (title.toUpperCase() == _tip) return ColorSchemes.tipDarken;
+    if (title.toUpperCase() == _info) return ColorSchemes.infoDarken;
+    if (title.toUpperCase() == _caution) return ColorSchemes.cautionDarken;
+    if (title.toUpperCase() == _danger) return ColorSchemes.dangerDarken;
+    return ColorSchemes.infoLighten;
   }
 
   Widget _defaultIcon() {
     if (title.toUpperCase() == _tip) {
       return const FaIcon(
         FontAwesomeIcons.lightbulb,
-        color: Color(0xFF003100),
+        color: ColorSchemes.tipDarken,
         size: 18,
       );
     }
     if (title.toUpperCase() == _info) {
       return const FaIcon(
         FontAwesomeIcons.circleInfo,
-        color: Color(0xFF193c47),
+        color: ColorSchemes.infoDarken,
         size: 18,
       );
     }
     if (title.toUpperCase() == _caution) {
       return const FaIcon(
         FontAwesomeIcons.triangleExclamation,
-        color: Color(0xFF4d3800),
+        color: ColorSchemes.cautionDarken,
         size: 18,
       );
     }
     if (title.toUpperCase() == _danger) {
       return const FaIcon(
         FontAwesomeIcons.fire,
-        color: Color(0xFF4b1113),
+        color: ColorSchemes.dangerDarken,
         size: 18,
       );
     }
     return const FaIcon(
       FontAwesomeIcons.circleInfo,
-      color: Color(0xFF193c47),
+      color: ColorSchemes.infoDarken,
       size: 18,
     );
   }

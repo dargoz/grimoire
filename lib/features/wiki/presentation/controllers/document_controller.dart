@@ -62,7 +62,7 @@ class DocumentController
   }
 
   Future _fetchDocument(FileTreeModel fileTreeModel) async {
-    log('tree model : $fileTreeModel');
+    log('fetch Document tree model : $fileTreeModel');
     if (state.value?.data?.filePath == fileTreeModel.path) return;
     documentWidgetSections.clear();
     globalSectionIndex = 0;
@@ -74,7 +74,7 @@ class DocumentController
   }
 
   Future getDocument(FileTreeModel fileTreeModel) async {
-    log('tree model : $fileTreeModel');
+    log('getDocument tree model : $fileTreeModel');
     if (state.value?.data?.filePath == fileTreeModel.path) return;
     documentWidgetSections.clear();
     globalSectionIndex = 0;
@@ -88,12 +88,19 @@ class DocumentController
 
   Future getDocumentFromPath(String path) async {
     var fileTreeData = ref.read(fileTreeStateNotifierProvider);
-    print('try to find path : $path');
+    log('try to find path : $path');
     var model = fileTreeData.value?.data
         ?.findNodeByPath(path: path, models: fileTreeData.value?.data ?? []);
     print('document controller model $model');
     if (model != null) {
-      getDocument(model);
+      await getDocument(model);documentWidgetSections.clear();
+      globalSectionIndex = 0;
+      _loading();
+      state = await AsyncValue.guard(() async {
+        var result =
+        await _getDocumentUseCase.executeUseCase(model.toEntity());
+        return result.map((e) => e?.toDocumentModel());
+      });
     } else {
       _error('no data');
     }
@@ -127,6 +134,7 @@ class DocumentController
   }
 
   void scrollTo(int index) {
+    print('scrollToIndex : $index');
     scrollController.scrollToIndex(index,
         preferPosition: AutoScrollPosition.begin);
   }

@@ -55,7 +55,8 @@ dependencies:
   oauth2: ^2.0.0
   envied: ^0.3.0
   intl: ^0.17.0
-  url_launcher: ^6.1.6
+  url_launcher: ^6.1.7
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -111,6 +112,18 @@ flutter:
         - asset: fonts/seguisb.ttf
           weight: 300
         - asset: fonts/seguisbi.ttf
+          weight: 300
+          style: italic
+    - family: JetBrainsMono
+      fonts:
+        - asset: fonts/JetBrainsMono-Regular.ttf
+        - asset: fonts/JetBrainsMono-Bold.ttf
+          weight: 700
+        - asset: fonts/JetBrainsMono-Italic.ttf
+          style: italic
+        - asset: fonts/JetBrainsMono-SemiBold.ttf
+          weight: 300
+        - asset: fonts/JetBrainsMono-SemiBoldItalic.ttf
           weight: 300
           style: italic
 

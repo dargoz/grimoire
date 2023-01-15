@@ -53,6 +53,7 @@ class DocumentPageState extends ConsumerState<DocumentPage> {
         fileTreeStateNotifierProvider, (previous, next) {
       if (next.value?.status == Status.completed) {
         var path = widget.filePath.replaceAll('%2F', '/');
+        print('called with listener file');
         documentController.getDocumentFromPath(path);
       }
     });
@@ -62,6 +63,7 @@ class DocumentPageState extends ConsumerState<DocumentPage> {
     var fileTreeController = ref.read(fileTreeStateNotifierProvider.notifier);
     return ref.watch(documentStateNotifierProvider).when(
         data: (model) {
+          print('called with model ${model.status}');
           switch (model.status) {
             case Status.loading:
               return SizedBox(
@@ -70,6 +72,7 @@ class DocumentPageState extends ConsumerState<DocumentPage> {
               );
             case Status.initial:
             case Status.completed:
+
               return Row(
                 children: [
                   Flexible(

@@ -16,7 +16,7 @@ import '../utils/table_render.dart';
 Widget documentWidget(
     {required BuildContext context,
     required AutoScrollController controller,
-    required void Function(String label, GlobalKey key, String attr)
+    required void Function(String label, GlobalKey parentKey, String attr)
         onSectionRender,
     required Future<Widget>? Function(String?) imageProvider,
     String? htmlContent,

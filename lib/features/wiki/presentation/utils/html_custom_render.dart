@@ -17,16 +17,26 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
   }
 
   if (language.isEmpty) {
+    bool isMultiLine = renderContext.tree.element!.text.contains('\n');
     return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 240, 240, 240),
-          borderRadius: BorderRadius.all(Radius.circular(4))),
-      child: Text(
-        renderContext.tree.element!.text,
-        style: const TextStyle(fontSize: 12),
-      ),
-    );
+        width: isMultiLine
+            ? MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                .size
+                .width
+            : null,
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 240, 240, 240),
+            border: isMultiLine ? Border.all(color: Colors.grey) : null,
+            borderRadius: const BorderRadius.all(Radius.circular(4))),
+        child: Padding(
+          padding: isMultiLine ? const EdgeInsets.all(8) : EdgeInsets.zero,
+          child: Text(
+            renderContext.tree.element!.text,
+            style: TextStyle(
+                fontSize: isMultiLine ? 14 : 12, fontFamily: 'JetBrainsMono'),
+          ),
+        ));
   } else {
     return SizedBox(
       width:
@@ -95,7 +105,7 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
   if (kDebugMode) {
     print('---------------------------------------------------');
     onRender(id, globalKey);
-    print("widget : ${widget.toString()} :: ${widget.key}");
+    print("widget : ${widget.toString()} :: $globalKey :: globalIndex $globalSectionIndex");
   }
 
   var renderWidget = AutoScrollTag(

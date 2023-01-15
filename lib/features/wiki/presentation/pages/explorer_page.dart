@@ -10,6 +10,7 @@ import '../../../../core/models/resource.dart';
 import '../controllers/file_tree_controller.dart';
 import '../controllers/keyboard_controller.dart';
 import '../widgets/app_search_widget.dart';
+import '../widgets/file_tree_loading_widget.dart';
 import '../widgets/search_bar_widget_v2.dart';
 
 class ExplorerPage extends ConsumerStatefulWidget {
@@ -123,6 +124,9 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                 children: [
                   ref.watch(fileTreeStateNotifierProvider).when(
                       data: (model) {
+                        if (model.status == Status.loading) {
+                          return const FileTreeLoadingWidget();
+                        }
                         return Expanded(
                             child: FileTreeWidget(
                           fileTreeModels: model.data ?? [],
@@ -136,7 +140,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                       error: (object, stackTrace) {
                         return const ResponseErrorWidget();
                       },
-                      loading: () => const Text('loading..'))
+                      loading: () => const FileTreeLoadingWidget())
                 ],
               )),
         Flexible(
