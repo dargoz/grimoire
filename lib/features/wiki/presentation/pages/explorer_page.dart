@@ -148,7 +148,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                           onTap: (fileTreeModel) {
                             var path =
                                 fileTreeModel.path.replaceAll('/', '%2F');
-                            context.go("/grimoire/document/$path");
+                            context.go("/document/$path");
                           },
                         ));
                       },

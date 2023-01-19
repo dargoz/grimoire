@@ -135,6 +135,7 @@ class DocumentController
   void scrollTo(int index) {
     print('scrollToIndex : $index');
     scrollController.scrollToIndex(index,
+        duration: const Duration(milliseconds: 5),
         preferPosition: AutoScrollPosition.begin);
   }
 

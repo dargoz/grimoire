@@ -42,7 +42,7 @@ class KeyCapsWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
           child: Text(text,
-              style: const TextStyle(fontSize: 10, color: Colors.black54)),
+              style: const TextStyle(fontSize: 10, color: Colors.black87)),
         ),
       ),
     );

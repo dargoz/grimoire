@@ -138,10 +138,13 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
                     child: Row(
                       children: [
                         const KeyCapsWidget(text: 'esc'),
-                        const Text(
-                          ' to close',
-                          style:
-                              TextStyle(fontSize: 12, color: Color(0xFF969faf)),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 4),
+                          child: Text(
+                            ' to close',
+                            style: TextStyle(
+                                fontSize: 12, color: Color(0xFF969faf)),
+                          ),
                         ),
                         const Spacer(),
                         const Text(
