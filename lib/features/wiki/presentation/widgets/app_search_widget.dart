@@ -2,23 +2,43 @@ import 'package:flutter/material.dart';
 
 import 'key_caps_widget.dart';
 
-class AppBarSearchWidget extends StatelessWidget {
+class AppBarSearchWidget extends StatefulWidget {
   const AppBarSearchWidget({super.key, this.onTap});
 
   final void Function()? onTap;
 
   @override
+  State<StatefulWidget> createState() => AppBarSearchWidgetState();
+}
+
+class AppBarSearchWidgetState extends State<AppBarSearchWidget> {
+  bool _isHover = false;
+
+  @override
   Widget build(BuildContext context) {
     return MouseRegion(
         cursor: SystemMouseCursors.click,
+        onEnter: (event) {
+          setState(() {
+            _isHover = true;
+          });
+        },
+        onExit: (event) {
+          setState(() {
+            _isHover = false;
+          });
+        },
         child: GestureDetector(
-          onTap: onTap,
+          onTap: widget.onTap,
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Container(
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  color: Color(0xFFebedf0)),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(32)),
+                  border: _isHover
+                      ? Border.all(color: Colors.grey)
+                      : Border.all(color: const Color(0xFFebedf0)),
+                  color: const Color(0xFFebedf0)),
               child: Row(
                 children: const [
                   Padding(
