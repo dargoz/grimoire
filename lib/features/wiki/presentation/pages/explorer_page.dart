@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/search_controller.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/designs/widgets/response_error_widget.dart';
 import '../../../../core/models/resource.dart';
@@ -68,7 +69,21 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                   AppBarSearchWidget(
                     onTap: () => _keyboardController.showSearchBar(),
                   ),
-                  const Icon(Icons.help),
+                  IconButton(
+                    onPressed: () async {
+                      PackageInfo packageInfo =
+                          await PackageInfo.fromPlatform();
+                      showAboutDialog(
+                          context: context,
+                          applicationVersion:
+                              '${packageInfo.version}+${packageInfo.buildNumber}',
+                          applicationIcon: const Icon(Icons.book),
+                          applicationLegalese:
+                              'Git Based Markdown Documentation\n'
+                              'Created with ♥ and ☕ by DRG');
+                    },
+                    icon: const Icon(Icons.help),
+                  ),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                     child: CircleAvatar(
@@ -133,7 +148,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                           onTap: (fileTreeModel) {
                             var path =
                                 fileTreeModel.path.replaceAll('/', '%2F');
-                            context.go("/document/$path");
+                            context.go("/grimoire/document/$path");
                           },
                         ));
                       },

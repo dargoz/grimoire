@@ -19,7 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/html_custom_render.dart';
 
-final documentStateNotifierProvider = StateNotifierProvider.autoDispose<
+final documentStateNotifierProvider = StateNotifierProvider<
     DocumentController,
     AsyncValue<Resource<DocumentModel>>>((ref) => DocumentController(ref));
 

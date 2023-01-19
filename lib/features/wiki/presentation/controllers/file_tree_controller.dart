@@ -11,8 +11,8 @@ import 'package:grimoire/injection.dart';
 
 import '../../../../core/models/resource.dart';
 
-final fileTreeStateNotifierProvider = StateNotifierProvider<FileTreeController,
-        AsyncValue<Resource<List<FileTreeModel>>>>(
+final fileTreeStateNotifierProvider = StateNotifierProvider.autoDispose<
+        FileTreeController, AsyncValue<Resource<List<FileTreeModel>>>>(
     (ref) => FileTreeController(ref));
 
 class FileTreeController
