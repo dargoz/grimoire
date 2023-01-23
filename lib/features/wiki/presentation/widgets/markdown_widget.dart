@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grimoire/features/wiki/presentation/utils/image_render.dart';
 
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
@@ -54,6 +55,10 @@ Widget markdownWidget(
             onRender: (label, key) => onSectionRender(label, key, '6'),
             controller: controller),
         'table': (renderContext, widget) => tableRender(
+            renderContext: renderContext,
+            widget: widget,
+            imageProvider: imageProvider),
+        'img': (renderContext, widget) => imageRender(
             renderContext: renderContext,
             widget: widget,
             imageProvider: imageProvider),

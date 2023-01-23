@@ -128,12 +128,16 @@ class DocumentController
     } else if (href != null) {
       var node =
           fileTreeModels.findNodeByPath(models: fileTreeModels, path: href);
-      getDocument(node!);
+      if (node != null) {
+        getDocument(node);
+      } else {
+        _error('file not found');
+      }
+
     }
   }
 
   void scrollTo(int index) {
-    print('scrollToIndex : $index');
     scrollController.scrollToIndex(index,
         duration: const Duration(milliseconds: 5),
         preferPosition: AutoScrollPosition.begin);

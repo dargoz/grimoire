@@ -55,8 +55,9 @@ dependencies:
   oauth2: ^2.0.0
   envied: ^0.3.0
   intl: ^0.18.0
-  url_launcher: ^6.1.7
+  url_launcher: ^6.1.8
   shimmer: ^2.0.0
+  crypto: 3.0.2
 
 dev_dependencies:
   flutter_test:
