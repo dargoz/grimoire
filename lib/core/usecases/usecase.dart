@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:grimoire/core/errors/failures.dart';
+import '../errors/error_code.dart';
 import '../models/resource.dart';
 
 abstract class UseCase<Type, Params> {
@@ -20,8 +21,8 @@ abstract class UseCase<Type, Params> {
       return Resource.error(formatException.message);
     } on Failure catch (failure) {
       return Resource.error(failure.errorMessage, errorCode: failure.errorCode);
-    } on TimeoutException catch (timeout) {
-      return Resource.error(timeout.message, errorCode: '');
+    } on TimeoutException catch (_) {
+      return const Resource.error('Request Timeout', errorCode: requestTimeout);
     } on Exception catch (exception) {
       return Resource.error(exception.toString());
     }
