@@ -116,7 +116,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                                 searchModel: searchState.data![index],
                                 onTap: () {
                                   _keyboardController.hideSearchBar();
-                                  _searchController.onSearchResultTap(index);
+                                  context.go('/document/${_searchController.getPath(index)}');
                                 }),
                       ],
                     );
