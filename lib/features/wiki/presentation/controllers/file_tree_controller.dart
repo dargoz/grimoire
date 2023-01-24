@@ -32,7 +32,7 @@ class FileTreeController
   Future _fetchFileTree() async {
     state = await AsyncValue.guard(() async {
       var result =
-          await _getFileTreeUseCase.executeUseCase(serviceController.projectId);
+          await _getFileTreeUseCase.executeUseCase(serviceController.repository);
       var newState = result.map((e) => e?.toModel());
       return newState;
     });

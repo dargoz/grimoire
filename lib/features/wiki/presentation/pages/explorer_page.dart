@@ -66,6 +66,31 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                 backgroundColor: const Color(0xFFfafafa),
                 iconTheme: const IconThemeData(color: Color(0xFF1c1e21)),
                 actions: [
+                  PopupMenuButton(
+                      child: Row(
+                        children: const [
+                          Text('Master', style: TextStyle(color: Colors.black87),),
+                          Icon(Icons.arrow_drop_down_sharp)
+                        ],
+                      ),
+                      itemBuilder: (context) {
+                    return [
+                      const PopupMenuItem<int>(
+                        value: 0,
+                        child: Text("0.0.1"),
+                      ),
+
+                      const PopupMenuItem<int>(
+                        value: 1,
+                        child: Text("dev"),
+                      ),
+
+                      const PopupMenuItem<int>(
+                        value: 2,
+                        child: Text("0.0.2"),
+                      ),
+                    ];
+                  }),
                   AppBarSearchWidget(
                     onTap: () => _keyboardController.showSearchBar(),
                   ),

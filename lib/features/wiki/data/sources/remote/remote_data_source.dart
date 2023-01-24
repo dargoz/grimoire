@@ -6,4 +6,6 @@ abstract class RemoteDataSource {
   Future getCommit(String projectId, String commitId);
 
   Future getRepositoryTree(RepositoryTreeRequest request, String ref);
+
+  Future getBranches(String projectId);
 }

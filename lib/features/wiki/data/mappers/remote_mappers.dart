@@ -1,7 +1,9 @@
+import 'package:grimoire/features/wiki/data/sources/remote/gitlab/responses/branch_response.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/highlight.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/models/schema_model.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/requests/add_document_request.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/typesense/responses/search_response.dart';
+import 'package:grimoire/features/wiki/domain/entities/branch_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/search_result_entity.dart';
 import 'package:typesense/typesense.dart';
@@ -130,5 +132,19 @@ extension SearchMapper on SearchResponse {
                 .toList(),
             textMatch: e.textMatch))
         .toList();
+  }
+}
+
+extension BranchResponseMapper on BranchResponse {
+  BranchEntity toEntity() {
+    return BranchEntity(
+        name: name,
+        merged: merged,
+        protected: protected,
+        defaultBranch: defaultBranch,
+        developersCanPush: developersCanPush,
+        developersCanMerge: developersCanMerge,
+        canPush: canPush,
+        webUrl: webUrl);
   }
 }

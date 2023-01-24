@@ -29,4 +29,9 @@ class RemoteDataSourceImpl extends RemoteDataSource {
     return _restClient.service
         .getRepositoryTree(request.id, request.recursive, request.perPage, ref);
   }
+
+  @override
+  Future getBranches(String projectId) {
+    return _restClient.service.getBranches(projectId);
+  }
 }

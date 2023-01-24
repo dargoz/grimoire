@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grimoire/features/wiki/domain/entities/repository_entity.dart';
 
 import '../../../../core/models/resource.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -13,7 +14,7 @@ class ServiceController extends StateNotifier<Resource<dynamic>> {
 
   bool isRefresh = false;
 
-  String projectId = '';
+  RepositoryEntity repository = RepositoryEntity(projectId: '', ref: 'main');
 
   Future<Resource<dynamic>> executeService(
       UseCase useCase, dynamic params) async {

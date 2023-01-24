@@ -1,19 +1,21 @@
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/repository_entity.dart';
 import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/usecases/usecase.dart';
 
 @injectable
-class GetFileTreeUseCase extends UseCase<List<FileTreeEntity>?, String> {
+class GetFileTreeUseCase
+    extends UseCase<List<FileTreeEntity>?, RepositoryEntity> {
   GetFileTreeUseCase(this._wikiRepository);
 
   final WikiRepository _wikiRepository;
 
   @override
-  Future<List<FileTreeEntity>?> useCase(String params) async {
-    var result =
-        await _wikiRepository.getFileTree(true, 100, projectId: params);
+  Future<List<FileTreeEntity>?> useCase(RepositoryEntity params) async {
+    var result = await _wikiRepository.getFileTree(true, 100,
+        projectId: params.projectId, ref: params.ref);
     var filteredResult = result
         .where((element) =>
             element.name != 'merge_request_templates' &&

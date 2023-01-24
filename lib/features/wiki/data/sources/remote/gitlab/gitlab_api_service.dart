@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/gitlab/responses/branch_response.dart';
 import './responses/file_response.dart';
 import './responses/repository_tree_response.dart';
 import './responses/commit_response.dart';
@@ -24,4 +25,8 @@ abstract class GitlabApiService {
   @GET('/projects/{project_id}/repository/commits/{commit_id}')
   Future<CommitResponse> getCommit(
       @Path('project_id') String projectId, @Path('commit_id') commitId);
+
+  @GET('/projects/{project_id}/repository/branches')
+  Future<List<BranchResponse>> getBranches(
+      @Path('project_id') String projectId);
 }

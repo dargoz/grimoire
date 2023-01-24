@@ -15,9 +15,14 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
     String lg = renderContext.tree.element?.attributes['class'] as String;
     language = lg.substring(9);
   }
-
+  var codeText = renderContext.tree.element!.text;
   if (language.isEmpty) {
-    bool isMultiLine = renderContext.tree.element!.text.contains('\n');
+    codeText = codeText
+        .split('\n')
+        .where((element) => element.trim().isNotEmpty)
+        .join('\n');
+    print('code text : $codeText');
+    bool isMultiLine = codeText.contains('\n');
     return Container(
         width: isMultiLine
             ? MediaQueryData.fromWindow(WidgetsBinding.instance.window)
@@ -32,7 +37,7 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
         child: Padding(
           padding: isMultiLine ? const EdgeInsets.all(8) : EdgeInsets.zero,
           child: Text(
-            renderContext.tree.element!.text,
+            codeText,
             style: TextStyle(
                 fontSize: isMultiLine ? 14 : 12, fontFamily: 'JetBrainsMono'),
           ),
@@ -43,7 +48,7 @@ Widget customCodeRender(RenderContext renderContext, Widget widget) {
           MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width,
       child: HighlightView(
         // The original code to be highlighted
-        renderContext.tree.element!.text,
+        codeText,
 
         // Specify language
         // It is recommended to give it a value for performance
@@ -105,7 +110,8 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
   if (kDebugMode) {
     print('---------------------------------------------------');
     onRender(id, globalKey);
-    print("widget : ${widget.toString()} :: $globalKey :: globalIndex $globalSectionIndex");
+    print(
+        "widget : ${widget.toString()} :: $globalKey :: globalIndex $globalSectionIndex");
   }
 
   var renderWidget = AutoScrollTag(

@@ -116,7 +116,8 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
   }
 
   void _openProject(String projectId) {
-    ref.read(serviceStateNotifierProvider.notifier).projectId = projectId;
+    ref.read(serviceStateNotifierProvider.notifier).repository.projectId =
+        projectId;
     context.go('/document/README.md');
   }
 

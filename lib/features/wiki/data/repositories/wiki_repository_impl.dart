@@ -4,8 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:grimoire/features/wiki/data/mappers/local_mappers.dart';
 import 'package:grimoire/features/wiki/data/mappers/remote_mappers.dart';
 import 'package:grimoire/features/wiki/data/sources/local/local_data_source.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/gitlab/responses/branch_response.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/gitlab/responses/file_response.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/remote_data_source.dart';
+import 'package:grimoire/features/wiki/domain/entities/branch_entity.dart';
 
 import '../../../../core/errors/catcher.dart';
 import '../sources/remote/gitlab/requests/repository_tree_request.dart';
@@ -27,7 +29,7 @@ class WikiRepositoryImpl extends WikiRepository {
 
   @override
   Future<DocumentEntity> getDocument(String id, String filePath,
-      {String projectId = ''}) async {
+      {String projectId = '', String ref = 'main'}) async {
     var cacheProject = await _localDataSource.loadProject();
     if (cacheProject != null) {
       _projectId = cacheProject;
@@ -45,7 +47,7 @@ class WikiRepositoryImpl extends WikiRepository {
     filePath = filePath.replaceAll('.', '%2E');
     log('call get repository file : $filePath');
     FileResponse fileResponse =
-        await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
+        await _remoteDataSource.getRepositoryFile(_projectId, filePath, ref);
     CommitResponse commitResponse = await _remoteDataSource.getCommit(
         _projectId, fileResponse.lastCommitId);
 
@@ -62,7 +64,7 @@ class WikiRepositoryImpl extends WikiRepository {
 
   @override
   Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage,
-      {String projectId = ''}) async {
+      {String projectId = '', String ref = 'main'}) async {
     if (projectId.isNotEmpty) _projectId = projectId;
     try {
       _localDataSource.saveProject(_projectId);
@@ -73,13 +75,13 @@ class WikiRepositoryImpl extends WikiRepository {
         await _remoteDataSource.getRepositoryTree(
             RepositoryTreeRequest(
                 id: _projectId, recursive: true, perPage: 100),
-            "main");
+            ref);
     return response.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
 
   @override
   Future<DocumentEntity> getImage(String id, String filePath,
-      {String projectId = ''}) async {
+      {String projectId = '', String ref = 'main'}) async {
     if (projectId.isNotEmpty) _projectId = projectId;
     var cache = await _localDataSource.getDocument(id + filePath);
     if (cache != null) {
@@ -102,5 +104,11 @@ class WikiRepositoryImpl extends WikiRepository {
     fileObject.commitObject = commitResponse.toCommitObject();
     _localDataSource.saveDocument(fileObject);
     return documentEntity;
+  }
+
+  @override
+  Future<List<BranchEntity>> getBranches(String id) async {
+    List<BranchResponse> response = await _remoteDataSource.getBranches(id);
+    return response.map((e) => e.toEntity()).toList();
   }
 }

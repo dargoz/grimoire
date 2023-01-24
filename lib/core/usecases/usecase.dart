@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:grimoire/core/errors/failures.dart';
 import '../errors/error_code.dart';
 import '../models/resource.dart';
@@ -8,6 +9,7 @@ import '../models/resource.dart';
 abstract class UseCase<Type, Params> {
   String? resourceMessage;
 
+  @protected
   Future<Type> useCase(Params params);
 
   Future<Resource<Type>> executeUseCase(Params params) async {

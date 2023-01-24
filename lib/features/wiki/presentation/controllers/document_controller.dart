@@ -19,8 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/html_custom_render.dart';
 
-final documentStateNotifierProvider = StateNotifierProvider<
-    DocumentController,
+final documentStateNotifierProvider = StateNotifierProvider<DocumentController,
     AsyncValue<Resource<DocumentModel>>>((ref) => DocumentController(ref));
 
 class DocumentController
@@ -38,7 +37,7 @@ class DocumentController
         path: 'README.md', models: fileTreeData.value?.data ?? []);
     print('document controller model $model');
     if (model != null) {
-      print('model not null in document controller init state');
+      log('model not null in document controller init state');
       _fetchDocument(model);
     }
   }
@@ -91,8 +90,7 @@ class DocumentController
     if (model != null && fileTreeData.value?.status != Status.loading) {
       _loading();
       state = await AsyncValue.guard(() async {
-        var result =
-        await _getDocumentUseCase.executeUseCase(model.toEntity());
+        var result = await _getDocumentUseCase.executeUseCase(model.toEntity());
         return result.map((e) => e?.toDocumentModel());
       });
     } else {
@@ -133,7 +131,6 @@ class DocumentController
       } else {
         _error('file not found');
       }
-
     }
   }
 
@@ -159,7 +156,13 @@ class DocumentController
             '${parentPath.substring(0, parentPath.lastIndexOf('/'))}/$imageSource');
     var result = await _getImageUseCase.executeUseCase(model.toEntity());
     if (result.status == Status.completed) {
-      return Image.memory(base64.decode(result.data!.content));
+      var bytes = base64.decode(result.data!.content);
+      var image = await decodeImageFromList(bytes);
+      return Image.memory(
+        bytes,
+        height: image.height.toDouble(),
+        width: image.width.toDouble(),
+      );
     } else {
       return const Icon(Icons.broken_image_outlined);
     }
