@@ -18,8 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.0.6+1
 
 environment:
-  flutter: ">=3.3.4"
-  sdk: ">=2.17.6 <3.0.0"
+  flutter: ">=3.7.0"
+  sdk: ">=2.18.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -45,7 +45,7 @@ dependencies:
   markdown: ^6.0.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  flutter_secure_storage: ^6.0.0
+  flutter_secure_storage: ^7.0.1
   flutter_highlighter: ^0.1.1
   flutter_html: ^2.2.1
   google_fonts: ^3.0.1
