@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_file_tree_use_case.dart';
+import 'package:grimoire/features/wiki/domain/usecases/get_version_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/service_controller.dart';
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
@@ -26,6 +27,7 @@ class FileTreeController
   final Ref ref;
   late final ServiceController serviceController;
   final GetFileTreeUseCase _getFileTreeUseCase = getIt<GetFileTreeUseCase>();
+  final GetVersionUseCase _getVersionUseCase = getIt<GetVersionUseCase>();
 
   BuildContext? dialogContext;
 
@@ -56,5 +58,10 @@ class FileTreeController
   void refresh() {
     _loading();
     _fetchFileTree();
+  }
+
+  Future<List<String>> getBranchList(String text) async {
+    var result = await _getVersionUseCase.executeUseCase(serviceController.repository.projectId);
+    return result.data ?? [];
   }
 }

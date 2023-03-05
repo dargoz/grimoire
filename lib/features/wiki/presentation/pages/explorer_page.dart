@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -66,31 +67,42 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                 backgroundColor: const Color(0xFFfafafa),
                 iconTheme: const IconThemeData(color: Color(0xFF1c1e21)),
                 actions: [
-                  PopupMenuButton(
-                      child: Row(
-                        children: const [
-                          Text('Master', style: TextStyle(color: Colors.black87),),
-                          Icon(Icons.arrow_drop_down_sharp)
-                        ],
+                  SizedBox(
+                    width: 120,
+                    child: DropdownSearch<String>(
+                      selectedItem: 'Master',
+                      asyncItems: _fileController.getBranchList,
+                      popupProps: const PopupProps.menu(
+                        fit: FlexFit.loose,
                       ),
-                      itemBuilder: (context) {
-                    return [
-                      const PopupMenuItem<int>(
-                        value: 0,
-                        child: Text("0.0.1"),
-                      ),
-
-                      const PopupMenuItem<int>(
-                        value: 1,
-                        child: Text("dev"),
-                      ),
-
-                      const PopupMenuItem<int>(
-                        value: 2,
-                        child: Text("0.0.2"),
-                      ),
-                    ];
-                  }),
+                      dropdownBuilder: (context, value) {
+                        return Text(
+                          value ?? '',
+                          style: const TextStyle(
+                              color: Colors.black),
+                        );
+                      },
+                      dropdownButtonProps: const DropdownButtonProps(
+                          padding: EdgeInsets.all(0),
+                          isVisible: true),
+                      dropdownDecoratorProps:
+                      const DropDownDecoratorProps(
+                          textAlign: TextAlign.start,
+                          dropdownSearchDecoration:
+                          InputDecoration(
+                              filled: false,
+                              floatingLabelAlignment:
+                              FloatingLabelAlignment
+                                  .center,
+                              border: OutlineInputBorder(
+                                  gapPadding: 0,
+                                  borderRadius:
+                                  BorderRadius.all(
+                                      Radius.circular(16)),
+                                  borderSide:
+                                  BorderSide.none))),
+                    ),
+                  ),
                   AppBarSearchWidget(
                     onTap: () => _keyboardController.showSearchBar(),
                   ),
