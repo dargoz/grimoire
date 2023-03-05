@@ -14,7 +14,7 @@ class Configs {
 }
 
 Configs globalConfig = Configs(
-    repositoryUrl: 'http://localhost:3004/api/v4/',
+    repositoryUrl: 'https://gitlab.com/api/v4/',
     accessToken: Env.gitAccessToken,
     typeSenseUrl: Env.typesenseUrl,
     typeSenseApiKey: Env.typesenseApiKey);
