@@ -57,6 +57,7 @@ Widget markdownWidget(
         'table': (renderContext, widget) => tableRender(
             renderContext: renderContext,
             widget: widget,
+            context: context,
             imageProvider: imageProvider),
         'img': (renderContext, widget) => imageRender(
             renderContext: renderContext,

@@ -157,11 +157,9 @@ class DocumentController
     var result = await _getImageUseCase.executeUseCase(model.toEntity());
     if (result.status == Status.completed) {
       var bytes = base64.decode(result.data!.content);
-      var image = await decodeImageFromList(bytes);
       return Image.memory(
         bytes,
-        height: image.height.toDouble(),
-        width: image.width.toDouble(),
+        fit: BoxFit.cover,
       );
     } else {
       return const Icon(Icons.broken_image_outlined);
