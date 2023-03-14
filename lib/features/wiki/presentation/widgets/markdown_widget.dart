@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grimoire/features/wiki/presentation/utils/code_preview_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/image_render.dart';
 
 import 'package:markdown/markdown.dart' as md;
@@ -27,7 +28,8 @@ Widget markdownWidget(
     child: Html(
       tagsList: Html.tags
         ..add('admonition')
-        ..add('reference'),
+        ..add('reference')
+        ..add('code-preview'),
       customRender: {
         'code': customCodeRender,
         'h1': (renderContext, widget) => customHeaderRender(
@@ -65,7 +67,8 @@ Widget markdownWidget(
             imageProvider: imageProvider),
         'admonition': admonitionRender,
         'reference': (renderContext, widget) =>
-            referenceRender(renderContext, widget, onTap: onReferenceTap)
+            referenceRender(renderContext, widget, onTap: onReferenceTap),
+        'code-preview': codePreviewRender
       },
       data: md.markdownToHtml(htmlContent ?? '', blockSyntaxes: const [
         md.HeaderWithIdSyntax(),
