@@ -1,15 +1,14 @@
 import 'dart:developer';
 
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:grimoire/features/wiki/presentation/utils/custom_code_render.dart';
 import 'package:markdown/markdown.dart';
 
 import '../../../../core/designs/colors/color_schemes.dart';
-import 'html_custom_render.dart';
 
 Widget codePreviewRender(RenderContext renderContext, Widget widget) {
-  print('code preview render');
+  log('code preview render');
   List<String> langList = List.empty(growable: true);
   if (renderContext.tree.element?.attributes['class'] != null) {
     String lg = renderContext.tree.element?.attributes['class'] as String;
@@ -34,7 +33,7 @@ Widget codePreviewRender(RenderContext renderContext, Widget widget) {
   }
   return SizedBox(
     width: MediaQuery.of(renderContext.buildContext).size.width,
-    height: maxLength * 48,
+    height: maxLength * 24,
     child: CodePreview(
       tabs: langList,
       codeBlocks: codeBlocks,
@@ -75,36 +74,26 @@ class CodePreviewState extends State<CodePreview>
         length: widget.tabs.length,
         child: Scaffold(
           body: Container(
-            color: ColorSchemes.tipDarken,
+            color: Colors.transparent,
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 4,
-                              spreadRadius: 0)
-                        ]),
+                        color: Colors.white54,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(4))),
                     child: Padding(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(0),
                       child: TabBar(
                         controller: _tabController,
                         isScrollable: true,
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Colors.grey,
-                        indicator: const BubbleTabIndicator(
-                            indicatorHeight: 32.0,
-                            indicatorColor: ColorSchemes.infoBase,
-                            tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                            indicatorRadius: 8,
-                            insets: EdgeInsets.zero),
+                        labelColor: ColorSchemes.bluePrimary,
+                        unselectedLabelColor: ColorSchemes.bluePrimary,
+                        indicatorColor: ColorSchemes.bluePrimary,
                         tabs: widget.tabs
                             .map(
                               (e) => Tab(
@@ -124,14 +113,19 @@ class CodePreviewState extends State<CodePreview>
                       child: Container(
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     decoration: BoxDecoration(
-                      color: ColorSchemes.cautionLighten,
-                      border: Border.all(color: ColorSchemes.infoDarken),
-                    ),
+                        color: Colors.transparent,
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(8))),
                     child: Html(
                       data: markdownToHtml(
                           widget.codeBlocks[_tabController.index]),
-                      customRender: const {
-                        'code': customCodeRender,
+                      customRender: {
+                        'code': (renderContext, tagWidget) => CustomCodeRender(
+                              renderContext: renderContext,
+                              widget: tagWidget,
+                              showBorder: false,
+                            ),
                       },
                     ),
                   ))

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grimoire/features/wiki/presentation/utils/code_preview_render.dart';
+import 'package:grimoire/features/wiki/presentation/utils/custom_code_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/image_render.dart';
 
 import 'package:markdown/markdown.dart' as md;
@@ -10,6 +11,7 @@ import 'package:grimoire/features/wiki/presentation/utils/admonition_syntax.dart
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../models/file_tree_model.dart';
+import '../utils/code_preview_syntax.dart';
 import '../utils/html_custom_render.dart';
 import '../utils/reference_render.dart';
 import '../utils/reference_syntax.dart';
@@ -31,7 +33,8 @@ Widget markdownWidget(
         ..add('reference')
         ..add('code-preview'),
       customRender: {
-        'code': customCodeRender,
+        'code': (renderContext, widget) =>
+            CustomCodeRender(renderContext: renderContext, widget: widget),
         'h1': (renderContext, widget) => customHeaderRender(
             renderContext, widget,
             onRender: (label, key) => onSectionRender(label, key, '1'),
@@ -74,7 +77,8 @@ Widget markdownWidget(
         md.HeaderWithIdSyntax(),
         AdmonitionSyntax(),
         ReferenceSyntax(),
-        md.TableSyntax()
+        md.TableSyntax(),
+        CodePreviewSyntax()
       ]),
       onAnchorTap: onAnchorTap,
     ),

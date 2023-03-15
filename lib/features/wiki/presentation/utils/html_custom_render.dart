@@ -6,71 +6,8 @@ import 'package:flutter_highlighter/themes/atom-one-light.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grimoire/core/designs/colors/color_schemes.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-
-Widget customCodeRender(RenderContext renderContext, Widget widget) {
-  var language = '';
-
-  if (renderContext.tree.element?.attributes['class'] != null) {
-    String lg = renderContext.tree.element?.attributes['class'] as String;
-    language = lg.substring(9);
-  }
-  var codeText = renderContext.tree.element!.text;
-  if (language.isEmpty) {
-    codeText = codeText
-        .split('\n')
-        .where((element) => element.trim().isNotEmpty)
-        .join('\n');
-    print('code text : $codeText');
-    bool isMultiLine = codeText.contains('\n');
-    return Container(
-        width: isMultiLine
-            ? MediaQueryData.fromWindow(WidgetsBinding.instance.window)
-                .size
-                .width
-            : null,
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 240, 240, 240),
-            border: isMultiLine ? Border.all(color: Colors.grey) : null,
-            borderRadius: const BorderRadius.all(Radius.circular(4))),
-        child: Padding(
-          padding: isMultiLine ? const EdgeInsets.all(8) : EdgeInsets.zero,
-          child: Text(
-            codeText,
-            style: TextStyle(
-                fontSize: isMultiLine ? 14 : 12, fontFamily: 'JetBrainsMono'),
-          ),
-        ));
-  } else {
-    return SizedBox(
-      width:
-          MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width,
-      child: HighlightView(
-        // The original code to be highlighted
-        codeText,
-
-        // Specify language
-        // It is recommended to give it a value for performance
-        language: language,
-
-        // Specify highlight theme
-        // All available themes are listed in `themes` folder
-        theme: MediaQueryData.fromWindow(WidgetsBinding.instance.window)
-                    .platformBrightness ==
-                Brightness.light
-            ? atomOneLightTheme
-            : atomOneDarkTheme,
-
-        // Specify padding
-        padding: const EdgeInsets.all(8),
-
-        // Specify text style
-        textStyle: GoogleFonts.robotoMono(),
-      ),
-    );
-  }
-}
 
 int globalSectionIndex = 0;
 
