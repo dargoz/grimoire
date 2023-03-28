@@ -14,6 +14,14 @@ void main() {
     addExpectedData(expectedResult);
     expect(actualResult.data!.toString(), expectedResult.toString());
   });
+
+  test('Count hidden children Test', () async {
+    var useCase = GetFileTreeUseCase(FakeWikiRepository());
+    var actualResult = await useCase.executeUseCase(RepositoryEntity(projectId: '', ref: ''));
+    var expectedResult = List<FileTreeEntity>.empty(growable: true);
+    addExpectedData(expectedResult);
+    expect(actualResult.data!.toString(), expectedResult.toString());
+  });
 }
 
 void addExpectedData(List<FileTreeEntity> expectedResult) {

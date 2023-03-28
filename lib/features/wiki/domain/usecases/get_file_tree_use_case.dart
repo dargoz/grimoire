@@ -16,21 +16,35 @@ class GetFileTreeUseCase
   Future<List<FileTreeEntity>?> useCase(RepositoryEntity params) async {
     var result = await _wikiRepository.getFileTree(true, 100,
         projectId: params.projectId, ref: params.ref);
+    List<FileTreeEntity> hiddenChildren = List.empty(growable: true);
     var filteredResult = result
-        .where((element) =>
-            element.name != 'merge_request_templates' &&
-            !element.name.startsWith('.') &&
-            (element.name.contains('.md') || element.type == 'tree'))
+        .where((element) {
+      if (isGeneralMarkdown(element)) {
+        return true;
+      } else {
+        hiddenChildren.add(element);
+        return false;
+      }
+    }
+            )
         .toList();
     var tree = List<FileTreeEntity>.empty(growable: true);
     for (var fileTree in filteredResult) {
       var paths = fileTree.path.split('/');
-      add(paths: paths, tree: tree, entity: fileTree);
+      _add(paths: paths, tree: tree, entity: fileTree);
     }
     return tree;
   }
 
-  void add(
+  bool isGeneralMarkdown(FileTreeEntity element) {
+    return element.name != 'merge_request_templates' &&
+        !element.name.startsWith('.') &&
+        !element.name.contains('.spec.') &&
+        !element.name.contains('.usage.') &&
+        (element.name.contains('.md') || element.type == 'tree');
+  }
+
+  void _add(
       {required List<String> paths,
       int position = 0,
       int pathIndex = -1,
@@ -40,7 +54,7 @@ class GetFileTreeUseCase
     if (pathIndex == -1 || position == paths.length - 1) {
       tree.add(entity);
     } else {
-      add(
+      _add(
           paths: paths,
           position: ++position,
           pathIndex: pathIndex,
