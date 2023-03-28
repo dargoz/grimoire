@@ -15,8 +15,8 @@ Widget codePreviewRender(RenderContext renderContext, Widget widget) {
     langList = lg.split('-');
   }
 
-  print('render element ${renderContext.tree.element?.innerHtml}');
-  var contents = renderContext.tree.element?.innerHtml.split('\n');
+  print('render element ${renderContext.tree.element?.text}');
+  var contents = renderContext.tree.element?.text.split('\n');
   if (contents?[contents.length - 1].trim().isEmpty ?? false) {
     contents?.removeAt(contents.length - 1);
   }

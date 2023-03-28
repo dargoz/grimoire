@@ -98,17 +98,17 @@ void main() {
         markdownToHtml(markdown, blockSyntaxes: const [CodePreviewSyntax(), TableSyntax()]);
     print('result :\n$result');
     expect(result, '''<pre><code-preview class="xml-java">```xml
-      <CheckBox
+      &lt;CheckBox
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/label"/>
+          android:text="@string/label"/&gt;
       ```
       --split--
       ```kotlin
       @Composable
       fun Checkbox(
           checked: Boolean,
-          onCheckedChange: ((Boolean) -> Unit)?,
+          onCheckedChange: ((Boolean) -&gt; Unit)?,
           modifier: Modifier = Modifier,
           enabled: Boolean = true,
           colors: CheckboxColors = CheckboxDefaults.colors(),

@@ -54,6 +54,10 @@ class CodePreviewSyntax extends BlockSyntax {
     childLines.add('');
 
     var text = childLines.join('\n');
+    if (parser.document.encodeHtml) {
+      var escapeHtml = const HtmlEscape(HtmlEscapeMode.element);
+      text = escapeHtml.convert(text);
+    }
     final code = Element.text('code-preview', text);
 
     // the info-string should be trimmed
