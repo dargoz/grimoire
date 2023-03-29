@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:grimoire/features/wiki/data/mappers/remote_mappers.dart';
+import 'package:grimoire/features/wiki/data/sources/remote/gitlab/responses/file_response.dart';
 import 'package:grimoire/features/wiki/data/sources/remote/gitlab/responses/repository_tree_response.dart';
 import 'package:grimoire/features/wiki/domain/entities/branch_entity.dart';
 
@@ -11,17 +12,26 @@ import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart'
 import 'get_string.dart';
 
 class FakeWikiRepository extends WikiRepository {
+  FakeWikiRepository(
+      {this.fileResponse = 'file_response.json',
+        this.fileTreeResponse = 'repository_tree_list_response.json'});
+
+  final String fileResponse;
+  final String fileTreeResponse;
+
   @override
   Future<DocumentEntity> getDocument(String id, String filePath,
-      {String projectId = ''}) {
-    // TODO: implement getDocument
-    throw UnimplementedError();
+      {String projectId = '', String ref = ''}) async {
+    String apiResponseString = getString(fileResponse);
+    Map<String, dynamic> json = jsonDecode(apiResponseString);
+    var response = FileResponse.fromJson(json);
+    return response.toDocumentEntity();
   }
 
   @override
   Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage,
       {String projectId = '', String ref = ''}) async {
-    String apiResponseString = getString('repository_tree_list_response.json');
+    String apiResponseString = getString(fileTreeResponse);
     Iterable json = jsonDecode(apiResponseString);
     var result = List<RepositoryTreeResponse>.from(
         json.map((e) => RepositoryTreeResponse.fromJson(e)));

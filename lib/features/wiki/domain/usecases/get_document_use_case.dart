@@ -37,7 +37,16 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
 
       var contentCodeUnits = base64.decode(document.content);
       String decodedContent = utf8.decode(contentCodeUnits);
-      document.content = decodedContent;
+
+      //remove heading tab
+      RegExp exp = RegExp(r'---([\s\S]*?)---');
+      List<String> tabs = List.empty(growable: true);
+      Iterable<Match> matches = exp.allMatches(decodedContent);
+
+      for (Match match in matches) {
+        tabs.add(match.group(1) ?? '');
+      }
+      document.content = decodedContent.replaceFirstMapped(exp, (match) => "");
 
       document.sections = _parseDocumentSections(decodedContent);
       try {

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/repository_entity.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_file_tree_use_case.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_version_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/service_controller.dart';
@@ -33,9 +34,9 @@ class FileTreeController
 
   Future _fetchFileTree() async {
     state = await AsyncValue.guard(() async {
-      var result =
-          await _getFileTreeUseCase.executeUseCase(serviceController.repository);
-      var newState = result.map((e) => e?.toModel());
+      var result = await _getFileTreeUseCase.executeUseCase(RepositoryEntity(
+          projectId: serviceController.projectId, ref: 'DEV1'));
+      var newState = result.map((e) => e?.fileTree.toModel());
       return newState;
     });
   }

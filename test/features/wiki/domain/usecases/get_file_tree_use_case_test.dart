@@ -6,21 +6,23 @@ import 'package:grimoire/features/wiki/domain/usecases/get_file_tree_use_case.da
 import '../../../../data/fake_wiki_repository.dart';
 
 void main() {
+
   test('Get File Tree Use Case Test', () async {
     var useCase = GetFileTreeUseCase(FakeWikiRepository());
     var actualResult =
         await useCase.executeUseCase(RepositoryEntity(projectId: '', ref: ''));
     var expectedResult = List<FileTreeEntity>.empty(growable: true);
     addExpectedData(expectedResult);
-    expect(actualResult.data!.toString(), expectedResult.toString());
+    expect(actualResult.data!.fileTree.toString(), expectedResult.toString());
   });
 
   test('Count hidden children Test', () async {
     var useCase = GetFileTreeUseCase(FakeWikiRepository());
-    var actualResult = await useCase.executeUseCase(RepositoryEntity(projectId: '', ref: ''));
+    var actualResult =
+    await useCase.executeUseCase(RepositoryEntity(projectId: '', ref: ''));
     var expectedResult = List<FileTreeEntity>.empty(growable: true);
     addExpectedData(expectedResult);
-    expect(actualResult.data!.toString(), expectedResult.toString());
+    expect(actualResult.data!.hiddenFileTree.length, 4);
   });
 }
 
