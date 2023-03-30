@@ -39,23 +39,13 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
       String decodedContent = utf8.decode(contentCodeUnits);
 
       //remove heading tab
-      RegExp exp = RegExp(r'---([\s\S]*?)---');
-      List<String> tabs = List.empty(growable: true);
-      Iterable<Match> matches = exp.allMatches(decodedContent);
-
-      for (Match match in matches) {
-        tabs.add(match.group(1) ?? '');
-      }
-      document.content = decodedContent.replaceFirstMapped(exp, (match) => "");
+      _parseDocumentHeading(decodedContent, document);
 
       document.sections = _parseDocumentSections(decodedContent);
-      try {
-        await _searchRepository.addDocument(document);
-      } catch (e) {
-        Catcher.captureException(e);
-      }
+      // add to search engine
+      await indexDocument(document);
+      log('indexing done');
 
-      print('indexing done');
     } on DioError catch (e) {
       if (e.response?.statusCode == 404 &&
           (e.response?.data.toString().contains('File Not Found') ?? false)) {
@@ -67,6 +57,37 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
       }
     }
     return document;
+  }
+
+  Future<void> indexDocument(DocumentEntity document) async {
+    try {
+      await _searchRepository.addDocument(document);
+    } catch (e) {
+      Catcher.captureException(e);
+    }
+  }
+
+  void _parseDocumentHeading(String content, DocumentEntity document) {
+    RegExp exp = RegExp(r'---([\s\S]*?)---');
+    List<String> tabs = List.empty(growable: true);
+    Iterable<Match> matches = exp.allMatches(content);
+
+    for (Match match in matches) {
+      tabs.addAll(match.group(1)?.split('\n').toList() ?? []);
+      if (match.group(1)?.contains('page') ?? false) {
+        document.isMultiPage = true;
+        tabs.removeAt(0);
+      }
+      if (tabs.last.isEmpty) tabs.removeLast();
+
+    }
+    if (document.isMultiPage) {
+      document.tabs = tabs;
+      document.content = content.replaceFirstMapped(exp, (match) => "");
+    } else {
+      document.content = content;
+    }
+
   }
 
   List<SectionEntity> _parseDocumentSections(String? content) {
@@ -96,7 +117,7 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
         contentSha256: "content",
         blobId: "",
         commitId: "",
-        executeFilemode: false);
+        executeFileMode: false);
   }
 
   String _generateDefaultContent(FileTreeEntity params) {

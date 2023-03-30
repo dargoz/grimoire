@@ -15,7 +15,7 @@ extension FileMapper on FileObject {
         contentSha256: contentSha256,
         blobId: blobId,
         commitId: commitId,
-        executeFilemode: executeFilemode,
+        executeFileMode: executeFilemode,
         commitEntity: commitObject.toCommitEntity());
   }
 }

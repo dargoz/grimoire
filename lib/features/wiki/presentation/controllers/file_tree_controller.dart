@@ -9,16 +9,17 @@ import 'package:grimoire/features/wiki/domain/usecases/get_version_use_case.dart
 import 'package:grimoire/features/wiki/presentation/controllers/service_controller.dart';
 import 'package:grimoire/features/wiki/presentation/mappers/presentation_mappers.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/project_model.dart';
 import 'package:grimoire/injection.dart';
 
 import '../../../../core/models/resource.dart';
 
 final fileTreeStateNotifierProvider = StateNotifierProvider.autoDispose<
-        FileTreeController, AsyncValue<Resource<List<FileTreeModel>>>>(
-    (ref) => FileTreeController(ref));
+    FileTreeController,
+    AsyncValue<Resource<ProjectModel>>>((ref) => FileTreeController(ref));
 
 class FileTreeController
-    extends StateNotifier<AsyncValue<Resource<List<FileTreeModel>>>> {
+    extends StateNotifier<AsyncValue<Resource<ProjectModel>>> {
   FileTreeController(this.ref) : super(const AsyncValue.loading()) {
     serviceController = ref.read(serviceStateNotifierProvider.notifier);
     log('init file controller');
@@ -36,24 +37,22 @@ class FileTreeController
     state = await AsyncValue.guard(() async {
       var result = await _getFileTreeUseCase.executeUseCase(RepositoryEntity(
           projectId: serviceController.projectId, ref: 'DEV1'));
-      var newState = result.map((e) => e?.fileTree.toModel());
+      var newState = result.map((e) => e?.toModel());
       return newState;
     });
   }
 
   Future _loading() async {
     state = await AsyncValue.guard(() async {
-      var result = Resource<List<FileTreeEntity>?>.loading(
-          'fetch document data',
-          data: state.value?.data?.map((e) => e.toEntity()).toList());
-      return result
-          .map((data) => data?.map((e) => e.toFileTreeModel()).toList());
+      var result = Resource<ProjectEntity>.loading('fetch document data',
+          data: state.value?.data?.toEntity());
+      return result.map((data) => data?.toModel());
     });
   }
 
   FileTreeModel? findReference(FileTreeModel content) {
-    return state.value?.data
-        ?.findNodeByPath(models: state.value!.data!, path: content.path);
+    return state.value?.data?.fileTree.findNodeByPath(
+        models: state.value!.data!.fileTree, path: content.path);
   }
 
   void refresh() {

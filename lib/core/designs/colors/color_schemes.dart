@@ -16,5 +16,6 @@ class ColorSchemes {
   static const Color dangerLighten = Color(0xFFffebec);
   static const Color dangerDarken = Color(0xFF4b1113);
   static const Color bluePrimary = Color(0xFF005CAA);
+  static const Color blue10 = Color(0xFFE6F3FF);
 
 }

@@ -100,7 +100,7 @@ void main() {
 
   test('parse heading', () {
     var testData = '# data 1\n'
-        '---tabs\n'
+        '---page\n'
         'overview\n'
         'spec\n'
         'usage\n'

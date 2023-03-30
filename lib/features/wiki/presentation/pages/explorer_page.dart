@@ -181,7 +181,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                         }
                         return Expanded(
                             child: FileTreeWidget(
-                          fileTreeModels: model.data ?? [],
+                          fileTreeModels: model.data?.fileTree ?? [],
                           onTap: (fileTreeModel) {
                             var path =
                                 fileTreeModel.path.replaceAll('/', '%2F');

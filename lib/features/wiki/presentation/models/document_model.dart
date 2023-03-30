@@ -12,7 +12,9 @@ class DocumentModel {
       required this.content,
       required this.contentSha256,
       required this.commitId,
-      required this.executeFilemode});
+      required this.executeFileMode,
+      this.isMultiPage = false,
+      this.tabs = const []});
 
   VersionModel? versionModel;
   List<Section> sections;
@@ -23,5 +25,7 @@ class DocumentModel {
   String content;
   String contentSha256;
   String commitId;
-  bool executeFilemode;
+  bool executeFileMode;
+  bool isMultiPage = false;
+  List<String> tabs;
 }

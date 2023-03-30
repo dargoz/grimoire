@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:grimoire/features/wiki/domain/entities/commit_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/file_tree_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/highlight_entity.dart';
+import 'package:grimoire/features/wiki/domain/entities/project_entity.dart';
 import 'package:grimoire/features/wiki/domain/entities/section_entity.dart';
 import 'package:grimoire/features/wiki/presentation/models/document_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/marker_model.dart';
+import 'package:grimoire/features/wiki/presentation/models/project_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/search_model.dart';
 import 'package:grimoire/features/wiki/presentation/models/version_model.dart';
 
@@ -56,7 +58,9 @@ extension DocumentEntityMapper on DocumentEntity {
         content: content,
         contentSha256: contentSha256,
         commitId: commitId,
-        executeFilemode: executeFilemode);
+        executeFileMode: executeFileMode,
+        isMultiPage: isMultiPage,
+        tabs: tabs);
   }
 }
 
@@ -75,7 +79,7 @@ extension DocumentModelMapper on DocumentModel {
         contentSha256: contentSha256,
         blobId: blobId,
         commitId: commitId,
-        executeFilemode: executeFilemode);
+        executeFileMode: executeFileMode);
   }
 }
 
@@ -146,5 +150,25 @@ extension SearchModelMapper on SearchResultEntity {
         document: documentEntity?.toDocumentModel(),
         marker: highlights?.map((e) => e.toMarkerModel()).toList() ?? [],
         textMatch: textMatch);
+  }
+}
+
+extension ProjectEntityMapper on ProjectEntity {
+  ProjectModel toModel() {
+    return ProjectModel(
+        projectId: projectId,
+        ref: ref,
+        fileTree: fileTree.toModel(),
+        hiddenFileTree: hiddenFileTree.toModel());
+  }
+}
+
+extension ProjectModelMapper on ProjectModel {
+  ProjectEntity toEntity() {
+    return ProjectEntity(
+        projectId: projectId,
+        ref: ref,
+        fileTree: fileTree.map((e) => e.toEntity()).toList(),
+        hiddenFileTree: hiddenFileTree.map((e) => e.toEntity()).toList());
   }
 }

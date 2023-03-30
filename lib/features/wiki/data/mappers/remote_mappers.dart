@@ -25,7 +25,7 @@ extension DocumentMapper on FileResponse {
         contentSha256: contentSha256,
         blobId: blobId,
         commitId: lastCommitId,
-        executeFilemode: executeFilemode ?? false);
+        executeFileMode: executeFilemode ?? false);
   }
 }
 
@@ -97,7 +97,7 @@ extension AddDocumentMapper on DocumentEntity {
         commitId: commitId,
         authorName: commitEntity?.authorName ?? '',
         committedDate: commitEntity?.committedDate ?? '',
-        executeFilemode: executeFilemode);
+        executeFilemode: executeFileMode);
   }
 }
 
@@ -111,7 +111,7 @@ extension DocumentRequestMapper on AddDocumentRequest {
         contentSha256: contentSha256,
         blobId: id,
         commitId: commitId,
-        executeFilemode: executeFilemode);
+        executeFileMode: executeFilemode);
   }
 }
 

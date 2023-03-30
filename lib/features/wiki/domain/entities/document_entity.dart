@@ -12,7 +12,7 @@ class DocumentEntity {
       required this.contentSha256,
       required this.blobId,
       required this.commitId,
-      required this.executeFilemode});
+      required this.executeFileMode});
 
   CommitEntity? commitEntity;
   List<SectionEntity>? sections;
@@ -23,18 +23,24 @@ class DocumentEntity {
   String contentSha256;
   String blobId;
   String commitId;
-  bool executeFilemode;
+  bool executeFileMode;
+  bool isMultiPage = false;
+  List<String> tabs = List.empty(growable: true);
 
   @override
   String toString() {
     return 'DocumentEntity{'
         'commitEntity: $commitEntity, '
+        'sections: $sections, '
         'fileName: $fileName, '
         'filePath: $filePath, '
-        'size: $size, content: $content, '
+        'size: $size, '
+        'content: $content, '
         'contentSha256: $contentSha256, '
         'blobId: $blobId, '
         'commitId: $commitId, '
-        'executeFilemode: $executeFilemode}';
+        'executeFileMode: $executeFileMode, '
+        'isMultiPage: $isMultiPage, '
+        'tabs: $tabs}';
   }
 }

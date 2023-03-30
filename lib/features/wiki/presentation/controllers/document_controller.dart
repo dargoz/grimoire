@@ -33,8 +33,8 @@ class DocumentController
 
   DocumentController(this.ref) : super(const AsyncValue.loading()) {
     var fileTreeData = ref.read(fileTreeStateNotifierProvider);
-    var model = fileTreeData.value?.data?.findNodeByPath(
-        path: 'README.md', models: fileTreeData.value?.data ?? []);
+    var model = fileTreeData.value?.data?.fileTree.findNodeByPath(
+        path: 'README.md', models: fileTreeData.value?.data?.fileTree ?? []);
     print('document controller model $model');
     if (model != null) {
       log('model not null in document controller init state');
@@ -84,8 +84,8 @@ class DocumentController
   Future getDocumentFromPath(String path) async {
     var fileTreeData = ref.read(fileTreeStateNotifierProvider);
     log('try to find path : $path');
-    var model = fileTreeData.value?.data
-        ?.findNodeByPath(path: path, models: fileTreeData.value?.data ?? []);
+    var model = fileTreeData.value?.data?.fileTree.findNodeByPath(
+        path: path, models: fileTreeData.value?.data?.fileTree ?? []);
     print('document controller model $model');
     if (model != null && fileTreeData.value?.status != Status.loading) {
       _loading();
@@ -96,6 +96,23 @@ class DocumentController
     } else {
       _error('no data');
     }
+  }
+
+  Future<Resource<DocumentModel>> getSubDocument(String identifier) async {
+    var fileTreeData = ref.read(fileTreeStateNotifierProvider);
+    var currentFilePath = state.value?.data?.filePath;
+    var requestedFilePath = currentFilePath?.split('.').join('.$identifier.');
+    print('requested file path : $requestedFilePath');
+    var model = fileTreeData.value?.data?.hiddenFileTree.findNodeByPath(
+        models: fileTreeData.value?.data?.hiddenFileTree ?? [],
+        path: requestedFilePath ?? '');
+    if (model != null) {
+      print('model $model');
+      var result = await _getDocumentUseCase.executeUseCase(model.toEntity());
+      clear();
+      return result.map((e) => e?.toDocumentModel());
+    }
+    return const Resource.error("no data");
   }
 
   void clear() {

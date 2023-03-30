@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grimoire/features/wiki/presentation/models/project_model.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/document_widget.dart';
 
 import '../../../../core/models/resource.dart';
 import '../controllers/document_controller.dart';
 import '../controllers/file_tree_controller.dart';
-import '../models/file_tree_model.dart';
 
 
 class DocumentPage extends ConsumerStatefulWidget {
@@ -42,7 +42,7 @@ class DocumentPageState extends ConsumerState<DocumentPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<Resource<List<FileTreeModel>>>>(
+    ref.listen<AsyncValue<Resource<ProjectModel>>>(
         fileTreeStateNotifierProvider, (previous, next) {
       if (next.value?.status == Status.completed) {
         var path = widget.filePath.replaceAll('%2F', '/');
