@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grimoire/core/utils/extensions.dart';
 
 import '../../../../core/models/resource.dart';
 import '../controllers/document_controller.dart';
