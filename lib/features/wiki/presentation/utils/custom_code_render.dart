@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_highlighter/flutter_highlighter.dart';
 import 'package:flutter_highlighter/themes/atom-one-light.dart';
-import 'package:flutter_html/html_parser.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grimoire/core/designs/colors/color_schemes.dart';
 
@@ -10,11 +10,9 @@ class CustomCodeRender extends StatefulWidget {
   const CustomCodeRender(
       {super.key,
       required this.renderContext,
-      required this.widget,
       this.showBorder = true});
 
-  final RenderContext renderContext;
-  final Widget widget;
+  final ExtensionContext renderContext;
   final bool showBorder;
 
   @override
@@ -27,12 +25,12 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
   @override
   Widget build(BuildContext context) {
     var language = '';
-    if (widget.renderContext.tree.element?.attributes['class'] != null) {
+    if (widget.renderContext.attributes['class'] != null) {
       String lg =
-          widget.renderContext.tree.element?.attributes['class'] as String;
+          widget.renderContext.attributes['class'] as String;
       language = lg.substring(9);
     }
-    var codeText = widget.renderContext.tree.element!.text;
+    var codeText = widget.renderContext.element!.text;
     if (language.isEmpty) {
       codeText = codeText
           .split('\n')

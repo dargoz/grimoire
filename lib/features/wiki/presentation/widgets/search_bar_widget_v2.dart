@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+
 import 'package:grimoire/features/wiki/presentation/widgets/key_caps_widget.dart';
 
 class SearchBarWidgetV2 extends StatefulWidget {

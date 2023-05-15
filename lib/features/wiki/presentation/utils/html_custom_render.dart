@@ -1,30 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_highlighter/flutter_highlighter.dart';
-import 'package:flutter_highlighter/themes/atom-one-dark.dart';
-import 'package:flutter_highlighter/themes/atom-one-light.dart';
 import 'package:flutter_html/flutter_html.dart';
-
-import 'package:google_fonts/google_fonts.dart';
-import 'package:grimoire/core/designs/colors/color_schemes.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 int globalSectionIndex = 0;
 
-Widget customHeaderRender(RenderContext renderContext, Widget widget,
+Widget customHeaderRender(ExtensionContext renderContext,
     {required void Function(String label, GlobalKey key) onRender,
     required AutoScrollController controller}) {
   var id = '';
-  if (renderContext.tree.element?.attributes['id'] != null) {
-    String lg = renderContext.tree.element?.attributes['id'] as String;
+  if (renderContext.attributes['id'] != null) {
+    String lg = renderContext.attributes['id'] as String;
     id = lg;
   }
   var globalKey = GlobalKey(debugLabel: id);
   double fontSize = 24;
   var fontWeight = FontWeight.normal;
-  switch (renderContext.tree.name) {
+  switch (renderContext.elementName) {
     case 'h1':
-      fontSize = 48;
+      fontSize = 40;
       fontWeight = FontWeight.bold;
       break;
     case 'h2':
@@ -48,7 +42,7 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
     print('---------------------------------------------------');
     onRender(id, globalKey);
     print(
-        "widget : ${widget.toString()} :: $globalKey :: globalIndex $globalSectionIndex");
+        "widget : ${renderContext.element.toString()} :: $globalKey :: globalIndex $globalSectionIndex");
   }
 
   var renderWidget = AutoScrollTag(
@@ -56,18 +50,19 @@ Widget customHeaderRender(RenderContext renderContext, Widget widget,
     controller: controller,
     index: globalSectionIndex++,
     child: Text(
-      renderContext.tree.element?.text ?? 'error_parsing',
+      renderContext.element?.text ?? 'error_parsing',
       key: globalKey,
       style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
     ),
   );
 
-  if (renderContext.tree.name == 'h1') {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [renderWidget, const Divider()],
-    );
-  } else {
-    return renderWidget;
-  }
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      renderWidget,
+      Divider(
+        color: (renderContext.elementName == 'h1') ? null : Colors.transparent,
+      )
+    ],
+  );
 }

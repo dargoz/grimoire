@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/html_parser.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 Widget imageRender(
-    {required RenderContext renderContext,
-    required Widget widget,
+    {required ExtensionContext renderContext,
     required Future<Widget>? Function(String?) imageProvider}) {
   var img = '';
-  if (renderContext.tree.element?.attributes['src'] != null) {
-    img = renderContext.tree.element?.attributes['src'] as String;
+  if (renderContext.attributes['src'] != null) {
+    img = renderContext.attributes['src'] as String;
   }
   print('image content $img');
   return FutureBuilder<Widget>(

@@ -158,9 +158,10 @@ class DocumentWidget extends ConsumerWidget {
                       ? fileTreeController.findReference(content) ?? content
                       : content);
                 },
-                onAnchorTap: (text, renderContext, map, element) {
-                  print('anchor tap : $text');
-                  documentController.redirect(text ?? '', map['href'],
+
+                onAnchorTap: (url, attributes, element) {
+                  print('anchor tap : $url');
+                  documentController.redirect(url ?? '', attributes['href'],
                       fileTreeState.value!.data!.fileTree);
                 },
                 imageProvider: (imageSource) {
