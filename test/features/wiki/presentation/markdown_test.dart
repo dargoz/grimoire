@@ -4,6 +4,8 @@ import 'package:grimoire/features/wiki/presentation/utils/code_preview_syntax.da
 import 'package:grimoire/features/wiki/presentation/utils/reference_syntax.dart';
 import 'package:markdown/markdown.dart';
 
+import '../../../data/get_string.dart';
+
 void main() {
   test('markdown admonition', () async {
     var markdown = '# Introduction Content - Beginning\n'
@@ -114,5 +116,13 @@ void main() {
           colors: CheckboxColors = CheckboxDefaults.colors(),
           interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
       ): Unit\n      ```\n</code-preview></pre>\n''');
+  });
+
+
+  test('markdown list test', () async {
+    var markdown = getString('sample_markdown.md');
+    var result = markdownToHtml(markdown,
+        blockSyntaxes: const [HeaderWithIdSyntax(), TableSyntax()]);
+    print('result : $result');
   });
 }
