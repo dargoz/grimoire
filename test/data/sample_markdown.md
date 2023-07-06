@@ -74,3 +74,39 @@ This section is focused on styling through stylesheets. For more advanced custom
 
 3. asdas
 4. sample number 4
+
+
+# test HTML
+
+<style>
+.row{
+    background-color: #E9ECEF;
+    overflow: hidden;
+}
+.img_col{
+    float: left;
+    width: 50%;
+    position: relative;
+}
+.txt_col{
+    color: #495057;
+    margin-left: 10px; 
+    float: left;
+}
+</style>
+
+<div class=row>
+    <div class=img_col>
+        <img src=".assets/1-1377908956.png">
+    </div>
+    <p class=txt_col>
+    1. Primary10<br>
+    2. 8px<br>
+    3. Black30<br>
+    4. Black10<br>
+    5. Black20<br>
+    6. 8px<br>
+    7. Black10<br>
+    </p>
+</div>
+<br>
