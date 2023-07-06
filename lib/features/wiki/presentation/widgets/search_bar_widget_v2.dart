@@ -127,7 +127,7 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
                   color: Colors.grey,
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   height: 48,
                   decoration: const BoxDecoration(
                     color: Colors.white,

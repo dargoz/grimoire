@@ -165,7 +165,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
 
   Widget buildContent(BuildContext context) {
     final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+        MediaQuery.orientationOf(context) == Orientation.portrait;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,8 +204,8 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
 
   Widget panelContainer(BuildContext context, {required Widget childWidget}) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.2,
-      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.sizeOf(context).width * 0.2,
+      height: MediaQuery.sizeOf(context).height,
       padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
       decoration: const BoxDecoration(
         border: Border(

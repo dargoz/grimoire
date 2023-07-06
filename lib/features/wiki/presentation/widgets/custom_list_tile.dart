@@ -12,7 +12,7 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.sizeOf(context).width,
       margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
       child: TextButton(
         onPressed: onTap,

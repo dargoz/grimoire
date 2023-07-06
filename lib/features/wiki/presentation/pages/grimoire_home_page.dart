@@ -24,7 +24,7 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
   Widget build(BuildContext context) {
     var state = ref.read(serviceStateNotifierProvider.notifier);
     final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+        MediaQuery.orientationOf(context) == Orientation.portrait;
     ref.listen<Resource<dynamic>>(serviceStateNotifierProvider,
         (previous, next) async {
       // if (previous?.status == Status.completed) return;

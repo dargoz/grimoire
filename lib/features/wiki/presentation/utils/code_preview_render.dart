@@ -32,7 +32,7 @@ Widget codePreviewRender(ExtensionContext renderContext) {
     }
   }
   return SizedBox(
-    width: MediaQuery.of(renderContext.buildContext!).size.width,
+    width: MediaQuery.sizeOf(renderContext.buildContext!).width,
     height: maxLength * 24,
     child: CodePreview(
       tabs: langList,

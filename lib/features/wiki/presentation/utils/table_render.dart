@@ -12,7 +12,7 @@ Widget tableRender(
   var contents = renderContext.elementChildren;
   List<TableRow> tableColumn = List.empty(growable: true);
   List<TableRow> tableRows = List.empty(growable: true);
-  var documentWidth = (MediaQuery.of(context).size.width * 0.6) - 32;
+  var documentWidth = (MediaQuery.sizeOf(context).width * 0.6) - 32;
   for (var content in contents) {
     log('element child : ${content.localName}');
     log('element child has children : ${content.children.length}');

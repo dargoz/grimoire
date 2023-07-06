@@ -31,18 +31,18 @@ class DocumentWidget extends ConsumerWidget {
           switch (model.status) {
             case Status.loading:
               return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.sizeOf(context).height * 0.5,
                 child: const LoadingWidget(),
               );
             case Status.initial:
             case Status.completed:
               final isPortrait =
-                  MediaQuery.of(context).orientation == Orientation.portrait;
+                  MediaQuery.orientationOf(context) == Orientation.portrait;
               return Row(
                 children: [
                   Flexible(
                       child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
+                    height: MediaQuery.sizeOf(context).height,
                     child: () {
                       if (model.data?.isMultiPage ?? false) {
                         return DocumentTabWidget(
@@ -90,7 +90,7 @@ class DocumentWidget extends ConsumerWidget {
             case Status.error:
               print('response : error :');
               return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.sizeOf(context).height * 0.5,
                 child: ResourceErrorWidget(
                     errorCode: model.errorCode, errorMessage: model.message),
               );
@@ -98,12 +98,12 @@ class DocumentWidget extends ConsumerWidget {
         },
         error: (object, stackTrace) {
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
+            height: MediaQuery.sizeOf(context).height * 0.5,
             child: const ResourceErrorWidget(),
           );
         },
         loading: () => SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.sizeOf(context).height * 0.5,
               child: const LoadingWidget(),
             ));
   }
