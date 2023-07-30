@@ -36,7 +36,7 @@ final GoRouter appRouter = GoRouter(
                       pageBuilder: (context, state) {
                         return NoTransitionPage(
                             child: DocumentPage(
-                          filePath: state.params['filePath']!,
+                          filePath: state.pathParameters['filePath']!,
                         ));
                       })
                 ])
