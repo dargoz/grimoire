@@ -2,7 +2,9 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:grimoire/core/designs/colors/color_schemes.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/search_controller.dart' as sc;
+import 'package:grimoire/features/wiki/presentation/controllers/service_controller.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -16,9 +18,14 @@ import '../widgets/file_tree_loading_widget.dart';
 import '../widgets/search_bar_widget_v2.dart';
 
 class ExplorerPage extends ConsumerStatefulWidget {
-  const ExplorerPage({Key? key, required this.child}) : super(key: key);
+  const ExplorerPage({
+    Key? key,
+    required this.child,
+    required this.projectId,
+  }) : super(key: key);
 
   final Widget child;
+  final String projectId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ExplorerPageState();
@@ -32,6 +39,8 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
   @override
   void initState() {
     print('init state explorer');
+    ref.read(serviceStateNotifierProvider.notifier).repository.projectId =
+        widget.projectId;
     _keyboardController = ref.read(keyboardStateNotifierProvider.notifier);
     _searchController = ref.read(sc.searchStateNotifierProvider.notifier);
     _fileController = ref.read(fileTreeStateNotifierProvider.notifier);
@@ -101,6 +110,15 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                                       Radius.circular(16)),
                                   borderSide:
                                   BorderSide.none))),
+                      onChanged: (value) {
+                        if (value != null) {
+                          ref
+                              .read(serviceStateNotifierProvider.notifier)
+                              .repository
+                              .ref = value;
+                          _fileController.refresh();
+                        }
+                      },
                     ),
                   ),
                   AppBarSearchWidget(
@@ -153,7 +171,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                                 searchModel: searchState.data![index],
                                 onTap: () {
                                   _keyboardController.hideSearchBar();
-                                  context.go('/document/${_searchController.getPath(index)}');
+                                  context.go('/document/${widget.projectId}/${_searchController.getPath(index)}');
                                 }),
                       ],
                     );
@@ -185,7 +203,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                           onTap: (fileTreeModel) {
                             var path =
                                 fileTreeModel.path.replaceAll('/', '%2F');
-                            context.go("/document/$path");
+                            context.go("/document/${widget.projectId}/$path");
                           },
                         ));
                       },
@@ -211,6 +229,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
         border: Border(
           right: BorderSide(width: 1.0, color: Colors.grey),
         ),
+        color: ColorSchemes.secondaryBlueDarker,
       ),
       constraints: const BoxConstraints(minWidth: 100, minHeight: 100),
       child: childWidget,
