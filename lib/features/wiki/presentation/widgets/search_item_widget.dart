@@ -34,12 +34,12 @@ class _SearchItemState extends State<SearchItemWidget> {
         child: Column(
           children: [
             Container(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.sizeOf(context).width,
               padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
               child: Text(widget.searchModel.document?.fileName ?? 'unknown'),
             ),
             Container(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.sizeOf(context).width,
               padding: const EdgeInsets.fromLTRB(8, 16, 4, 16),
               decoration: BoxDecoration(
                   color: _isHover

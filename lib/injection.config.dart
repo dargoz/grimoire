@@ -4,43 +4,31 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: lines_longer_than_80_chars
+// coverage:ignore-file
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i1;
-import 'package:grimoire/features/wiki/data/repositories/search_repository_impl.dart'
-    as _i10;
-import 'package:grimoire/features/wiki/data/repositories/wiki_repository_impl.dart'
-    as _i15;
-import 'package:grimoire/features/wiki/data/sources/local/local_data_source.dart'
-    as _i3;
-import 'package:grimoire/features/wiki/data/sources/local/local_data_source_impl.dart'
-    as _i4;
-import 'package:grimoire/features/wiki/data/sources/remote/remote_data_source.dart'
-    as _i11;
-import 'package:grimoire/features/wiki/data/sources/remote/remote_data_source_impl.dart'
-    as _i12;
-import 'package:grimoire/features/wiki/data/sources/remote/rest_client.dart'
-    as _i5;
-import 'package:grimoire/features/wiki/data/sources/remote/rest_client_impl.dart'
-    as _i6;
-import 'package:grimoire/features/wiki/data/sources/remote/search_data_source.dart'
-    as _i7;
-import 'package:grimoire/features/wiki/data/sources/remote/search_data_source_impl.dart'
-    as _i8;
-import 'package:grimoire/features/wiki/domain/repositories/search_repository.dart'
-    as _i9;
-import 'package:grimoire/features/wiki/domain/repositories/wiki_repository.dart'
-    as _i14;
-import 'package:grimoire/features/wiki/domain/usecases/get_document_use_case.dart'
-    as _i16;
-import 'package:grimoire/features/wiki/domain/usecases/get_file_tree_use_case.dart'
-    as _i17;
-import 'package:grimoire/features/wiki/domain/usecases/get_image_use_case.dart'
-    as _i18;
-import 'package:grimoire/features/wiki/domain/usecases/get_version_use_case.dart'
-    as _i19;
-import 'package:grimoire/features/wiki/domain/usecases/search_document_use_case.dart'
-    as _i13;
 import 'package:injectable/injectable.dart' as _i2;
+
+import 'features/wiki/data/repositories/search_repository_impl.dart' as _i10;
+import 'features/wiki/data/repositories/wiki_repository_impl.dart' as _i15;
+import 'features/wiki/data/sources/local/local_data_source.dart' as _i3;
+import 'features/wiki/data/sources/local/local_data_source_impl.dart' as _i4;
+import 'features/wiki/data/sources/remote/remote_data_source.dart' as _i11;
+import 'features/wiki/data/sources/remote/remote_data_source_impl.dart' as _i12;
+import 'features/wiki/data/sources/remote/rest_client.dart' as _i5;
+import 'features/wiki/data/sources/remote/rest_client_impl.dart' as _i6;
+import 'features/wiki/data/sources/remote/search_data_source.dart' as _i7;
+import 'features/wiki/data/sources/remote/search_data_source_impl.dart' as _i8;
+import 'features/wiki/domain/repositories/search_repository.dart' as _i9;
+import 'features/wiki/domain/repositories/wiki_repository.dart' as _i14;
+import 'features/wiki/domain/usecases/get_document_use_case.dart' as _i16;
+import 'features/wiki/domain/usecases/get_file_tree_use_case.dart' as _i17;
+import 'features/wiki/domain/usecases/get_image_use_case.dart' as _i18;
+import 'features/wiki/domain/usecases/get_version_use_case.dart' as _i19;
+import 'features/wiki/domain/usecases/search_document_use_case.dart' as _i13;
 
 // ignore_for_file: unnecessary_lambdas
 // ignore_for_file: lines_longer_than_80_chars

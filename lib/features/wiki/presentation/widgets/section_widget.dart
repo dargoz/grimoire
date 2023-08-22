@@ -11,7 +11,7 @@ class SectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.2,
+      width: MediaQuery.sizeOf(context).width * 0.2,
       padding: const EdgeInsets.fromLTRB(8, 24, 8, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

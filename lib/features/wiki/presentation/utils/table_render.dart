@@ -3,23 +3,23 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as d;
 
 Widget tableRender(
-    {required RenderContext renderContext,
-    required Widget widget,
+    {required ExtensionContext renderContext,
     required BuildContext context,
     required Future<Widget>? Function(String?) imageProvider}) {
-  var contents = renderContext.tree.children;
+  var contents = renderContext.elementChildren;
   List<TableRow> tableColumn = List.empty(growable: true);
   List<TableRow> tableRows = List.empty(growable: true);
-  var documentWidth = (MediaQuery.of(context).size.width * 0.6) - 32;
+  var documentWidth = (MediaQuery.sizeOf(context).width * 0.6) - 32;
   for (var content in contents) {
-    log('element child : ${content.name}');
+    log('element child : ${content.localName}');
     log('element child has children : ${content.children.length}');
 
     for (var tableContent in content.children) {
       var tr = tableContent.children;
-      if (content.name == 'thead') {
+      if (content.localName == 'thead') {
         var cellWidth = documentWidth / tr.length;
         tableColumn.add(TableRow(
             decoration: const BoxDecoration(
@@ -33,7 +33,7 @@ Widget tableRender(
                       child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Text(
-                          th.element?.text ?? '',
+                          th.text ?? '',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 16,
@@ -43,7 +43,7 @@ Widget tableRender(
                       )),
                 )
                 .toList()));
-      } else if (content.name == 'tbody') {
+      } else if (content.localName == 'tbody') {
         var cellWidth = documentWidth / tr.length;
         tableRows.add(TableRow(
             children: tr
@@ -68,21 +68,21 @@ Widget tableRender(
         ),
       );
   } catch (e) {
-    return widget;
+    return renderContext.buildContext!.widget;
   }
 }
 
-Widget _innerWidget(StyledElement styledElement,
+Widget _innerWidget(d.Element styledElement,
     Future<Widget>? Function(String?) imageProvider) {
   if (kDebugMode) {
     log('*~*~*~*~*~*~*~**~*~*');
-    log('element : ${styledElement.element?.text}');
+    log('element : ${styledElement.text}');
     log('inner children : ${styledElement.children.toList()}');
     log('*~*~*~*~*~*~*~**~*~*');
   }
 
   if (styledElement.children.isNotEmpty &&
-      styledElement.children[0].name == 'img') {
+      styledElement.children[0].localName == 'img') {
     return FutureBuilder<Widget>(
         future: imageProvider(styledElement.children[0].attributes['src']),
         initialData: const Icon(Icons.broken_image),
@@ -92,6 +92,6 @@ Widget _innerWidget(StyledElement styledElement,
   return _renderElement(styledElement);
 }
 
-Widget _renderElement(StyledElement element) {
-  return Html(data: element.element?.innerHtml);
+Widget _renderElement(d.Element element) {
+  return Html(data: element.innerHtml);
 }

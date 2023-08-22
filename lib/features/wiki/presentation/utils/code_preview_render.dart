@@ -7,16 +7,16 @@ import 'package:markdown/markdown.dart';
 
 import '../../../../core/designs/colors/color_schemes.dart';
 
-Widget codePreviewRender(RenderContext renderContext, Widget widget) {
+Widget codePreviewRender(ExtensionContext renderContext) {
   log('code preview render');
   List<String> langList = List.empty(growable: true);
-  if (renderContext.tree.element?.attributes['class'] != null) {
-    String lg = renderContext.tree.element?.attributes['class'] as String;
+  if (renderContext.attributes['class'] != null) {
+    String lg = renderContext.attributes['class'] as String;
     langList = lg.split('-');
   }
 
-  print('render element ${renderContext.tree.element?.text}');
-  var contents = renderContext.tree.element?.text.split('\n');
+  print('render element ${renderContext.element?.text}');
+  var contents = renderContext.element?.text.split('\n');
   if (contents?[contents.length - 1].trim().isEmpty ?? false) {
     contents?.removeAt(contents.length - 1);
   }
@@ -32,7 +32,7 @@ Widget codePreviewRender(RenderContext renderContext, Widget widget) {
     }
   }
   return SizedBox(
-    width: MediaQuery.of(renderContext.buildContext).size.width,
+    width: MediaQuery.sizeOf(renderContext.buildContext!).width,
     height: maxLength * 24,
     child: CodePreview(
       tabs: langList,
@@ -120,13 +120,14 @@ class CodePreviewState extends State<CodePreview>
                     child: Html(
                       data: markdownToHtml(
                           widget.codeBlocks[_tabController.index]),
-                      customRender: {
-                        'code': (renderContext, tagWidget) => CustomCodeRender(
-                              renderContext: renderContext,
-                              widget: tagWidget,
-                              showBorder: false,
-                            ),
-                      },
+                      extensions: [
+                        TagExtension(
+                          tagsToExtend: {"code"},
+                          builder: (extensionContext) {
+                            return CustomCodeRender(renderContext: extensionContext, showBorder: false,);
+                          },
+                        ),
+                      ],
                     ),
                   ))
                 ],

@@ -2,7 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:grimoire/features/wiki/presentation/controllers/search_controller.dart';
+import 'package:grimoire/features/wiki/presentation/controllers/search_controller.dart' as sc;
 import 'package:grimoire/features/wiki/presentation/widgets/file_tree_widget.dart';
 import 'package:grimoire/features/wiki/presentation/widgets/search_item_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -26,14 +26,14 @@ class ExplorerPage extends ConsumerStatefulWidget {
 
 class _ExplorerPageState extends ConsumerState<ExplorerPage> {
   late final KeyboardController _keyboardController;
-  late final SearchController _searchController;
+  late final sc.SearchController _searchController;
   late final FileTreeController _fileController;
 
   @override
   void initState() {
     print('init state explorer');
     _keyboardController = ref.read(keyboardStateNotifierProvider.notifier);
-    _searchController = ref.read(searchStateNotifierProvider.notifier);
+    _searchController = ref.read(sc.searchStateNotifierProvider.notifier);
     _fileController = ref.read(fileTreeStateNotifierProvider.notifier);
     super.initState();
   }
@@ -135,7 +135,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
                 children: [
                   buildContent(context),
                   Consumer(builder: (context, ref, child) {
-                    var searchState = ref.watch(searchStateNotifierProvider);
+                    var searchState = ref.watch(sc.searchStateNotifierProvider);
                     return SearchBarWidgetV2(
                       controller: _keyboardController.searchBarController,
                       onFocusChanged: (isFocus) {
@@ -165,7 +165,7 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
 
   Widget buildContent(BuildContext context) {
     final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+        MediaQuery.orientationOf(context) == Orientation.portrait;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,8 +204,8 @@ class _ExplorerPageState extends ConsumerState<ExplorerPage> {
 
   Widget panelContainer(BuildContext context, {required Widget childWidget}) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.2,
-      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.sizeOf(context).width * 0.2,
+      height: MediaQuery.sizeOf(context).height,
       padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
       decoration: const BoxDecoration(
         border: Border(

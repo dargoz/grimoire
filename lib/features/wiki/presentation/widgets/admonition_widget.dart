@@ -27,7 +27,7 @@ class AdmonitionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.sizeOf(context).width,
       decoration: BoxDecoration(
         color: strokeColor ?? _defaultStrokeColor(),
         borderRadius: const BorderRadius.all(Radius.circular(6)),

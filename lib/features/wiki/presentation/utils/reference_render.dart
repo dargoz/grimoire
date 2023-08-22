@@ -1,20 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/html_parser.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:grimoire/features/wiki/presentation/utils/reference_widget.dart';
 
 import '../models/file_tree_model.dart';
 
-Widget referenceRender(RenderContext renderContext, Widget widget,
+Widget referenceRender(ExtensionContext renderContext,
     {void Function(FileTreeModel)? onTap}) {
   var ref = '';
-  if (renderContext.tree.element?.attributes['class'] != null) {
-    String type = renderContext.tree.element?.attributes['class'] as String;
+  if (renderContext.attributes['class'] != null) {
+    String type = renderContext.attributes['class'] as String;
     ref = type.substring(6);
   }
 
-  var contents = renderContext.tree.element?.text.split('\n');
+  var contents = renderContext.element?.text.split('\n');
   if (contents?[contents.length - 1].trim().isEmpty ?? false) {
     contents?.removeAt(contents.length - 1);
   }

@@ -12,7 +12,7 @@ class ReferenceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.sizeOf(context).width,
       child: Wrap(
           spacing: 16,
           runSpacing: 16,
@@ -21,7 +21,7 @@ class ReferenceWidget extends StatelessWidget {
           children: [
             for (var content in contents ?? <FileTreeModel>[])
               Container(
-                width: MediaQuery.of(context).size.width * 0.25,
+                width: MediaQuery.sizeOf(context).width * 0.25,
                 constraints: const BoxConstraints(minWidth: 300),
                 child: TextButton(
                     onPressed: () =>

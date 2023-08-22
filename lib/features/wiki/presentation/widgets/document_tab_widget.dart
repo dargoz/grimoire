@@ -73,7 +73,7 @@ class DocumentTabState extends ConsumerState<DocumentTabWidget>
                       tabs: widget.tabs
                           .map(
                             (e) => SizedBox(
-                          width: MediaQuery.of(context).size.width *
+                          width: MediaQuery.sizeOf(context).width *
                               0.5 /
                               widget.tabs.length,
                           child: Tab(

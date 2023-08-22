@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+
 import 'package:grimoire/features/wiki/presentation/widgets/key_caps_widget.dart';
 
 class SearchBarWidgetV2 extends StatefulWidget {
@@ -126,7 +127,7 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
                   color: Colors.grey,
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   height: 48,
                   decoration: const BoxDecoration(
                     color: Colors.white,

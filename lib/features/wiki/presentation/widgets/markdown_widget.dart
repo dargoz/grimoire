@@ -28,51 +28,58 @@ Widget markdownWidget(
     OnTap? onAnchorTap}) {
   return SelectionArea(
     child: Html(
-      tagsList: Html.tags
-        ..add('admonition')
-        ..add('reference')
-        ..add('code-preview'),
-      customRender: {
-        'code': (renderContext, widget) =>
-            CustomCodeRender(renderContext: renderContext, widget: widget),
-        'h1': (renderContext, widget) => customHeaderRender(
-            renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '1'),
-            controller: controller),
-        'h2': (renderContext, widget) => customHeaderRender(
-            renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '2'),
-            controller: controller),
-        'h3': (renderContext, widget) => customHeaderRender(
-            renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '3'),
-            controller: controller),
-        'h4': (renderContext, widget) => customHeaderRender(
-            renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '4'),
-            controller: controller),
-        'h5': (renderContext, widget) => customHeaderRender(
-            renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '5'),
-            controller: controller),
-        'h6': (renderContext, widget) => customHeaderRender(
-            renderContext, widget,
-            onRender: (label, key) => onSectionRender(label, key, '6'),
-            controller: controller),
-        'table': (renderContext, widget) => tableRender(
-            renderContext: renderContext,
-            widget: widget,
-            context: context,
-            imageProvider: imageProvider),
-        'img': (renderContext, widget) => imageRender(
-            renderContext: renderContext,
-            widget: widget,
-            imageProvider: imageProvider),
-        'admonition': admonitionRender,
-        'reference': (renderContext, widget) =>
-            referenceRender(renderContext, widget, onTap: onReferenceTap),
-        'code-preview': codePreviewRender
-      },
+      extensions: [
+        TagExtension(
+          tagsToExtend: {"code"},
+          builder: (extensionContext) {
+            return CustomCodeRender(renderContext: extensionContext);
+          },
+        ),
+        TagExtension(
+          tagsToExtend: {"h1", "h2", "h3", "h4", "h5", "h6"},
+          builder: (extensionContext) {
+            return customHeaderRender(extensionContext,
+                onRender: (label, key) => onSectionRender(
+                    label,
+                    key,
+                    extensionContext.elementName.characters.last),
+                controller: controller);
+          },
+        ),
+        TagExtension(
+          tagsToExtend: {"table"},
+          builder: (extensionContext) {
+            return tableRender(
+                renderContext: extensionContext,
+                context: context,
+                imageProvider: imageProvider);
+          },
+        ),
+        TagExtension(
+          tagsToExtend: {"img"},
+          builder: (extensionContext) {
+            return imageRender(
+                renderContext: extensionContext,
+                imageProvider: imageProvider);
+          },
+        ),
+        TagExtension(
+          tagsToExtend: {"admonition"},
+          builder: admonitionRender,
+        ),
+        TagExtension(
+          tagsToExtend: {"code-preview"},
+          builder: codePreviewRender,
+        ),TagExtension(
+          tagsToExtend: {"reference"},
+          builder: (extensionContext) {
+            return referenceRender(
+                extensionContext,
+                onTap: onReferenceTap);
+          },
+        ),
+
+      ],
       data: md.markdownToHtml(htmlContent ?? '', blockSyntaxes: const [
         md.HeaderWithIdSyntax(),
         AdmonitionSyntax(),
