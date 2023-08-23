@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:grimoire/core/utils/extensions.dart';
 import 'package:html/dom.dart' as d;
 
 Widget tableRender(
@@ -93,5 +94,33 @@ Widget _innerWidget(d.Element styledElement,
 }
 
 Widget _renderElement(d.Element element) {
-  return Html(data: element.innerHtml);
+  var hexColor = element.getElementsByTagName('hex-color');
+  if (hexColor.isNotEmpty) {
+    return _hexColorRender(hexColor[0].innerHtml);
+  } else {
+    return Html(data: element.innerHtml);
+  }
+}
+
+Widget _hexColorRender(String hexColor) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            '$hexColor ',
+          ),
+        ),
+        Flexible(
+          child: Container(
+            height: 13,
+            width: 13,
+            color: HexColor.fromHex(hexColor),
+          ),
+        ),
+      ],
+    ),
+  );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grimoire/features/wiki/presentation/utils/code_preview_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/custom_code_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/image_render.dart';
+import 'package:grimoire/features/wiki/presentation/utils/table_syntax.dart';
 
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
@@ -84,7 +85,7 @@ Widget markdownWidget(
         md.HeaderWithIdSyntax(),
         AdmonitionSyntax(),
         ReferenceSyntax(),
-        md.TableSyntax(),
+        TableSyntax(),
         CodePreviewSyntax()
       ]),
       onAnchorTap: onAnchorTap,
