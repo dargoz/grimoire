@@ -5,4 +5,6 @@ abstract class LocalDataSource {
   Future<FileObject?> getDocument(String id);
   void saveProject(String projectId);
   Future<String?> loadProject();
+  void saveBranch(String projectId);
+  Future<String?> loadBranch();
 }

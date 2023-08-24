@@ -27,12 +27,13 @@ final GoRouter appRouter = GoRouter(
                   print('location');
                   return ExplorerPage(
                     child: child,
+                    projectId: state.pathParameters['projectId']!,
                   );
                 },
                 routes: [
                   GoRoute(
                       parentNavigatorKey: _shellNavigatorKey,
-                      path: 'document/:filePath',
+                      path: 'document/:projectId/:filePath',
                       pageBuilder: (context, state) {
                         return NoTransitionPage(
                             child: DocumentPage(

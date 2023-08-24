@@ -29,12 +29,17 @@ class WikiRepositoryImpl extends WikiRepository {
 
   @override
   Future<DocumentEntity> getDocument(String id, String filePath,
-      {String projectId = '', String ref = 'main'}) async {
+      {String projectId = '', String ref = ''}) async {
     var cacheProject = await _localDataSource.loadProject();
+    var cacheBranch = await _localDataSource.loadBranch();
     if (cacheProject != null) {
       _projectId = cacheProject;
     }
+    if (cacheBranch != null) {
+      ref = cacheBranch;
+    }
     if (projectId.isNotEmpty) _projectId = projectId;
+    if (ref.isEmpty) ref = 'main';
     var cache = await _localDataSource.getDocument(id + filePath);
 
     if (cache != null) {
@@ -68,6 +73,7 @@ class WikiRepositoryImpl extends WikiRepository {
     if (projectId.isNotEmpty) _projectId = projectId;
     try {
       _localDataSource.saveProject(_projectId);
+      _localDataSource.saveBranch(ref);
     } catch (e) {
       Catcher.captureException(e);
     }

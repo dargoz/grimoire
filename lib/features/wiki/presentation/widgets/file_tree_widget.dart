@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:grimoire/features/wiki/presentation/models/file_tree_model.dart';
 
 import 'custom_expansion_tile.dart';
@@ -13,12 +14,20 @@ class FileTreeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var currentPath = GoRouterState.of(context)
+        .uri
+        .toString()
+        .split('/')
+        .last
+        .replaceAll('%2F', '/')
+        .replaceAll('%20', ' ');
+
     return SingleChildScrollView(
       controller: ScrollController(),
       child: Column(
         children: [
           for (var fileTree in fileTreeModels)
-            fileTree.toExpansionTile(onTap, false)
+            fileTree.toExpansionTile(onTap, false, currentPath)
         ],
       ),
     );
@@ -26,39 +35,89 @@ class FileTreeWidget extends StatelessWidget {
 }
 
 extension FileTreeToExpansion on FileTreeModel {
-  Widget toExpansionTile(
-      void Function(FileTreeModel fileTreeModel)? onTap, bool hasParent) {
+  Widget toExpansionTile(void Function(FileTreeModel fileTreeModel)? onTap,
+      bool hasParent, String currentPath,
+      {int lvl = 0}) {
+    var lvlPath = currentPath.split('/');
+    var isCurrentPathParent = lvl < lvlPath.length
+        ? lvlPath.getRange(0, (lvl + 1)).join('/') == path
+            ? true
+            : false
+        : false;
     return children.isNotEmpty
         ? Theme(
             data: ThemeData(dividerColor: Colors.transparent),
-            child: CustomExpansionTile(
-              textColor: Colors.black87,
-              initiallyExpanded: true,
-              // trailing: const SizedBox.shrink(),
-              childrenPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-              onExpansionTileTap: () {
-                if (onTap != null) {
-                  onTap(this);
-                }
-              },
-              title: Text(
-                name,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    color: Colors.black45,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: CustomExpansionTile(
+                      textColor: Colors.black87,
+                      initiallyExpanded: true,
+                      iconColor: Colors.white60,
+                      // trailing: const SizedBox.shrink(),
+                      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                      onExpansionTileTap: () {
+                        if (onTap != null) {
+                          onTap(this);
+                        }
+                      },
+                      title: isCurrentPathParent
+                          ? Stack(
+                              children: <Widget>[
+                                // Stroked text as border.
+                                Text(
+                                  name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 1
+                                      ..color = Colors.black,
+                                  ),
+                                ),
+                                // Solid text as fill.
+                                Text(
+                                  name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              name,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white60,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                      hasParent: hasParent,
+                      children: [
+                        for (var child in children)
+                          if (child.name != 'README.md')
+                            child.toExpansionTile(
+                              onTap,
+                              true,
+                              currentPath,
+                              lvl: lvl + 1,
+                            ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              hasParent: hasParent,
-              children: [
-                for (var child in children)
-                  if (child.name != 'README.md')
-                    child.toExpansionTile(onTap, true)
-              ],
             ))
         : CustomListTile(
             title: name.replaceAll('.md', ''),
             onTap: onTap == null ? null : () => onTap(this),
+            isSelected: currentPath == path ? true : false,
+            lvl: lvl,
           );
   }
 }
