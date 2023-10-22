@@ -8,7 +8,7 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: LottieBuilder.asset(
-        'assets/lottie/loading_animation_bored_hand.json',
+        'assets/lottie/loading_animation_paper_plane.json',
         package: 'grimoire',
       ),
     );

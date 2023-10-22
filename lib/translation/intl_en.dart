@@ -11,7 +11,8 @@ const enTranslation = <String, String>{
   AppTranslation.submit: "Submit",
   AppTranslation.loginFormDescription: "Please Enter your Credential",
   AppTranslation.userDomain: "User Domain",
-  AppTranslation.password: "Access Token",
+  AppTranslation.password: "Password",
   AppTranslation.errorEmptyUserDomain: "User domain cannot be empty",
   AppTranslation.errorEmptyPassword: "Password cannot be empty",
+  AppTranslation.loginFailed: "Incorrect User Domain or Password."
 };

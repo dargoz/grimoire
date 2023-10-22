@@ -9,11 +9,11 @@ import '../../../../core/models/resource.dart';
 import '../controllers/document_controller.dart';
 import '../controllers/file_tree_controller.dart';
 
-
 class DocumentPage extends ConsumerStatefulWidget {
-  const DocumentPage({super.key, required this.filePath});
+  const DocumentPage({super.key, required this.filePath, this.fragment});
 
   final String filePath;
+  final String? fragment;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => DocumentPageState();
@@ -21,6 +21,7 @@ class DocumentPage extends ConsumerStatefulWidget {
 
 class DocumentPageState extends ConsumerState<DocumentPage> {
   late final DocumentController documentController;
+  String? tab;
 
   @override
   void initState() {
@@ -35,21 +36,35 @@ class DocumentPageState extends ConsumerState<DocumentPage> {
     print(
         '-- update document : ${data.value?.data?.filePath} :: ${widget.filePath}');
     if (data.value?.data?.filePath != widget.filePath) {
-      var path = widget.filePath.replaceAll('%2F', '/');
+      var path = preProcessPath(widget.filePath);
       documentController.getDocumentFromPath(path);
+      documentController.section = widget.fragment;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    var path = preProcessPath(widget.filePath);
     ref.listen<AsyncValue<Resource<ProjectModel>>>(
         fileTreeStateNotifierProvider, (previous, next) {
       if (next.value?.status == Status.completed) {
-        var path = widget.filePath.replaceAll('%2F', '/');
         log('called with listener file');
         documentController.getDocumentFromPath(path);
+        documentController.section = widget.fragment;
       }
     });
-    return const DocumentWidget();
+
+    return DocumentWidget(tab: tab);
+  }
+
+  String preProcessPath(String filePath) {
+    var path = filePath.replaceAll('%2F', '/');
+    var splitPath = path.split('.');
+    if (splitPath.length > 2) {
+      tab = splitPath.removeAt(1);
+    } else {
+      tab = null;
+    }
+    return splitPath.join(".");
   }
 }

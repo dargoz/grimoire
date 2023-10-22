@@ -41,4 +41,16 @@ class LocalDataSourceImpl extends HiveDataSource implements LocalDataSource {
     var encryptedBox = await Hive.openBox(projectBox);
     encryptedBox.put('project_id', projectId);
   }
+
+  @override
+  Future<String?> loadBranch() async {
+    var encryptedBox = await openBox(projectBox);
+    return encryptedBox.get('branch');
+  }
+
+  @override
+  void saveBranch(String projectId) async {
+    var encryptedBox = await Hive.openBox(projectBox);
+    encryptedBox.put('branch', projectId);
+  }
 }

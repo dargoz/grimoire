@@ -50,4 +50,10 @@ class FakeWikiRepository extends WikiRepository {
     // TODO: implement getBranches
     throw UnimplementedError();
   }
+
+  @override
+  Future<String?> getSavedBranch() {
+    // TODO: implement getSavedBranch
+    throw UnimplementedError();
+  }
 }

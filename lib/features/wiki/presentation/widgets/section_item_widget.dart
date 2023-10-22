@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../models/section.dart';
 
 class SectionItemWidget extends StatefulWidget {
-  const SectionItemWidget({super.key, required this.section, this.onTap});
+  const SectionItemWidget({super.key, required this.section, this.onTap, this.isActive = false});
 
   final Section section;
   final void Function(String sectionKey)? onTap;
+  final bool isActive;
 
   @override
   State<StatefulWidget> createState() => _SectionItemState();
@@ -46,9 +47,9 @@ class _SectionItemState extends State<SectionItemWidget> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(tabSize, 0, 0, 4),
             child: Text(
-              widget.section.label,
+              widget.section.label.replaceAll("**", ""),
               style: TextStyle(
-                color: _isHover ? Colors.blueAccent : Colors.grey,
+                color: _isHover || widget.isActive ? Colors.blueAccent : Colors.grey,
               ),
             ),
           ),

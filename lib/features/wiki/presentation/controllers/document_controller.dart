@@ -3,7 +3,10 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grimoire/features/wiki/presentation/controllers/section_controller.dart';
+import 'package:grimoire/features/wiki/presentation/controllers/sub_document_controller.dart';
 import '../../../../core/models/resource.dart';
 import 'package:grimoire/features/wiki/domain/entities/document_entity.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_document_use_case.dart';
@@ -28,6 +31,8 @@ class DocumentController
   final GetImageUseCase _getImageUseCase = getIt<GetImageUseCase>();
 
   var documentWidgetSections = List<Section>.empty(growable: true);
+  var widgetSectionsOffset = List<double?>.empty(growable: true);
+  String? section;
 
   AutoScrollController scrollController = AutoScrollController();
 
@@ -36,6 +41,40 @@ class DocumentController
     var model = fileTreeData.value?.data?.fileTree.findNodeByPath(
         path: 'README.md', models: fileTreeData.value?.data?.fileTree ?? []);
     print('document controller model $model');
+    scrollController.addListener(() {
+      try {
+        if (widgetSectionsOffset.isEmpty) {
+          setDocumentWidgetSectionOffset();
+        }
+
+        var context = documentWidgetSections.last.sectionKey.currentContext;
+        if (context != null) {
+          var newOffset = getWidgetOffset(context);
+          if (newOffset != widgetSectionsOffset.last) {
+            setDocumentWidgetSectionOffset();
+          }
+        }
+
+        if (widgetSectionsOffset.isNotEmpty) {
+          var nearest = widgetSectionsOffset
+              .where((e) => (e ?? 0) <= (scrollController.offset + 50))
+              .toList()
+            ..sort((a, b) => b!.compareTo(a!));
+          int? activeSectionIndex;
+          if (nearest.isNotEmpty) {
+            activeSectionIndex = widgetSectionsOffset
+                .indexWhere((element) => element == nearest.first);
+          }
+          Future(() {
+            ref
+                .read(sectionStateNotifierProvider.notifier)
+                .setActiveSection(activeSectionIndex);
+          });
+        }
+      } catch (e) {
+        print('Scroll Listener Error: $e');
+      }
+    });
     if (model != null) {
       log('model not null in document controller init state');
       _fetchDocument(model);
@@ -43,6 +82,25 @@ class DocumentController
   }
 
   final Ref ref;
+
+  double getWidgetOffset(BuildContext context) {
+    var renderBox = context.findRenderObject();
+    RenderAbstractViewport viewport = RenderAbstractViewport.of(renderBox);
+    var revealedOffset = viewport.getOffsetToReveal(renderBox!, 0);
+    return revealedOffset.offset;
+  }
+
+  void setDocumentWidgetSectionOffset() {
+    if (documentWidgetSections.isNotEmpty) {
+      if (documentWidgetSections[0].sectionKey.currentContext != null) {
+        widgetSectionsOffset = documentWidgetSections.map((e) {
+          return (e.sectionKey.currentContext != null)
+              ? getWidgetOffset(e.sectionKey.currentContext!)
+              : null;
+        }).toList();
+      }
+    }
+  }
 
   Future _loading() async {
     state = await AsyncValue.guard(() async {
@@ -109,7 +167,6 @@ class DocumentController
     if (model != null) {
       print('model $model');
       var result = await _getDocumentUseCase.executeUseCase(model.toEntity());
-      clear();
       return result.map((e) => e?.toDocumentModel());
     }
     return const Resource.error("no data");
@@ -118,6 +175,10 @@ class DocumentController
   void clear() {
     globalSectionIndex = 0;
     documentWidgetSections.clear();
+    Future(() {
+      ref.read(sectionStateNotifierProvider.notifier).setActiveSection(null);
+    });
+    widgetSectionsOffset.clear();
   }
 
   void redirect(
@@ -158,13 +219,18 @@ class DocumentController
   }
 
   void onSectionClick(String nodeKey) {
-    var sectionIndex = state.value?.data?.sections
+    var sectionIndex = ref
+            .read(subDocumentStateNotifierProvider)
+            ?.value
+            ?.data
+            ?.sections
             .indexWhere((element) => element.id == nodeKey) ??
         0;
     scrollTo(sectionIndex);
   }
 
-  Future<Widget> getImage(String parentPath, String imageSource) async {
+  Future<Widget> getImage(String parentPath, String imageSource,
+      {double? width, double? height}) async {
     var model = FileTreeModel(
         id: '',
         name: imageSource,
@@ -177,6 +243,8 @@ class DocumentController
       return Image.memory(
         bytes,
         fit: BoxFit.cover,
+        width: width,
+        height: height,
       );
     } else {
       return const Icon(Icons.broken_image_outlined);

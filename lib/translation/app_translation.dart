@@ -25,6 +25,7 @@ class AppTranslation extends Translations {
   static const String errorEmptyPassword = "errorEmptyPassword";
   static const String about = "about";
   static const String feedback = "feedback";
+  static const String loginFailed = "loginFailed";
 
   @override
   Map<String, Map<String, String>> get keys => {

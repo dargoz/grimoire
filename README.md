@@ -1,6 +1,6 @@
 # grimoire
 
-grimoire is a wiki application based on git repositories. this apps have similar functionality as `docusaurus`, 
+grimoire is a wiki application based on git repositories. this apps have similar functionality as `docusaurus`,
 an app that let user focus on creating content like documentation, blog, or articles. The only difference is this app
 use git repository as data / content provider. All you need to do is only set up your related git auth token and project path.
 
@@ -25,7 +25,27 @@ Here's some features that will provided :
 
 ## Deploy using Docker with NGINX
 1. ``docker build -t grimoire:[APP_VERSION] .``
-2. ``docker run --name grimoire -d -p 8085:8085 grimoire:[APP_VERSION]``
+2. ``docker run --name grimoire -d -p 8081:8081 grimoire:[APP_VERSION]``
+
+## Host on Openshift Cloud Platform using Docker Image
+1. use this guideline to upload container image to openshift registry: https://wiki.apps.ocpdev.dti.co.id/index.php/Upload_container_image_ke_openshift_dengan_windows
+    - ``oc login``
+    - ``oc registry login --insecure=true``
+    - ``oc whoami -t``
+    - login to registry using whoami token:
+      ```
+      docker login default-route-openshift-image-registry.apps.ocpdev.dti.co.id
+      Username: [ACTIVE_DTI_USER]
+      Password: [WHOAMI_TOKEN]
+      ```
+    - ``docker tag grimoire:[APP_VERSION] default-route-openshift-image-registry.apps.ocpdev.dti.co.id/mb-bo-orion-dev/grimoire:[APP_VERSION]``
+    - ``docker push default-route-openshift-image-registry.apps.ocpdev.dti.co.id/mb-bo-orion-dev/grimoire:[APP_VERSION]``
+2. after successfully upload container image to openshift ImageStream, you can create /update your app:
+    1. New App
+        - ``oc new-app grimoire:[APP_VERSION]``
+        - ``oc expose svc grimoire --port=8081``
+    2. Update Deployment (if it's not your first deployment / already use ``oc new-app`` before)
+        - ``oc set image deploy grimoire grimoire=image-registry.openshift-image-registry.svc:5000/mb-bo-orion-dev/grimoire:[APP_VERSION]``
 
 ## Windows MSIX tutorial
 https://docs.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing

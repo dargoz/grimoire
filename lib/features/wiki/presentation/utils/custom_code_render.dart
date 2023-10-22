@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_highlighter/flutter_highlighter.dart';
 import 'package:flutter_highlighter/themes/atom-one-light.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:grimoire/core/designs/colors/color_schemes.dart';
 
 class CustomCodeRender extends StatefulWidget {
@@ -40,7 +39,7 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
       bool isMultiLine = codeText.contains('\n');
       return Container(
           width: isMultiLine
-              ? MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+              ? MediaQueryData.fromView(View.of(context))
                   .size
                   .width
               : null,
@@ -60,7 +59,7 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
     } else {
       return Container(
         padding: const EdgeInsets.all(4),
-        width: MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+        width: MediaQueryData.fromView(View.of(context))
             .size
             .width,
         decoration: widget.showBorder
@@ -79,7 +78,7 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
               language: language,
               // Specify highlight theme
               // All available themes are listed in `themes` folder
-              theme: MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+              theme: MediaQueryData.fromView(View.of(context))
                           .platformBrightness ==
                       Brightness.light
                   ? atomOneLightTheme
@@ -87,7 +86,7 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
               // Specify padding
               padding: const EdgeInsets.all(8),
               // Specify text style
-              textStyle: GoogleFonts.robotoMono(),
+              textStyle: const TextStyle(fontFamily: 'JetBrainsMono'),
             ),
             Positioned(
                 top: 0,

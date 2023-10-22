@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
 
 class ResponseErrorWidget extends StatelessWidget {
-  const ResponseErrorWidget({super.key, this.errorMessage = 'General Error'});
+  const ResponseErrorWidget(
+      {Key? key,
+        this.userAction,
+        this.errorCode,
+        this.errorMessage,
+        this.buttonLabel})
+      : super(key: key);
 
-  final String errorMessage;
+  final dynamic userAction;
+
+  final String? errorCode;
+  final String? errorMessage;
+  final String? buttonLabel;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(errorMessage),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(errorMessage ?? "null"),
+          if (buttonLabel != null)
+            ElevatedButton(
+                onPressed: () {
+                  userAction(context, errorCode, errorMessage);
+                },
+                child: Text(buttonLabel!))
+        ],
+      ),
     );
   }
 }

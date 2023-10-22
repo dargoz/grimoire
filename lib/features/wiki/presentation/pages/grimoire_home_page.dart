@@ -50,6 +50,7 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
         return true;
       },
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBarWidget(),
         body: Container(
           decoration: BoxDecoration(
@@ -71,7 +72,7 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
                 Image.asset(
                   'assets/icons/grimoire_logo_bw.png',
                   package: 'grimoire',
-                  scale: 2.5,
+                  scale: 3,
                 ),
                 /*const Spacer(
                 flex: 1,
@@ -118,24 +119,43 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
   void _openProject(String projectId) {
     ref.read(serviceStateNotifierProvider.notifier).repository.projectId =
         projectId;
-    context.go('/document/README.md');
+    context.go('/document/$projectId/README.md');
   }
 
-  Widget appsContainer(String assetPath, {void Function()? onTap}) {
+  Widget appsContainer(String assetPath,
+      {void Function()? onTap, String? name}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 128,
-          height: 128,
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 111, 86, 120),
-              borderRadius: BorderRadius.all(Radius.circular(16))),
-          child: Image.asset(
-            assetPath,
-            package: 'grimoire',
-            scale: 10,
+      child: Material(
+        borderRadius: BorderRadius.circular(25),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(25),
+          onTap: onTap,
+          child: Container(
+            width: 128,
+            height: 128,
+            decoration: const BoxDecoration(
+                color: Color.fromARGB(149, 89, 86, 120),
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Image.asset(assetPath,
+                        package: 'grimoire', scale: 8, fit: BoxFit.fitHeight),
+                  ),
+                ),
+                if (name != null)
+                  Text(
+                    name,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
+                const SizedBox(height: 12)
+              ],
+            ),
           ),
         ),
       ),

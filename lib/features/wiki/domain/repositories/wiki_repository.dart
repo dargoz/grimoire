@@ -14,4 +14,6 @@ abstract class WikiRepository {
       {String projectId = '', String ref = ''});
 
   Future<List<BranchEntity>> getBranches(String id);
+
+  Future<String?> getSavedBranch();
 }

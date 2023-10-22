@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:grimoire/core/utils/extensions.dart';
 import 'package:html/dom.dart' as d;
 
 Widget tableRender(
     {required ExtensionContext renderContext,
     required BuildContext context,
-    required Future<Widget>? Function(String?) imageProvider}) {
+    required Future<Widget>? Function(String?) imageProvider,
+    OnTap? onAnchorTap}) {
   var contents = renderContext.elementChildren;
   List<TableRow> tableColumn = List.empty(growable: true);
   List<TableRow> tableRows = List.empty(growable: true);
@@ -49,7 +51,7 @@ Widget tableRender(
             children: tr
                 .map((td) => SizedBox(
                       width: cellWidth,
-                      child: _innerWidget(td, imageProvider),
+                      child: _innerWidget(td, imageProvider, onAnchorTap: onAnchorTap),
                     ))
                 .toList()));
       }
@@ -72,8 +74,10 @@ Widget tableRender(
   }
 }
 
-Widget _innerWidget(d.Element styledElement,
-    Future<Widget>? Function(String?) imageProvider) {
+Widget _innerWidget(
+  d.Element styledElement, 
+  Future<Widget>? Function(String?) imageProvider, 
+  {OnTap? onAnchorTap}) {
   if (kDebugMode) {
     log('*~*~*~*~*~*~*~**~*~*');
     log('element : ${styledElement.text}');
@@ -89,9 +93,40 @@ Widget _innerWidget(d.Element styledElement,
         builder: (buildContext, snapshot) =>
             snapshot.data ?? const Icon(Icons.broken_image));
   }
-  return _renderElement(styledElement);
+  return _renderElement(styledElement, onAnchorTap: onAnchorTap);
 }
 
-Widget _renderElement(d.Element element) {
-  return Html(data: element.innerHtml);
+Widget _renderElement(d.Element element, {OnTap? onAnchorTap}) {
+  var hexColor = element.getElementsByTagName('hex-color');
+  if (hexColor.isNotEmpty) {
+    return _hexColorRender(hexColor[0].innerHtml);
+  } else {
+    return Html(
+      data: element.innerHtml,
+      onAnchorTap: onAnchorTap,
+    );
+  }
+}
+
+Widget _hexColorRender(String hexColor) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            '$hexColor ',
+          ),
+        ),
+        Flexible(
+          child: Container(
+            height: 13,
+            width: 13,
+            color: HexColor.fromHex(hexColor),
+          ),
+        ),
+      ],
+    ),
+  );
 }

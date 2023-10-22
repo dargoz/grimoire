@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grimoire/features/wiki/presentation/utils/code_preview_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/custom_code_render.dart';
 import 'package:grimoire/features/wiki/presentation/utils/image_render.dart';
+import 'package:grimoire/features/wiki/presentation/utils/table_html_extension.dart';
+import 'package:grimoire/features/wiki/presentation/utils/table_syntax.dart';
 
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_html/flutter_html.dart';
@@ -15,19 +17,46 @@ import '../utils/code_preview_syntax.dart';
 import '../utils/html_custom_render.dart';
 import '../utils/reference_render.dart';
 import '../utils/reference_syntax.dart';
-import '../utils/table_render.dart';
 
 Widget markdownWidget(
     {required BuildContext context,
     required AutoScrollController controller,
     required void Function(String label, GlobalKey parentKey, String attr)
         onSectionRender,
-    required Future<Widget>? Function(String?) imageProvider,
+    required Future<Widget>? Function(String?, {double? width, double? height}) imageProvider,
     String? htmlContent,
     void Function(FileTreeModel)? onReferenceTap,
     OnTap? onAnchorTap}) {
   return SelectionArea(
     child: Html(
+      style: {
+        "table": Style(
+          backgroundColor: const Color(0x50EEEEEE),
+        ),
+        "th": Style(
+            padding: HtmlPaddings.all(8),
+            border: const Border(
+              bottom: BorderSide(color: Colors.grey),
+              right: BorderSide(color: Colors.grey),
+            ),
+            backgroundColor: const Color(0xFFf0f0f0),
+            fontSize: FontSize(16)),
+        "td": Style(
+          padding: HtmlPaddings.all(6),
+          border: const Border(
+              bottom: BorderSide(color: Colors.grey),
+              right: BorderSide(color: Colors.grey)),
+        ),
+        "p": Style(
+          fontSize: FontSize(16),
+          margin: Margins.only(bottom: 20),
+          lineHeight: const LineHeight(1.6),
+        ),
+        "li": Style(
+          fontSize: FontSize(16),
+          lineHeight: const LineHeight(1.6),
+        )
+      },
       extensions: [
         TagExtension(
           tagsToExtend: {"code"},
@@ -46,15 +75,7 @@ Widget markdownWidget(
                 controller: controller);
           },
         ),
-        TagExtension(
-          tagsToExtend: {"table"},
-          builder: (extensionContext) {
-            return tableRender(
-                renderContext: extensionContext,
-                context: context,
-                imageProvider: imageProvider);
-          },
-        ),
+        const TableHtmlExtension(),
         TagExtension(
           tagsToExtend: {"img"},
           builder: (extensionContext) {
@@ -84,7 +105,7 @@ Widget markdownWidget(
         md.HeaderWithIdSyntax(),
         AdmonitionSyntax(),
         ReferenceSyntax(),
-        md.TableSyntax(),
+        TableSyntax(),
         CodePreviewSyntax()
       ]),
       onAnchorTap: onAnchorTap,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:grimoire/routes/app_route.dart';
 
 import '../configuration/configs.dart';
 
@@ -48,11 +49,19 @@ class CustomInterceptors extends Interceptor {
     switch (err.response?.statusCode) {
       case 500:
       case 400:
+      case 401:
+        appRouter.go('/login');
+        break;
       case 403:
         return handler.resolve(Response<dynamic>(
             requestOptions: err.response!.requestOptions,
             statusCode: err.response?.statusCode,
             data: err.response?.data));
+      case 404:
+        return handler.resolve(Response<dynamic>(
+            requestOptions: err.response!.requestOptions,
+            statusCode: err.response?.statusCode,
+            data: []));
       default:
         super.onError(err, handler);
         break;

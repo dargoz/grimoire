@@ -14,8 +14,12 @@ class GetFileTreeUseCase extends UseCase<ProjectEntity, RepositoryEntity> {
 
   @override
   Future<ProjectEntity> useCase(RepositoryEntity params) async {
-    var result = await _wikiRepository.getFileTree(true, 100,
-        projectId: params.projectId, ref: params.ref);
+    var result = await _wikiRepository.getFileTree(
+      true,
+      100,
+      projectId: params.projectId,
+      ref: params.ref,
+    );
     List<FileTreeEntity> hiddenChildren = List.empty(growable: true);
     var filteredResult = result.where((element) {
       if (isGeneralMarkdown(element)) {

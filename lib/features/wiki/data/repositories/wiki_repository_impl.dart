@@ -29,12 +29,17 @@ class WikiRepositoryImpl extends WikiRepository {
 
   @override
   Future<DocumentEntity> getDocument(String id, String filePath,
-      {String projectId = '', String ref = 'main'}) async {
+      {String projectId = '', String ref = ''}) async {
     var cacheProject = await _localDataSource.loadProject();
+    var cacheBranch = await _localDataSource.loadBranch();
     if (cacheProject != null) {
       _projectId = cacheProject;
     }
+    if (cacheBranch != null) {
+      ref = cacheBranch;
+    }
     if (projectId.isNotEmpty) _projectId = projectId;
+    if (ref.isEmpty) ref = 'master';
     var cache = await _localDataSource.getDocument(id + filePath);
 
     if (cache != null) {
@@ -63,27 +68,52 @@ class WikiRepositoryImpl extends WikiRepository {
   }
 
   @override
-  Future<List<FileTreeEntity>> getFileTree(bool recursive, int perPage,
-      {String projectId = '', String ref = 'main'}) async {
+  Future<List<FileTreeEntity>> getFileTree(
+    bool recursive,
+    int perPage, {
+    String projectId = '',
+    String ref = 'master',
+  }) async {
     if (projectId.isNotEmpty) _projectId = projectId;
     try {
       _localDataSource.saveProject(_projectId);
+      _localDataSource.saveBranch(ref);
     } catch (e) {
       Catcher.captureException(e);
     }
-    List<RepositoryTreeResponse> response =
-        await _remoteDataSource.getRepositoryTree(
-            RepositoryTreeRequest(
-                id: _projectId, recursive: true, perPage: 100),
-            ref);
-    return response.map((fileTree) => fileTree.toFileTreeEntity()).toList();
+    List<RepositoryTreeResponse> responses = [];
+    int page = 1;
+
+    while (true) {
+      List<RepositoryTreeResponse> response =
+          await _remoteDataSource.getRepositoryTree(
+        RepositoryTreeRequest(
+          id: _projectId,
+          recursive: true,
+          perPage: 100,
+          page: page,
+        ),
+        ref,
+      );
+      if (response.isEmpty) {
+        break;
+      }
+      responses.addAll(response);
+      page++;
+    }
+
+    return responses.map((fileTree) => fileTree.toFileTreeEntity()).toList();
   }
 
   @override
   Future<DocumentEntity> getImage(String id, String filePath,
-      {String projectId = '', String ref = 'main'}) async {
+      {String projectId = '', String ref = 'master'}) async {
     if (projectId.isNotEmpty) _projectId = projectId;
     var cache = await _localDataSource.getDocument(id + filePath);
+    var cacheBranch = await _localDataSource.loadBranch();
+    if (cacheBranch != null) {
+      ref = cacheBranch;
+    }
     if (cache != null) {
       if (kDebugMode) {
         print("using image cache");
@@ -93,7 +123,7 @@ class WikiRepositoryImpl extends WikiRepository {
     filePath = filePath.replaceAll('/', '%2F');
     filePath = filePath.replaceAll('.', '%2E');
     FileResponse fileResponse =
-        await _remoteDataSource.getRepositoryFile(_projectId, filePath, "main");
+        await _remoteDataSource.getRepositoryFile(_projectId, filePath, ref);
     CommitResponse commitResponse = await _remoteDataSource.getCommit(
         _projectId, fileResponse.lastCommitId);
 
@@ -110,5 +140,11 @@ class WikiRepositoryImpl extends WikiRepository {
   Future<List<BranchEntity>> getBranches(String id) async {
     List<BranchResponse> response = await _remoteDataSource.getBranches(id);
     return response.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<String?> getSavedBranch() async {
+    var ref = await _localDataSource.loadBranch();
+    return ref;
   }
 }

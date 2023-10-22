@@ -20,7 +20,8 @@ abstract class GitlabApiService {
       @Path('project_id') String projectId,
       @Query("recursive") bool recursive,
       @Query('per_page') int perPage,
-      @Query('ref') String ref);
+      @Query('ref') String ref,
+      @Query('page') int page);
 
   @GET('/projects/{project_id}/repository/commits/{commit_id}')
   Future<CommitResponse> getCommit(

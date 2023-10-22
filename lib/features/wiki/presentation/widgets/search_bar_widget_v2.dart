@@ -9,12 +9,14 @@ class SearchBarWidgetV2 extends StatefulWidget {
       this.onQueryChanged,
       this.onFocusChanged,
       required this.controller,
-      required this.itemList});
+      required this.itemList,
+      this.onTextNotFocus});
 
   final void Function(String query)? onQueryChanged;
   final void Function(bool isFocus)? onFocusChanged;
   final SearchBarController controller;
   final List<Widget> itemList;
+  final void Function()? onTextNotFocus;
 
   @override
   State<StatefulWidget> createState() => SearchBarWidgetState();
@@ -46,6 +48,13 @@ class SearchBarWidgetState extends State<SearchBarWidgetV2> {
 
   @override
   void initState() {
+    textFocus.addListener(() {
+      if (!textFocus.hasFocus) {
+        if (widget.onTextNotFocus != null) {
+          widget.onTextNotFocus!();
+        }
+      }
+    });
     listener = () {
       setState(() {
         _isVisible = widget.controller.isOpen;

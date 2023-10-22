@@ -16,17 +16,26 @@ Widget customHeaderRender(ExtensionContext renderContext,
   var globalKey = GlobalKey(debugLabel: id);
   double fontSize = 24;
   var fontWeight = FontWeight.normal;
+  EdgeInsets? margin;
   switch (renderContext.elementName) {
     case 'h1':
-      fontSize = 40;
+      fontSize = 48;
       fontWeight = FontWeight.bold;
+      margin = const EdgeInsets.only(bottom: 10);
       break;
     case 'h2':
       fontSize = 32;
       fontWeight = FontWeight.bold;
+      margin = const EdgeInsets.only(top: 16, bottom: 4);
       break;
     case 'h3':
       fontSize = 24;
+      if (renderContext.element?.children.isNotEmpty ?? false) {
+        if (renderContext.element?.children[0].localName == 'strong') {
+          fontWeight = FontWeight.bold;
+        }
+      }
+      margin = const EdgeInsets.only(top: 6);
       break;
     case 'h4':
       fontSize = 20;
@@ -40,10 +49,10 @@ Widget customHeaderRender(ExtensionContext renderContext,
   }
   if (kDebugMode) {
     print('---------------------------------------------------');
-    onRender(id, globalKey);
     print(
         "widget : ${renderContext.element.toString()} :: $globalKey :: globalIndex $globalSectionIndex");
   }
+  onRender(id, globalKey);
 
   var renderWidget = AutoScrollTag(
     key: ValueKey(globalKey),
@@ -56,13 +65,16 @@ Widget customHeaderRender(ExtensionContext renderContext,
     ),
   );
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      renderWidget,
-      Divider(
-        color: (renderContext.elementName == 'h1') ? null : Colors.transparent,
-      )
-    ],
+  return Container(
+    margin: margin,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        renderWidget,
+        Divider(
+          color: (renderContext.elementName == 'h1') ? null : Colors.transparent,
+        )
+      ],
+    ),
   );
 }

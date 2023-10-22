@@ -31,7 +31,7 @@ class BreadcrumbWidget extends StatelessWidget {
                 elevation: const ElevationStateColor()),
             child: const Icon(
               Icons.home,
-              size: 16,
+              size: 18,
             )),
         for (var menu in menuItems)
           Row(
@@ -58,7 +58,7 @@ class BreadcrumbWidget extends StatelessWidget {
                       elevation: const ElevationStateColor()),
                   child: Text(
                     menu.label.replaceAll('.md', ''),
-                    style: const TextStyle(color: Colors.black87, fontSize: 12),
+                    style: const TextStyle(color: Colors.black87, fontSize: 12.8),
                   )),
             ],
           )

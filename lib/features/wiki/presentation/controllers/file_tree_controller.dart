@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grimoire/features/wiki/domain/entities/repository_entity.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_file_tree_use_case.dart';
 import 'package:grimoire/features/wiki/domain/usecases/get_version_use_case.dart';
 import 'package:grimoire/features/wiki/presentation/controllers/service_controller.dart';

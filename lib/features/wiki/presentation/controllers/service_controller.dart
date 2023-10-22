@@ -14,7 +14,7 @@ class ServiceController extends StateNotifier<Resource<dynamic>> {
 
   bool isRefresh = false;
 
-  RepositoryEntity repository = RepositoryEntity(projectId: '', ref: 'main');
+  RepositoryEntity repository = RepositoryEntity(projectId: '', ref: 'DEV1');
 
   Future<Resource<dynamic>> executeService(
       UseCase useCase, dynamic params) async {

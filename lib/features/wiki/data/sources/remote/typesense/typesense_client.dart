@@ -6,7 +6,7 @@ class TypeSenseClient {
 
   TypeSenseClient() {
     final host = globalConfig.typeSenseUrl;
-    const protocol = Protocol.http;
+    const protocol = Protocol.https;
     final config = Configuration(
       // Replace with your configuration
       globalConfig.typeSenseApiKey,

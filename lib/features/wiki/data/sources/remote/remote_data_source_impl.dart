@@ -27,7 +27,7 @@ class RemoteDataSourceImpl extends RemoteDataSource {
   Future<List<RepositoryTreeResponse>> getRepositoryTree(
       RepositoryTreeRequest request, String ref) {
     return _restClient.service
-        .getRepositoryTree(request.id, request.recursive, request.perPage, ref);
+        .getRepositoryTree(request.id, request.recursive, request.perPage, ref, request.page);
   }
 
   @override
