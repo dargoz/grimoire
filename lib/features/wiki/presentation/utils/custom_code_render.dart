@@ -50,7 +50,7 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
               borderRadius: const BorderRadius.all(Radius.circular(4))),
           child: Padding(
             padding: isMultiLine ? const EdgeInsets.all(8) : EdgeInsets.zero,
-            child: Text(
+            child: SelectableText(
               codeText,
               style: TextStyle(
                   fontSize: isMultiLine ? 14 : 12, fontFamily: 'JetBrainsMono'),

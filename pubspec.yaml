@@ -46,7 +46,11 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   flutter_secure_storage: ^9.0.0
-  flutter_highlighter: ^0.1.1
+  flutter_highlighter:
+    git:
+      url: https://github.com/predatorx7/highlight.git
+      path: flutter_highlighter
+      ref: master
   flutter_html: ^3.0.0-beta.2
   flutter_svg: ^2.0.5
   lottie: ^2.5.0
