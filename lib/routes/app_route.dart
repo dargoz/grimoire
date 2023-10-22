@@ -41,7 +41,7 @@ final GoRouter appRouter = GoRouter(
                       false) {
                     ref = state.pathParameters['branch']!;
                   } else {
-                    ref = 'master';
+                    ref = 'main';
                   }
                   
                   return ExplorerPage(

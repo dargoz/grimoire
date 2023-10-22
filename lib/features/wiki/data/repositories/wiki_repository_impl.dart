@@ -39,7 +39,7 @@ class WikiRepositoryImpl extends WikiRepository {
       ref = cacheBranch;
     }
     if (projectId.isNotEmpty) _projectId = projectId;
-    if (ref.isEmpty) ref = 'master';
+    if (ref.isEmpty) ref = 'main';
     var cache = await _localDataSource.getDocument(id + filePath);
 
     if (cache != null) {
@@ -72,7 +72,7 @@ class WikiRepositoryImpl extends WikiRepository {
     bool recursive,
     int perPage, {
     String projectId = '',
-    String ref = 'master',
+    String ref = 'main',
   }) async {
     if (projectId.isNotEmpty) _projectId = projectId;
     try {
@@ -107,7 +107,7 @@ class WikiRepositoryImpl extends WikiRepository {
 
   @override
   Future<DocumentEntity> getImage(String id, String filePath,
-      {String projectId = '', String ref = 'master'}) async {
+      {String projectId = '', String ref = 'main'}) async {
     if (projectId.isNotEmpty) _projectId = projectId;
     var cache = await _localDataSource.getDocument(id + filePath);
     var cacheBranch = await _localDataSource.loadBranch();
