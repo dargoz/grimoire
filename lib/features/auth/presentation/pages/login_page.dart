@@ -9,7 +9,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/designs/widgets/response_error_widget.dart';
 import '../../../../core/models/resource.dart';
-import '../../../../core/utils/error_code_constants.dart';
 import '../../../../translation/app_translation.dart';
 import '../../../wiki/presentation/widgets/loading_widget.dart';
 
@@ -37,8 +36,8 @@ class LoginPage extends ConsumerWidget {
           case Status.loading:
             return const LoadingWidget();
           case Status.error:
-            if (state.errorCode != ErrorCode.SESSION_EXPIRED &&
-                state.errorCode != ErrorCode.NO_PRIVILEGES) {
+            if (state.errorCode != "503" &&
+                state.errorCode != "403") {
               return ResponseErrorWidget(
                 userAction: _handleUserAction,
                 errorCode: state.errorCode,

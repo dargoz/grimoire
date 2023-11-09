@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import 'package:grimoire/core/utils/error_code_constants.dart';
 import 'package:grimoire/features/auth/domain/entities/auth_form_entity.dart';
 import 'package:grimoire/features/auth/domain/usecases/request_access_token_use_case.dart';
 import 'package:grimoire/features/auth/domain/usecases/save_access_token_use_case.dart';
@@ -43,7 +42,7 @@ class LoginController extends StateNotifier<Resource<String>> {
     var bearerToken = await _getBearerTokenUseCase.executeUseCase(authFormEntity);
 
     if(bearerToken.data == null){
-      state = Resource<String>.error(AppTranslation.loginFailed.tr, errorCode: ErrorCode.NO_PRIVILEGES);
+      state = Resource<String>.error(AppTranslation.loginFailed.tr, errorCode: "403");
       return;
     }
     

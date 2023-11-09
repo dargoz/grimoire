@@ -16,9 +16,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   final AuthRestClient _authRestClient;
 
-  AuthRemoteDataSourceImpl(this._authRestClient) {
-
-  }
+  AuthRemoteDataSourceImpl(this._authRestClient);
 
   Future<void> redirect(Uri authorizationUrl) async {
     print('url redirect : ${authorizationUrl.toString()}');

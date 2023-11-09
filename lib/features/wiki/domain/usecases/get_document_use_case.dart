@@ -46,7 +46,7 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
       await indexDocument(document);
       log('indexing done');
 
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response?.statusCode == 404 &&
           (e.response?.data.toString().contains('File Not Found') ?? false)) {
         log('error message : ${e.message}');

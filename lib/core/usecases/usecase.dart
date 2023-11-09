@@ -17,7 +17,7 @@ abstract class UseCase<Type, Params> {
       var response = await useCase(params).timeout(const Duration(seconds: 15));
       validateResult(response);
       return Resource.completed(response, message: resourceMessage);
-    } on DioError catch (dioError) {
+    } on DioException catch (dioError) {
       return Resource.error(dioError.response?.data.toString());
     } on FormatException catch (formatException) {
       return Resource.error(formatException.message);
