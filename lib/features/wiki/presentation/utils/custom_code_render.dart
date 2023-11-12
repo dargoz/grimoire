@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_highlighter/flutter_highlighter.dart';
 import 'package:flutter_highlighter/themes/atom-one-light.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:grimoire/core/designs/colors/color_schemes.dart';
+import 'package:grimoire/features/wiki/presentation/widgets/custom_highlight_view.dart';
 
 class CustomCodeRender extends StatefulWidget {
   const CustomCodeRender(
@@ -50,7 +50,7 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
               borderRadius: const BorderRadius.all(Radius.circular(4))),
           child: Padding(
             padding: isMultiLine ? const EdgeInsets.all(8) : EdgeInsets.zero,
-            child: SelectableText(
+            child: Text(
               codeText,
               style: TextStyle(
                   fontSize: isMultiLine ? 14 : 12, fontFamily: 'JetBrainsMono'),
@@ -70,7 +70,7 @@ class CustomCodeRenderState extends State<CustomCodeRender> {
             : null,
         child: Stack(
           children: [
-            HighlightView(
+            CustomHighlightView(
               // The original code to be highlighted
               codeText,
               // Specify language

@@ -33,7 +33,6 @@ Widget codePreviewRender(ExtensionContext renderContext) {
   }
   return SizedBox(
     width: MediaQuery.sizeOf(renderContext.buildContext!).width,
-    height: maxLength * 24,
     child: CodePreview(
       tabs: langList,
       codeBlocks: codeBlocks,
@@ -71,69 +70,70 @@ class CodePreviewState extends State<CodePreview>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: widget.tabs.length,
-        child: Scaffold(
-          body: Container(
-            color: Colors.transparent,
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white54,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(4))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: TabBar(
-                        controller: _tabController,
-                        isScrollable: true,
-                        labelColor: ColorSchemes.bluePrimary,
-                        unselectedLabelColor: ColorSchemes.bluePrimary,
-                        indicatorColor: ColorSchemes.bluePrimary,
-                        tabs: widget.tabs
-                            .map(
-                              (e) => Tab(
-                                text: e,
-                                height: 32,
-                              ),
-                            )
-                            .toList(),
-                        onTap: (index) {
-                          log("index : $index");
-                          setState(() {});
-                        },
-                      ),
-                    ),
+      length: widget.tabs.length,
+      child: Container(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white54,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(4))),
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+                    labelColor: ColorSchemes.bluePrimary,
+                    unselectedLabelColor: ColorSchemes.bluePrimary,
+                    indicatorColor: ColorSchemes.bluePrimary,
+                    tabs: widget.tabs
+                        .map(
+                          (e) => Tab(
+                            text: e,
+                            height: 32,
+                          ),
+                        )
+                        .toList(),
+                    onTap: (index) {
+                      log("index : $index");
+                      setState(() {});
+                    },
                   ),
-                  Flexible(
-                      child: Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(8))),
-                    child: Html(
-                      data: markdownToHtml(
-                          widget.codeBlocks[_tabController.index]),
-                      extensions: [
-                        TagExtension(
-                          tagsToExtend: {"code"},
-                          builder: (extensionContext) {
-                            return CustomCodeRender(renderContext: extensionContext, showBorder: false,);
-                          },
-                        ),
-                      ],
-                    ),
-                  ))
-                ],
+                ),
               ),
-            ),
+              Flexible(
+                  child: Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(8))),
+                child: Html(
+                  data: markdownToHtml(widget.codeBlocks[_tabController.index]),
+                  extensions: [
+                    TagExtension(
+                      tagsToExtend: {"code"},
+                      builder: (extensionContext) {
+                        return CustomCodeRender(
+                          renderContext: extensionContext,
+                          showBorder: false,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ))
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

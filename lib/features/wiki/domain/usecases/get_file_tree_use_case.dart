@@ -45,6 +45,7 @@ class GetFileTreeUseCase extends UseCase<ProjectEntity, RepositoryEntity> {
     return element.name != 'merge_request_templates' &&
         !element.name.startsWith('.') &&
         !element.name.contains('.spec.') &&
+        !element.name.contains('.reference.') &&
         !element.name.contains('.usage.') &&
         (element.name.contains('.md') || element.type == 'tree');
   }

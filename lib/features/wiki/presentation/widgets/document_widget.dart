@@ -82,8 +82,6 @@ class DocumentWidget extends ConsumerWidget {
                           widgets: model.data?.tabs.mapIndexed((e, i) {
                                 if (i == 0) {
                                   return FutureBuilder(
-                                    future:
-                                    documentController.getSubDocument(e),
                                     builder: (context, snapshot) {
                                       documentController.clear();
                                       ref
@@ -92,7 +90,7 @@ class DocumentWidget extends ConsumerWidget {
                                           .setSubDocument(model);
                                       return _pageDocument(
                                           context, ref, model, isPortrait);
-                                    }
+                                    },
                                   );
                                 } else {
                                   return FutureBuilder<Resource<DocumentModel>>(
@@ -230,7 +228,7 @@ class DocumentWidget extends ConsumerWidget {
                 print('imageSource : $imageSource');
                 imageCount++;
                 var img = await documentController.getImage(
-                    model.data?.filePath ?? '', imageSource ?? '',
+                    model.data, imageSource ?? '',
                     width: width, height: height);
                 renderedImage++;
 

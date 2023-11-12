@@ -229,14 +229,20 @@ class DocumentController
     scrollTo(sectionIndex);
   }
 
-  Future<Widget> getImage(String parentPath, String imageSource,
+  Future<Widget> getImage(DocumentModel? documentModel, String imageSource,
       {double? width, double? height}) async {
-    var model = FileTreeModel(
-        id: '',
-        name: imageSource,
-        type: 'blob',
-        path:
-            '${parentPath.substring(0, parentPath.lastIndexOf('/'))}/$imageSource');
+    var parentPath = documentModel?.filePath ?? "";
+
+
+    var fileTreeData = ref.read(fileTreeStateNotifierProvider);
+    var model = fileTreeData.value?.data?.hiddenFileTree.findNodeByPath(
+        models: fileTreeData.value?.data?.hiddenFileTree ?? [],
+        path: '${parentPath.substring(0, parentPath.lastIndexOf('/'))}/$imageSource' ?? '');
+    
+    if(model == null) {
+      return const Icon(Icons.broken_image_outlined);
+    }
+
     var result = await _getImageUseCase.executeUseCase(model.toEntity());
     if (result.status == Status.completed) {
       var bytes = base64.decode(result.data!.content);
