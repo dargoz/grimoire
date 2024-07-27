@@ -90,7 +90,7 @@ class DocumentWidget extends ConsumerWidget {
                                           .setSubDocument(model);
                                       return _pageDocument(
                                           context, ref, model, isPortrait);
-                                    },
+                                    }, future: null,
                                   );
                                 } else {
                                   return FutureBuilder<Resource<DocumentModel>>(

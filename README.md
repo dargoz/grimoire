@@ -28,7 +28,7 @@ Here's some features that will provided :
 2. ``docker run --name grimoire -d -p 8081:8081 grimoire:[APP_VERSION]``
 
 ## Host on Openshift Cloud Platform using Docker Image
-1. use this guideline to upload container image to openshift registry: https://wiki.apps.ocpdev.dti.co.id/index.php/Upload_container_image_ke_openshift_dengan_windows
+1. use this guideline to upload container image to openshift registry:
     - ``oc login``
     - ``oc registry login --insecure=true``
     - ``oc whoami -t``
