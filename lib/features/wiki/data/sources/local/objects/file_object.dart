@@ -1,23 +1,24 @@
 import 'package:grimoire/features/wiki/data/sources/local/objects/commit_object.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 part 'file_object.g.dart';
 
 @HiveType(typeId: 0)
 class FileObject extends HiveObject {
-  FileObject(
-      {required this.fileName,
-      required this.filePath,
-      required this.size,
-      required this.encoding,
-      required this.content,
-      required this.contentSha256,
-      required this.ref,
-      required this.blobId,
-      required this.commitId,
-      required this.lastCommitId,
-      required this.executeFilemode,
-      required this.commitObject});
+  FileObject({
+    required this.fileName,
+    required this.filePath,
+    required this.size,
+    required this.encoding,
+    required this.content,
+    required this.contentSha256,
+    required this.ref,
+    required this.blobId,
+    required this.commitId,
+    required this.lastCommitId,
+    required this.executeFilemode,
+    required this.commitObject,
+  });
 
   @HiveField(0)
   String fileName;

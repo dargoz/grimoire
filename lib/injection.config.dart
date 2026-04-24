@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -54,54 +55,70 @@ _i174.GetIt $initGetIt(
   String? environment,
   _i526.EnvironmentFilter? environmentFilter,
 }) {
-  final gh = _i526.GetItHelper(
-    getIt,
-    environment,
-    environmentFilter,
-  );
+  final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   gh.singleton<_i567.AuthRestClient>(() => _i990.AuthRestClientImpl());
   gh.singleton<_i981.LocalDataSource>(() => _i595.LocalDataSourceImpl());
   gh.singleton<_i736.AuthLocalDataSource>(
-      () => _i383.AuthLocalDataSourceImpl());
+    () => _i383.AuthLocalDataSourceImpl(),
+  );
   gh.singleton<_i605.RestClient>(() => _i613.RestClientImpl());
   gh.singleton<_i301.SearchDataSource>(() => _i508.SearchDataSourceImpl());
+  gh.singleton<_i697.SearchRepository>(
+    () => _i192.SearchRepositoryImpl(
+      gh<_i301.SearchDataSource>(),
+      gh<_i981.LocalDataSource>(),
+    ),
+  );
   gh.singleton<_i641.AuthRemoteDataSource>(
-      () => _i900.AuthRemoteDataSourceImpl(gh<_i567.AuthRestClient>()));
+    () => _i900.AuthRemoteDataSourceImpl(gh<_i567.AuthRestClient>()),
+  );
+  gh.singleton<_i1015.AuthRepository>(
+    () => _i111.AuthRepositoryImpl(
+      gh<_i641.AuthRemoteDataSource>(),
+      gh<_i736.AuthLocalDataSource>(),
+    ),
+  );
   gh.singleton<_i838.RemoteDataSource>(
-      () => _i77.RemoteDataSourceImpl(gh<_i605.RestClient>()));
-  gh.singleton<_i1015.AuthRepository>(() => _i111.AuthRepositoryImpl(
-        gh<_i641.AuthRemoteDataSource>(),
-        gh<_i736.AuthLocalDataSource>(),
-      ));
-  gh.singleton<_i26.WikiRepository>(() => _i905.WikiRepositoryImpl(
-        gh<_i838.RemoteDataSource>(),
-        gh<_i981.LocalDataSource>(),
-      ));
-  gh.factory<_i1.GetAccessTokenUseCase>(
-      () => _i1.GetAccessTokenUseCase(gh<_i1015.AuthRepository>()));
-  gh.factory<_i238.RemoveAccessTokenUseCase>(
-      () => _i238.RemoveAccessTokenUseCase(gh<_i1015.AuthRepository>()));
-  gh.factory<_i26.RequestAccessTokenUseCase>(
-      () => _i26.RequestAccessTokenUseCase(gh<_i1015.AuthRepository>()));
-  gh.factory<_i220.SaveAccessTokenUseCase>(
-      () => _i220.SaveAccessTokenUseCase(gh<_i1015.AuthRepository>()));
-  gh.singleton<_i697.SearchRepository>(() => _i192.SearchRepositoryImpl(
-        gh<_i301.SearchDataSource>(),
-        gh<_i981.LocalDataSource>(),
-      ));
+    () => _i77.RemoteDataSourceImpl(gh<_i605.RestClient>()),
+  );
+  gh.singleton<_i26.WikiRepository>(
+    () => _i905.WikiRepositoryImpl(
+      gh<_i838.RemoteDataSource>(),
+      gh<_i981.LocalDataSource>(),
+    ),
+  );
   gh.factory<_i899.SearchDocumentUseCase>(
-      () => _i899.SearchDocumentUseCase(gh<_i697.SearchRepository>()));
-  gh.factory<_i827.GetDocumentUseCase>(() => _i827.GetDocumentUseCase(
-        gh<_i26.WikiRepository>(),
-        gh<_i697.SearchRepository>(),
-      ));
+    () => _i899.SearchDocumentUseCase(gh<_i697.SearchRepository>()),
+  );
+  gh.factory<_i1.GetAccessTokenUseCase>(
+    () => _i1.GetAccessTokenUseCase(gh<_i1015.AuthRepository>()),
+  );
+  gh.factory<_i238.RemoveAccessTokenUseCase>(
+    () => _i238.RemoveAccessTokenUseCase(gh<_i1015.AuthRepository>()),
+  );
+  gh.factory<_i26.RequestAccessTokenUseCase>(
+    () => _i26.RequestAccessTokenUseCase(gh<_i1015.AuthRepository>()),
+  );
+  gh.factory<_i220.SaveAccessTokenUseCase>(
+    () => _i220.SaveAccessTokenUseCase(gh<_i1015.AuthRepository>()),
+  );
+  gh.factory<_i827.GetDocumentUseCase>(
+    () => _i827.GetDocumentUseCase(
+      gh<_i26.WikiRepository>(),
+      gh<_i697.SearchRepository>(),
+    ),
+  );
   gh.factory<_i315.GetFileTreeUseCase>(
-      () => _i315.GetFileTreeUseCase(gh<_i26.WikiRepository>()));
+    () => _i315.GetFileTreeUseCase(gh<_i26.WikiRepository>()),
+  );
   gh.factory<_i56.GetImageUseCase>(
-      () => _i56.GetImageUseCase(gh<_i26.WikiRepository>()));
+    () => _i56.GetImageUseCase(gh<_i26.WikiRepository>()),
+  );
   gh.factory<_i1003.GetSavedBranchUseCase>(
-      () => _i1003.GetSavedBranchUseCase(gh<_i26.WikiRepository>()));
+    () => _i1003.GetSavedBranchUseCase(gh<_i26.WikiRepository>()),
+  );
   gh.factory<_i235.GetVersionUseCase>(
-      () => _i235.GetVersionUseCase(gh<_i26.WikiRepository>()));
+    () => _i235.GetVersionUseCase(gh<_i26.WikiRepository>()),
+  );
   return getIt;
 }

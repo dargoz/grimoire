@@ -1,6 +1,6 @@
 import 'package:grimoire/features/wiki/data/sources/local/objects/commit_object.dart';
 import 'package:grimoire/features/wiki/data/sources/local/objects/file_object.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import 'package:grimoire/features/wiki/data/sources/local/local_data_source.dart';
 import 'package:injectable/injectable.dart';

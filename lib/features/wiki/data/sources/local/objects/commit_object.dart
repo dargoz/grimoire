@@ -1,22 +1,23 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 part 'commit_object.g.dart';
 
 @HiveType(typeId: 1)
 class CommitObject extends HiveObject {
-  CommitObject(
-      {this.id,
-      this.shortId,
-      this.createdAt,
-      this.parentIds,
-      this.title,
-      this.message,
-      this.authorName,
-      this.authorEmail,
-      this.authoredDate,
-      this.committerName,
-      this.committerEmail,
-      this.committedDate});
+  CommitObject({
+    this.id,
+    this.shortId,
+    this.createdAt,
+    this.parentIds,
+    this.title,
+    this.message,
+    this.authorName,
+    this.authorEmail,
+    this.authoredDate,
+    this.committerName,
+    this.committerEmail,
+    this.committedDate,
+  });
 
   @HiveField(0)
   String? id;

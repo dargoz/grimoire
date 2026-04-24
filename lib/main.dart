@@ -3,16 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:grimoire/routes/app_route.dart';
 import 'package:grimoire/translation/app_translation.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 
 import 'injection.dart';
 
 void main() async {
   await Hive.initFlutter();
   configureDependencies();
-  runApp(const ProviderScope(
-    child: MyApp(),
-  ));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

@@ -22,8 +22,9 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
   Future<DocumentEntity> useCase(FileTreeEntity params) async {
     DocumentEntity document;
     if (params.type == 'tree') {
-      if (params.children
-              .indexWhere((element) => element.name == 'README.md') ==
+      if (params.children.indexWhere(
+            (element) => element.name == 'README.md',
+          ) ==
           -1) {
         document = _defaultDocument(params);
         return document;
@@ -45,8 +46,7 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
       // add to search engine
       await indexDocument(document);
       log('indexing done');
-
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response?.statusCode == 404 &&
           (e.response?.data.toString().contains('File Not Found') ?? false)) {
         log('error message : ${e.message}');
@@ -79,7 +79,6 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
         tabs.removeAt(0);
       }
       if (tabs.last.isEmpty) tabs.removeLast();
-
     }
     if (document.isMultiPage) {
       document.tabs = tabs;
@@ -87,7 +86,6 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
     } else {
       document.content = content;
     }
-
   }
 
   List<SectionEntity> _parseDocumentSections(String? content) {
@@ -110,14 +108,15 @@ class GetDocumentUseCase extends UseCase<DocumentEntity, FileTreeEntity> {
     params.path = params.path.replaceAll('%2F', '/');
     params.path = params.path.replaceAll('%2E', '.');
     return DocumentEntity(
-        fileName: 'README.md',
-        filePath: params.path,
-        size: -1,
-        content: _generateDefaultContent(params),
-        contentSha256: "content",
-        blobId: "",
-        commitId: "",
-        executeFileMode: false);
+      fileName: 'README.md',
+      filePath: params.path,
+      size: -1,
+      content: _generateDefaultContent(params),
+      contentSha256: "content",
+      blobId: "",
+      commitId: "",
+      executeFileMode: false,
+    );
   }
 
   String _generateDefaultContent(FileTreeEntity params) {

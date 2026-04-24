@@ -6,5 +6,6 @@ class Configs {
 }
 
 Configs globalConfig = Configs(
-    repositoryUrl: 'https://gitlab.com/api/v4/',
-    accessToken: 'glpat-6VtJb2k-Ns8SXGApxzbb');
+  repositoryUrl: 'https://gitlab.com/api/v4/',
+  accessToken: 'glpat-JXKHgICOEHba-u7cNlmo5WM6MQpvOjEKdTptZXJkZw8.01.1713evnuf',
+);

@@ -8,7 +8,7 @@ class CodePreviewSyntax extends BlockSyntax {
 
   @override
   bool canParse(BlockParser parser) {
-    final match = pattern.firstMatch(parser.current);
+    final match = pattern.firstMatch(parser.current.content);
     if (match == null) return false;
     final codeFence = match.group(1)!;
     final infoString = match.group(2);
@@ -20,17 +20,19 @@ class CodePreviewSyntax extends BlockSyntax {
         !infoString!.codeUnits.contains($percent));
   }
 
-  @override
-  List<String> parseChildLines(BlockParser parser, [String? endBlock]) {
+  List<String> _parseCodePreviewChildLines(
+    BlockParser parser, [
+    String? endBlock,
+  ]) {
     endBlock ??= '';
 
     final childLines = <String>[];
     parser.advance();
 
     while (!parser.isDone) {
-      final match = pattern.firstMatch(parser.current);
+      final match = pattern.firstMatch(parser.current.content);
       if (match == null || !match[1]!.startsWith(endBlock)) {
-        childLines.add(parser.current);
+        childLines.add(parser.current.content);
         parser.advance();
       } else {
         parser.advance();
@@ -43,12 +45,10 @@ class CodePreviewSyntax extends BlockSyntax {
 
   @override
   Node? parse(BlockParser parser) {
-    final match = pattern.firstMatch(parser.current)!;
+    final match = pattern.firstMatch(parser.current.content)!;
     final endBlock = match.group(1);
     var infoString = match.group(2)!;
-    print('endBlock : $endBlock');
-    print('infoString : $infoString');
-    final childLines = parseChildLines(parser, endBlock);
+    final childLines = _parseCodePreviewChildLines(parser, endBlock);
 
     // The Markdown tests expect a trailing newline.
     childLines.add('');

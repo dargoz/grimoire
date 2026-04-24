@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grimoire/core/designs/state_ext.dart';
 
-class BgStateColor implements MaterialStateProperty<Color?> {
+class BgStateColor implements WidgetStateProperty<Color?> {
   const BgStateColor(this.baseColor);
 
   final Color baseColor;
   @override
-  Color? resolve(Set<MaterialState> states) {
+  Color? resolve(Set<WidgetState> states) {
     Color? color = baseColor;
     Color? darkerVersion = Color.lerp(color, Colors.white, 0.3);
     // Darken our button color for each state we want to reflect. Buttons will

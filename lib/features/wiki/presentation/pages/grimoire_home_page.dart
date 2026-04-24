@@ -25,8 +25,10 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
     var state = ref.read(serviceStateNotifierProvider.notifier);
     final isPortrait =
         MediaQuery.orientationOf(context) == Orientation.portrait;
-    ref.listen<Resource<dynamic>>(serviceStateNotifierProvider,
-        (previous, next) async {
+    ref.listen<Resource<dynamic>>(serviceStateNotifierProvider, (
+      previous,
+      next,
+    ) async {
       // if (previous?.status == Status.completed) return;
       log('----- build called... ${next.status}');
       if (_dialogVisible && context.canPop()) {
@@ -39,36 +41,31 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
         state.reset();
       } else if (next.status == Status.error) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.message ?? 'Unknown Error'),
-          ),
+          SnackBar(content: Text(next.message ?? 'Unknown Error')),
         );
       }
     });
-    return WillPopScope(
-      onWillPop: () async {
-        return true;
-      },
+    return PopScope(
+      canPop: true,
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBarWidget(),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: Image.asset(
-                  'assets/images/grimoire_bg.jpg',
-                  package: 'grimoire',
-                ).image,
-                fit: BoxFit.cover),
+              image: Image.asset(
+                'assets/images/grimoire_bg.jpg',
+                package: 'grimoire',
+              ).image,
+              fit: BoxFit.cover,
+            ),
           ),
           alignment: Alignment.center,
           child: SizedBox(
             width: isPortrait ? 500 : 640,
             child: Column(
               children: [
-                const Spacer(
-                  flex: 1,
-                ),
+                const Spacer(flex: 1),
                 Image.asset(
                   'assets/icons/grimoire_logo_bw.png',
                   package: 'grimoire',
@@ -87,27 +84,27 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
                       labelText: 'What do you seek ?'),
                 ),
               ),*/
-                const Spacer(
-                  flex: 1,
-                ),
+                const Spacer(flex: 1),
                 Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 32,
                   runSpacing: 32,
                   children: [
-                    appsContainer('assets/icons/grimoire_logo_bw.png',
-                        onTap: () {
-                      _openProject('39138680');
-                    }),
-                    appsContainer('assets/icons/grimoire_logo_bw.png',
-                        onTap: () {
-                      _openProject('27745171');
-                    }),
+                    appsContainer(
+                      'assets/icons/grimoire_logo_bw.png',
+                      onTap: () {
+                        _openProject('39138680');
+                      },
+                    ),
+                    appsContainer(
+                      'assets/icons/grimoire_logo_bw.png',
+                      onTap: () {
+                        _openProject('27745171');
+                      },
+                    ),
                   ],
                 ),
-                const Spacer(
-                  flex: 2,
-                ),
+                const Spacer(flex: 2),
               ],
             ),
           ),
@@ -122,8 +119,11 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
     context.go('/document/$projectId/README.md');
   }
 
-  Widget appsContainer(String assetPath,
-      {void Function()? onTap, String? name}) {
+  Widget appsContainer(
+    String assetPath, {
+    void Function()? onTap,
+    String? name,
+  }) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Material(
@@ -135,25 +135,32 @@ class GrimoireHomePageState extends ConsumerState<GrimoireHomePage> {
             width: 128,
             height: 128,
             decoration: const BoxDecoration(
-                color: Color.fromARGB(149, 89, 86, 120),
-                borderRadius: BorderRadius.all(Radius.circular(25))),
+              color: Color.fromARGB(149, 89, 86, 120),
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+            ),
             child: Column(
               children: [
                 const SizedBox(height: 12),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    child: Image.asset(assetPath,
-                        package: 'grimoire', scale: 8, fit: BoxFit.fitHeight),
+                    child: Image.asset(
+                      assetPath,
+                      package: 'grimoire',
+                      scale: 8,
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
                 ),
                 if (name != null)
                   Text(
                     name,
                     style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w600),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                const SizedBox(height: 12)
+                const SizedBox(height: 12),
               ],
             ),
           ),

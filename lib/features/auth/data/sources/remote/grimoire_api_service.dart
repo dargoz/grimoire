@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:grimoire/features/auth/data/sources/remote/requests/bearer_token_request.dart';
 import 'package:grimoire/features/auth/data/sources/remote/responses/bearer_token_response.dart';
-import 'package:retrofit/http.dart';
+import 'package:retrofit/retrofit.dart';
 
 part 'grimoire_api_service.g.dart';
 
@@ -11,5 +11,6 @@ abstract class GrimoireApiService {
 
   @POST('/auth')
   Future<BearerTokenResponse> requestBearerToken(
-      @Body() BearerTokenRequest bearerTokenRequest,);
+    @Body() BearerTokenRequest bearerTokenRequest,
+  );
 }

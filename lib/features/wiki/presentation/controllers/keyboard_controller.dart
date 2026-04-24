@@ -5,7 +5,8 @@ import 'package:grimoire/features/wiki/presentation/widgets/search_bar_widget_v2
 
 final keyboardStateNotifierProvider =
     StateNotifierProvider<KeyboardController, int>(
-        (ref) => KeyboardController(ref));
+      (ref) => KeyboardController(ref),
+    );
 
 class KeyboardController extends StateNotifier<int> {
   var searchBarController = SearchBarController();
@@ -15,9 +16,9 @@ class KeyboardController extends StateNotifier<int> {
 
   KeyboardController(Ref ref) : super(0);
 
-  void onKeyEvent(RawKeyEvent event) {
+  void onKeyEvent(KeyEvent event) {
     final key = event.logicalKey;
-    if (event is RawKeyDownEvent) {
+    if (event is KeyDownEvent) {
       if (keys.contains(key)) return;
       keys.add(key);
       // your keyboard command
@@ -31,7 +32,6 @@ class KeyboardController extends StateNotifier<int> {
     } else {
       keys.remove(key);
     }
-    print('keys : $keys');
   }
 
   void showSearchBar() {
